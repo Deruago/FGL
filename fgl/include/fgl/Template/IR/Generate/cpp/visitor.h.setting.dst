@@ -1,0 +1,264 @@
+{{file.target_language}} = <C++>
+{{file.file_name}} = <{{output_name}}>
+{{file.namespace}} = <fgl::ir::generate::cpp>
+{{file.extension}} = <h>
+
+{{const_qualifier}} = <const>
+{{constexpr}} = <constexpr>
+
+{{output_name}} = <Visitor>
+{{flavoring_name}} = <Flavoring>
+
+{{header_guard}} = <FGL_{{flavoring_name.Upper}}_{{output_name.Upper}}_H>
+
+{{flavor_specialization_type_conversion}} = <{{flavor_name}}EnumToType>
+{{flavor_invalidation_type}} = <unsigned int>
+{{flavor_count_type}} = <int>
+{{flavor_value}} = <FlavorValue>
+{{flavor_type_name}} = <{{flavor_name}}SpecializationType>
+{{flavor_specialization_type}} = <{{flavor_type_name}}::{{flavor_specialization_name}}>
+
+{{flavor_forward_declaration}} = <struct {{flavor_name}};>
+{{flavor_specialization_forward_declaration}} = <struct {{flavor_specialization_name}};>
+
+{{flavor_type_definition}} = <
+enum class FlavorType
+{
+	// Reserved values
+	FGL_RESERVED_Unknown = 0,
+
+	// Default cases
+	{{flavor_type_definition_default_case.Variable_Field}}
+
+	// Flavor specialization cases
+	{{flavor_type_definition_specialization_case.Variable_Field}}
+};>
+
+{{flavor_type_definition_default_case}} = <{{flavor_name}},>
+{{flavor_type_definition_specialization_case}} = <{{flavor_name}}_{{flavor_specialization_name}},>
+
+{{flavor}} = <
+struct {{flavor_name}}
+{
+public:
+	{{optional_value}}
+
+	// Counters
+	{{flavor_count_type}} count = 0;
+
+public:
+	// Compile time known possible flavor specializations
+	{{flavor_specialization_member.Variable_Field}}
+
+	// Run-time possible flavor specializations
+
+public:
+	{{flavor_name}}() = default;
+	~{{flavor_name}}() = default;
+
+	{{flavor_name}}(const {{flavor_name}}&) = delete;
+	{{flavor_name}}({{flavor_name}}&&) noexcept = delete;
+
+	{{flavor_name}}& operator=(const {{flavor_name}}&) = delete;
+	{{flavor_name}}& operator=({{flavor_name}}&&) noexcept = delete;
+
+public:
+	template{{left_angle_bracket}}{{flavor_type_name}} type{{right_angle_bracket}}
+	typename {{flavor_specialization_type_conversion}}{{left_angle_bracket}}type{{right_angle_bracket}}::type& Get()
+	{
+		{{flavor_specialization_case.Variable_Field}}
+
+		return {};
+	}
+
+	template{{left_angle_bracket}}{{flavor_type_name}} type{{right_angle_bracket}}
+	void Add()
+	{
+		{{flavor_name}}::count += 1;
+		{{flavor_name}}::Get{{left_angle_bracket}}type{{right_angle_bracket}}().Add();
+	}
+
+	void Add()
+	{
+		{{flavor_name}}::count += 1;
+	}
+	
+	template{{left_angle_bracket}}{{flavor_type_name}} type{{right_angle_bracket}}
+	void Remove()
+	{
+		{{flavor_name}}::count -= 1;
+		{{flavor_name}}::Get{{left_angle_bracket}}type{{right_angle_bracket}}().Remove();
+	}
+
+	void Remove()
+	{
+		{{flavor_name}}::count -= 1;
+	}
+};>
+
+{{flavor_specialization_member}} = <{{flavor_specialization_name}} {{flavor_specialization_name}};>
+
+{{optional_invalidation_counter}} = <{{invalidation_counter}}>
+{{invalidation_counter}} = <{{flavor_invalidation_type}} invalidation = 0;>
+
+{{optional_value}} = <{{value}}>
+{{value}} = <{{flavor_value}} value;>
+
+{{optional_invalidation_add}} = <{{invalidation_add}}>
+{{invalidation_add}} = <
+void Invalidate()
+{
+	FlavorStackMemory::invalidation += 1;
+}>
+
+{{optional_invalidation_remove}} = <{{invalidation_remove}}>
+{{invalidation_remove}} = <
+void Validate()
+{
+	FlavorStackMemory::invalidation -= 1;
+}>
+
+{{optional_is_invalidated_check}} = <{{is_invalidated_check}}>
+{{is_invalidated_check}} = <
+bool IsInvalidate()
+{
+	return FlavorStackMemory::invalidation {{right_angle_bracket}} 0;
+}>
+
+{{flavor_specialization_case}} = <
+if {{constexpr}} (type == {{flavor_type_name}}::{{flavor_name}}_{{flavor_specialization_name}})
+{
+	return {{flavor_name}}::{{flavor_specialization_name}};
+}>
+
+{{flavor_specialization_type_definition}} = <enum class {{flavor_type_name}}
+{
+	// Reserved values
+	FGL_RESERVED_Unknown = 0,
+
+	{{flavor_specialization_type_definition_case.Variable_Field}}
+};>
+
+{{flavor_specialization_type_definition_case}} = <{{flavor_type_definition_specialization_case}}>
+
+{{flavor_specialization}} = <
+struct {{flavor_specialization_name}}
+{
+public:
+	{{optional_value}}
+
+	// Counters
+	{{flavor_count_type}} count = 0;
+
+public:
+	{{flavor_specialization_name}}() = default;
+	~{{flavor_specialization_name}}() = default;
+
+	{{flavor_specialization_name}}(const {{flavor_specialization_name}}&) = delete;
+	{{flavor_specialization_name}}({{flavor_specialization_name}}&&) noexcept = delete;
+
+	{{flavor_specialization_name}}& operator=(const {{flavor_specialization_name}}&) = delete;
+	{{flavor_specialization_name}}& operator=({{flavor_specialization_name}}&&) noexcept = delete;
+
+public:
+	void Add()
+	{
+		{{flavor_specialization_name}}::count += 1;
+	}
+
+	void Remove()
+	{
+		{{flavor_specialization_name}}::count -= 1;
+	}
+};>
+
+{{template_base_dispatch_function}} = <
+template{{left_angle_bracket}}typename T{{right_angle_bracket}}
+void {{visit_function_name}}(T* node)
+{
+	for (auto* subNode : node-{{right_angle_bracket}}{{sub_member_access_name}})
+	{
+		subNode-{{right_angle_bracket}}{{accept_function_name}}(this);
+	}
+}>
+
+{{base_dispatch_function}} = <
+void {{visit_function_name}}({{target_namespace}}::{{object_base_type}}* node)
+{
+	for (auto* subNode : node-{{right_angle_bracket}}{{sub_member_access_name}})
+	{
+		subNode-{{right_angle_bracket}}{{accept_function_name}}(this);
+	}
+}>
+
+{{dispatch_function}} = <
+void {{visit_function_name}}({{target_namespace}}::{{object_type}}* node)
+{
+	{{entry_object_type}}(node);
+
+	for (auto* subNode : node-{{right_angle_bracket}}{{sub_member_access_name}})
+	{
+		subNode-{{right_angle_bracket}}{{accept_function_name}}(this);
+	}
+	
+	{{exit_object_type}}(node);
+}>
+{{visit_function_name}} = <Dispatch>
+{{sub_member_access_name}} = <GetNodes()>
+{{accept_function_name}} = <Accept>
+
+{{entry_node}} = <void {{entry_object_type}}({{target_namespace}}::{{object_type}}* node)
+{
+	{{entry_cases.Variable_Field}}
+
+	// Uncaptured part.
+}>
+{{entry_object_type}} = <Entry{{object_type_name}}>
+{{entry_cases}} = <if ({{entry_conditional}})
+{
+	{{entry_manipulation}}
+
+	{{optional_action_push}}
+
+	return;
+}>
+{{optional_action_push}} = <{{action_push}}>
+
+{{action_push}} = <flavorActionStack.push({{action_id}});>
+
+{{exit_node}} = <void {{exit_object_type}}({{target_namespace}}::{{object_type}}* node)
+{
+	{{exit_cases.Variable_Field}}
+}>
+{{exit_object_type}} = <Exit{{object_type_name}}>
+{{exit_cases}} = <if ({{action_id}} == flavorActionStack.top())
+{
+	{{miror_manipulation}}
+
+	{{optional_action_pop}}
+
+	return;
+}>
+{{optional_action_pop}} = <{{action_pop}}>
+{{action_pop}} = <flavorActionStack.pop();>
+
+{{flavor_declaration}} = <{{flavor_name}} {{flavor_name}};>
+
+{{optional_flavor_action_stack}} = <{{flavor_action_stack}}>
+
+{{flavor_action_stack}} = <::std::stack{{left_angle_bracket}}::std::size_t{{right_angle_bracket}} flavorActionStack;>
+
+{{flavor_enum_to_type_conversion}} = <
+template{{left_angle_bracket}}{{flavor_type_name}} type{{right_angle_bracket}}
+struct {{flavor_name}}EnumToType
+{
+	using type = void;
+};
+
+{{flavor_enum_to_type_conversion_case.Variable_Field}}>
+
+{{flavor_enum_to_type_conversion_case}} = <template{{left_angle_bracket}}{{right_angle_bracket}}
+struct {{flavor_name}}EnumToType{{left_angle_bracket}}{{flavor_type_name}}::{{flavor_name}}_{{flavor_specialization_name}}{{right_angle_bracket}}
+{
+	using type = {{flavor_specialization_name}};
+};>

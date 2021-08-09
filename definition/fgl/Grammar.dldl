@@ -1,0 +1,83 @@
+/ FGL Grammar
+/ Made by: Thimo Böhmer
+
+program
+	stmt*
+
+Group: stmt
+	entry_manipulation_rule
+	exit_manipulation_rule
+	setting_rule
+
+Group: setting_rule
+	TARGET_SETTING
+	MEMBER_SETTING
+	INCLUDE_SETTING
+	FUNCTION_SETTING
+	USER_INSERTED_SETTING
+
+entry_manipulation_rule
+	capture object ARROW [ADD] manipulation
+	
+exit_manipulation_rule
+	capture object ARROW MINUS manipulation
+
+capture
+	LEFT_SQUARE_BRACKET [flavor_capture] -> ((COMMA|AND) flavor_capture) RIGHT_SQUARE_BRACKET
+
+manipulation
+	LEFT_BRACKET [instruction] -> (COMMA instruction) RIGHT_BRACKET
+
+Group: instruction
+	new_flavor
+	delete_flavor
+	expand_flavor
+	user_defined_instruction
+
+new_flavor
+	NEW DOT flavor
+	
+delete_flavor
+	DELETE DOT flavor
+	
+expand_flavor
+	EXPAND DOT flavor DOT WITH LEFT_PARANTHESIS value RIGHT_PARANTHESIS
+
+flavor_capture
+	flavor
+	conditional_flavor
+
+conditional_flavor
+	value EQEQ value
+	value LTE  value
+	value GTE  value
+	value LT   value
+	value GT   value
+
+Group: value
+	object_access
+	NUMBER
+	STRING
+
+user_defined_instruction
+	value
+
+Group: object
+	VARNAME
+
+object_access
+	member -> (DOT member)
+
+member
+	VARNAME [LEFT_PARANTHESIS [argument] -> (COMMA argument) RIGHT_PARANTHESIS]
+
+Group: argument
+	value
+
+flavor
+	VARNAME [flavor_specialization]
+
+flavor_specialization
+	LEFT_PARANTHESIS value RIGHT_PARANTHESIS
+
+/
