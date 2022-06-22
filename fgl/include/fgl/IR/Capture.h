@@ -6,6 +6,7 @@
 #include "fgl/IR/Flavor/DifferenceFlavor.h"
 #include "fgl/IR/LanguageTarget.h"
 #include <vector>
+#include <memory>
 
 namespace fgl::ir
 {

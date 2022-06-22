@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	::fgl::CompilerGenerator fgl_compiler;
 	::deamer::file::generate::Compiler fgl_WriteToDisk(fgl_compiler.Generate());
 	fgl_WriteToDisk.SetProjectType(::deamer::file::generate::Compiler::ProjectType::single);
-	
+	fgl_WriteToDisk.SetLegacyNaming();
 	fgl_WriteToDisk.Generate();
 
 
