@@ -5,25 +5,38 @@
 # If you want to contribute to Deamer.
 # Please visit: https://github.com/Deruago/theDeamerProject 
 
-find_package(Deamer_External REQUIRED)
+include(GNUInstallDirs)
 
 
-add_library(fgl_external_libraries STATIC "${fgl_SOURCE_DIR}/lib/fgl.cpp")
-target_link_libraries(fgl_external_libraries PUBLIC Deamer_External)
-target_include_directories(fgl_external_libraries PUBLIC "${fgl_SOURCE_DIR}/extern" "${fgl_SOURCE_DIR}/include")
+
+
+
+add_library(fgl STATIC)
+target_compile_features(fgl PUBLIC cxx_std_17)
+set_target_properties(fgl PROPERTIES LINKER_LANGUAGE CXX)
+
+target_include_directories(fgl PUBLIC 
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+target_link_libraries(fgl PUBLIC Deamer::External Deamer::Algorithm)
+
+
+function(fgl_root_library_extend projectname extern_directory include_directory source_files)
+	target_sources(fgl PRIVATE ${source_files})
+
+	target_include_directories(fgl PUBLIC 
+		$<BUILD_INTERFACE:${include_directory}>
+		$<BUILD_INTERFACE:${extern_directory}>
+	)
+endfunction()
+
+
+add_library(deamer_reserved_fgl_core_library ALIAS fgl)
 
 function(fgl_add_external_library external_library_name source_files)
-	set(external_library_full_name "fgl_${external_library_name}_static_library")
-
-	add_library(${external_library_full_name} STATIC ${source_files})
-
-	target_link_libraries(${external_library_full_name} PUBLIC Deamer_External)
-	target_include_directories(${external_library_full_name} PRIVATE "${fgl_SOURCE_DIR}/extern" "${fgl_SOURCE_DIR}/include")
-	target_compile_features(${external_library_full_name} PUBLIC cxx_std_17)
-	set_target_properties(${external_library_full_name} PROPERTIES LINKED_LANGUAGE CXX)
-	set_property(TARGET ${external_library_full_name} PROPERTY POSITION_INDEPENDENT_CODE ON)
-	
-	target_link_libraries(fgl_external_libraries PUBLIC ${external_library_full_name})
-	
+	target_sources(fgl PRIVATE ${source_files})
 endfunction()
+
+
+
 

@@ -1,5 +1,5 @@
-#ifndef FGL_AST_REFERENCE_ACCESS_H
-#define FGL_AST_REFERENCE_ACCESS_H
+#ifndef FGL_AST_REFERENCE_ACCESSTEMPLATEBASE_H
+#define FGL_AST_REFERENCE_ACCESSTEMPLATEBASE_H
 
 #include "fgl/Ast/Relation/NodeEnumToType.h"
 #include "fgl/Ast/Relation/NodeTypeToEnum.h"
@@ -74,7 +74,7 @@
 #include <vector>
 #include <utility>
 
-namespace fgl { namespace ast { namespace relation { 
+namespace fgl { namespace ast { namespace reference { 
 
 	struct AccessBase
 	{	
@@ -112,169 +112,206 @@ namespace fgl { namespace ast { namespace relation {
 		}
 	};
 
-	/*!	\class Access
+	/*!	\class AccessTemplateBase
 	 *
 	 *	\brief Used to access AST nodes. It contains various helper functions to ease navigation through AST nodes.
+	 *
+	 *	\details This class contains the type dependent implementation of Access<T>.
+	 *	Refrain from using this class, as there is no backwards compatibility
+	 *	guarantee of this implementation class,
+	 *	Use Access<T> instead, this is backwards compatible and offers different benefits.
+	 *
+	 *	\see Access
 	 */
 	template<typename T>
-	struct Access : public AccessBase
+	struct AccessTemplateBase : public AccessBase
 	{
-		Access() = delete;
-		~Access() = delete;
+		AccessTemplateBase() = delete;
+		~AccessTemplateBase() = delete;
+	};
+
+	/*! \class Access
+	 *
+	 *	\brief Used to access AST nodes. It contains various helper functions to ease navigation through AST nodes.
+	 *
+	 *	\details Type dispatcher for logic.
+	 *
+	 *	\see AccessTemplateBase
+	 */
+	template<typename T>
+	struct Access : public AccessTemplateBase<T>
+	{
+		Access(std::vector<const T*> ts_) : AccessTemplateBase<T>(ts_)
+		{
+		}
+
+		Access(const T& t) : AccessTemplateBase<T>(t)
+		{
+		}
+
+		Access(const T* t) : AccessTemplateBase<T>(t)
+		{
+		}
+
+		Access(const AccessTemplateBase<T>& rhs) : AccessTemplateBase<T>(rhs)
+		{
+		}
+
+		Access() = default;
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::program>;
+	struct AccessTemplateBase<::fgl::ast::node::program>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__stmt__>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__>;
 	template<>
-	struct Access<::fgl::ast::node::stmt>;
+	struct AccessTemplateBase<::fgl::ast::node::stmt>;
 	template<>
-	struct Access<::fgl::ast::node::setting_rule>;
+	struct AccessTemplateBase<::fgl::ast::node::setting_rule>;
 	template<>
-	struct Access<::fgl::ast::node::entry_manipulation_rule>;
+	struct AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>;
 	template<>
-	struct Access<::fgl::ast::node::exit_manipulation_rule>;
+	struct AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>;
 	template<>
-	struct Access<::fgl::ast::node::capture>;
+	struct AccessTemplateBase<::fgl::ast::node::capture>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>;
 	template<>
-	struct Access<::fgl::ast::node::manipulation>;
+	struct AccessTemplateBase<::fgl::ast::node::manipulation>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>;
 	template<>
-	struct Access<::fgl::ast::node::instruction>;
+	struct AccessTemplateBase<::fgl::ast::node::instruction>;
 	template<>
-	struct Access<::fgl::ast::node::new_flavor>;
+	struct AccessTemplateBase<::fgl::ast::node::new_flavor>;
 	template<>
-	struct Access<::fgl::ast::node::delete_flavor>;
+	struct AccessTemplateBase<::fgl::ast::node::delete_flavor>;
 	template<>
-	struct Access<::fgl::ast::node::expand_flavor>;
+	struct AccessTemplateBase<::fgl::ast::node::expand_flavor>;
 	template<>
-	struct Access<::fgl::ast::node::flavor_capture>;
+	struct AccessTemplateBase<::fgl::ast::node::flavor_capture>;
 	template<>
-	struct Access<::fgl::ast::node::conditional_flavor>;
+	struct AccessTemplateBase<::fgl::ast::node::conditional_flavor>;
 	template<>
-	struct Access<::fgl::ast::node::value>;
+	struct AccessTemplateBase<::fgl::ast::node::value>;
 	template<>
-	struct Access<::fgl::ast::node::user_defined_instruction>;
+	struct AccessTemplateBase<::fgl::ast::node::user_defined_instruction>;
 	template<>
-	struct Access<::fgl::ast::node::object>;
+	struct AccessTemplateBase<::fgl::ast::node::object>;
 	template<>
-	struct Access<::fgl::ast::node::object_access>;
+	struct AccessTemplateBase<::fgl::ast::node::object_access>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_arrow__member__>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__DOT__member__>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>;
 	template<>
-	struct Access<::fgl::ast::node::member>;
+	struct AccessTemplateBase<::fgl::ast::node::member>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>;
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>;
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>;
 	template<>
-	struct Access<::fgl::ast::node::argument>;
+	struct AccessTemplateBase<::fgl::ast::node::argument>;
 	template<>
-	struct Access<::fgl::ast::node::flavor>;
+	struct AccessTemplateBase<::fgl::ast::node::flavor>;
 	template<>
-	struct Access<::fgl::ast::node::flavor_specialization>;
+	struct AccessTemplateBase<::fgl::ast::node::flavor_specialization>;
 	template<>
-	struct Access<::fgl::ast::node::COMMENT>;
+	struct AccessTemplateBase<::fgl::ast::node::COMMENT>;
 	template<>
-	struct Access<::fgl::ast::node::LEFT_SQUARE_BRACKET>;
+	struct AccessTemplateBase<::fgl::ast::node::LEFT_SQUARE_BRACKET>;
 	template<>
-	struct Access<::fgl::ast::node::RIGHT_SQUARE_BRACKET>;
+	struct AccessTemplateBase<::fgl::ast::node::RIGHT_SQUARE_BRACKET>;
 	template<>
-	struct Access<::fgl::ast::node::LEFT_BRACKET>;
+	struct AccessTemplateBase<::fgl::ast::node::LEFT_BRACKET>;
 	template<>
-	struct Access<::fgl::ast::node::RIGHT_BRACKET>;
+	struct AccessTemplateBase<::fgl::ast::node::RIGHT_BRACKET>;
 	template<>
-	struct Access<::fgl::ast::node::LEFT_PARANTHESIS>;
+	struct AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS>;
 	template<>
-	struct Access<::fgl::ast::node::RIGHT_PARANTHESIS>;
+	struct AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS>;
 	template<>
-	struct Access<::fgl::ast::node::COMMA>;
+	struct AccessTemplateBase<::fgl::ast::node::COMMA>;
 	template<>
-	struct Access<::fgl::ast::node::DOT>;
+	struct AccessTemplateBase<::fgl::ast::node::DOT>;
 	template<>
-	struct Access<::fgl::ast::node::ARROW>;
+	struct AccessTemplateBase<::fgl::ast::node::ARROW>;
 	template<>
-	struct Access<::fgl::ast::node::COLON>;
+	struct AccessTemplateBase<::fgl::ast::node::COLON>;
 	template<>
-	struct Access<::fgl::ast::node::NEW>;
+	struct AccessTemplateBase<::fgl::ast::node::NEW>;
 	template<>
-	struct Access<::fgl::ast::node::DELETE>;
+	struct AccessTemplateBase<::fgl::ast::node::DELETE>;
 	template<>
-	struct Access<::fgl::ast::node::EXPAND>;
+	struct AccessTemplateBase<::fgl::ast::node::EXPAND>;
 	template<>
-	struct Access<::fgl::ast::node::WITH>;
+	struct AccessTemplateBase<::fgl::ast::node::WITH>;
 	template<>
-	struct Access<::fgl::ast::node::AND>;
+	struct AccessTemplateBase<::fgl::ast::node::AND>;
 	template<>
-	struct Access<::fgl::ast::node::EQEQ>;
+	struct AccessTemplateBase<::fgl::ast::node::EQEQ>;
 	template<>
-	struct Access<::fgl::ast::node::EQ>;
+	struct AccessTemplateBase<::fgl::ast::node::EQ>;
 	template<>
-	struct Access<::fgl::ast::node::GTE>;
+	struct AccessTemplateBase<::fgl::ast::node::GTE>;
 	template<>
-	struct Access<::fgl::ast::node::GT>;
+	struct AccessTemplateBase<::fgl::ast::node::GT>;
 	template<>
-	struct Access<::fgl::ast::node::LTE>;
+	struct AccessTemplateBase<::fgl::ast::node::LTE>;
 	template<>
-	struct Access<::fgl::ast::node::LT>;
+	struct AccessTemplateBase<::fgl::ast::node::LT>;
 	template<>
-	struct Access<::fgl::ast::node::ADD>;
+	struct AccessTemplateBase<::fgl::ast::node::ADD>;
 	template<>
-	struct Access<::fgl::ast::node::MINUS>;
+	struct AccessTemplateBase<::fgl::ast::node::MINUS>;
 	template<>
-	struct Access<::fgl::ast::node::TARGET_SETTING>;
+	struct AccessTemplateBase<::fgl::ast::node::TARGET_SETTING>;
 	template<>
-	struct Access<::fgl::ast::node::INCLUDE_SETTING>;
+	struct AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING>;
 	template<>
-	struct Access<::fgl::ast::node::MEMBER_SETTING>;
+	struct AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING>;
 	template<>
-	struct Access<::fgl::ast::node::FUNCTION_SETTING>;
+	struct AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING>;
 	template<>
-	struct Access<::fgl::ast::node::USER_INSERTED_SETTING>;
+	struct AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING>;
 	template<>
-	struct Access<::fgl::ast::node::VARNAME>;
+	struct AccessTemplateBase<::fgl::ast::node::VARNAME>;
 	template<>
-	struct Access<::fgl::ast::node::NUMBER>;
+	struct AccessTemplateBase<::fgl::ast::node::NUMBER>;
 	template<>
-	struct Access<::fgl::ast::node::STRING>;
+	struct AccessTemplateBase<::fgl::ast::node::STRING>;
 	template<>
-	struct Access<::fgl::ast::node::ESCAPE_CHARS>;
+	struct AccessTemplateBase<::fgl::ast::node::ESCAPE_CHARS>;
 
 
 	
 	template<>
-	struct Access<::fgl::ast::node::program> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::program> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::program*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::program*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::program*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::program& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::program& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::program* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::program* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::program>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::program>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -290,7 +327,7 @@ namespace fgl { namespace ast { namespace relation {
 			return *this;
 		}
 
-		Access<::fgl::ast::node::program>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::program>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -324,12 +361,12 @@ namespace fgl { namespace ast { namespace relation {
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__stmt__> deamerreserved_star__stmt__();
-Access<::fgl::ast::node::stmt> stmt();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__> deamerreserved_star__stmt__();
+AccessTemplateBase<::fgl::ast::node::stmt> stmt();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::program>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::program>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -338,31 +375,51 @@ Access<::fgl::ast::node::stmt> stmt();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__stmt__> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_star__stmt__*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_star__stmt__*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_star__stmt__*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__stmt__& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__stmt__& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__stmt__* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__stmt__* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__stmt__>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -378,7 +435,7 @@ Access<::fgl::ast::node::stmt> stmt();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_star__stmt__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -412,12 +469,12 @@ Access<::fgl::ast::node::stmt> stmt();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__stmt__> deamerreserved_star__stmt__();
-Access<::fgl::ast::node::stmt> stmt();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__> deamerreserved_star__stmt__();
+AccessTemplateBase<::fgl::ast::node::stmt> stmt();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_star__stmt__>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -426,31 +483,51 @@ Access<::fgl::ast::node::stmt> stmt();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::stmt> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::stmt> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::stmt*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::stmt*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::stmt*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::stmt& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::stmt& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::stmt* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::stmt* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::stmt>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::stmt>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -466,7 +543,7 @@ Access<::fgl::ast::node::stmt> stmt();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::stmt>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::stmt>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -500,13 +577,13 @@ Access<::fgl::ast::node::stmt> stmt();
 		}
 
 	public:
-		Access<::fgl::ast::node::setting_rule> setting_rule();
-Access<::fgl::ast::node::entry_manipulation_rule> entry_manipulation_rule();
-Access<::fgl::ast::node::exit_manipulation_rule> exit_manipulation_rule();
+		AccessTemplateBase<::fgl::ast::node::setting_rule> setting_rule();
+AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule> entry_manipulation_rule();
+AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule> exit_manipulation_rule();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::stmt>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::stmt>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -515,31 +592,51 @@ Access<::fgl::ast::node::exit_manipulation_rule> exit_manipulation_rule();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::setting_rule> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::setting_rule> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::setting_rule*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::setting_rule*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::setting_rule*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::setting_rule& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::setting_rule& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::setting_rule* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::setting_rule* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::setting_rule>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::setting_rule>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -555,7 +652,7 @@ Access<::fgl::ast::node::exit_manipulation_rule> exit_manipulation_rule();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::setting_rule>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::setting_rule>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -589,15 +686,15 @@ Access<::fgl::ast::node::exit_manipulation_rule> exit_manipulation_rule();
 		}
 
 	public:
-		Access<::fgl::ast::node::TARGET_SETTING> TARGET_SETTING();
-Access<::fgl::ast::node::INCLUDE_SETTING> INCLUDE_SETTING();
-Access<::fgl::ast::node::MEMBER_SETTING> MEMBER_SETTING();
-Access<::fgl::ast::node::FUNCTION_SETTING> FUNCTION_SETTING();
-Access<::fgl::ast::node::USER_INSERTED_SETTING> USER_INSERTED_SETTING();
+		AccessTemplateBase<::fgl::ast::node::TARGET_SETTING> TARGET_SETTING();
+AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING> INCLUDE_SETTING();
+AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING> MEMBER_SETTING();
+AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING> FUNCTION_SETTING();
+AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING> USER_INSERTED_SETTING();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::setting_rule>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::setting_rule>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -606,31 +703,51 @@ Access<::fgl::ast::node::USER_INSERTED_SETTING> USER_INSERTED_SETTING();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::entry_manipulation_rule> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::entry_manipulation_rule*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::entry_manipulation_rule*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::entry_manipulation_rule*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::entry_manipulation_rule& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::entry_manipulation_rule& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::entry_manipulation_rule* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::entry_manipulation_rule* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::entry_manipulation_rule>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -646,7 +763,7 @@ Access<::fgl::ast::node::USER_INSERTED_SETTING> USER_INSERTED_SETTING();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::entry_manipulation_rule>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -680,15 +797,15 @@ Access<::fgl::ast::node::USER_INSERTED_SETTING> USER_INSERTED_SETTING();
 		}
 
 	public:
-		Access<::fgl::ast::node::capture> capture();
-Access<::fgl::ast::node::manipulation> manipulation();
-Access<::fgl::ast::node::object> object();
-Access<::fgl::ast::node::ARROW> ARROW();
-Access<::fgl::ast::node::ADD> ADD();
+		AccessTemplateBase<::fgl::ast::node::capture> capture();
+AccessTemplateBase<::fgl::ast::node::manipulation> manipulation();
+AccessTemplateBase<::fgl::ast::node::object> object();
+AccessTemplateBase<::fgl::ast::node::ARROW> ARROW();
+AccessTemplateBase<::fgl::ast::node::ADD> ADD();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::entry_manipulation_rule>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -697,31 +814,51 @@ Access<::fgl::ast::node::ADD> ADD();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::exit_manipulation_rule> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::exit_manipulation_rule*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::exit_manipulation_rule*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::exit_manipulation_rule*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::exit_manipulation_rule& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::exit_manipulation_rule& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::exit_manipulation_rule* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::exit_manipulation_rule* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::exit_manipulation_rule>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -737,7 +874,7 @@ Access<::fgl::ast::node::ADD> ADD();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::exit_manipulation_rule>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -771,15 +908,15 @@ Access<::fgl::ast::node::ADD> ADD();
 		}
 
 	public:
-		Access<::fgl::ast::node::capture> capture();
-Access<::fgl::ast::node::manipulation> manipulation();
-Access<::fgl::ast::node::object> object();
-Access<::fgl::ast::node::ARROW> ARROW();
-Access<::fgl::ast::node::MINUS> MINUS();
+		AccessTemplateBase<::fgl::ast::node::capture> capture();
+AccessTemplateBase<::fgl::ast::node::manipulation> manipulation();
+AccessTemplateBase<::fgl::ast::node::object> object();
+AccessTemplateBase<::fgl::ast::node::ARROW> ARROW();
+AccessTemplateBase<::fgl::ast::node::MINUS> MINUS();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::exit_manipulation_rule>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -788,31 +925,51 @@ Access<::fgl::ast::node::MINUS> MINUS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::capture> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::capture> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::capture*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::capture*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::capture*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::capture& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::capture& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::capture* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::capture* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::capture>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::capture>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -828,7 +985,7 @@ Access<::fgl::ast::node::MINUS> MINUS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::capture>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::capture>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -862,17 +1019,17 @@ Access<::fgl::ast::node::MINUS> MINUS();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____> deamerreserved_arrow__deamerreserved_optional__flavor_capture____();
-Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__();
-Access<::fgl::ast::node::flavor_capture> flavor_capture();
-Access<::fgl::ast::node::LEFT_SQUARE_BRACKET> LEFT_SQUARE_BRACKET();
-Access<::fgl::ast::node::RIGHT_SQUARE_BRACKET> RIGHT_SQUARE_BRACKET();
-Access<::fgl::ast::node::COMMA> COMMA();
-Access<::fgl::ast::node::AND> AND();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____> deamerreserved_arrow__deamerreserved_optional__flavor_capture____();
+AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__();
+AccessTemplateBase<::fgl::ast::node::flavor_capture> flavor_capture();
+AccessTemplateBase<::fgl::ast::node::LEFT_SQUARE_BRACKET> LEFT_SQUARE_BRACKET();
+AccessTemplateBase<::fgl::ast::node::RIGHT_SQUARE_BRACKET> RIGHT_SQUARE_BRACKET();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
+AccessTemplateBase<::fgl::ast::node::AND> AND();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::capture>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::capture>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -881,31 +1038,51 @@ Access<::fgl::ast::node::AND> AND();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -921,7 +1098,7 @@ Access<::fgl::ast::node::AND> AND();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -955,14 +1132,14 @@ Access<::fgl::ast::node::AND> AND();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__();
-Access<::fgl::ast::node::flavor_capture> flavor_capture();
-Access<::fgl::ast::node::COMMA> COMMA();
-Access<::fgl::ast::node::AND> AND();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__();
+AccessTemplateBase<::fgl::ast::node::flavor_capture> flavor_capture();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
+AccessTemplateBase<::fgl::ast::node::AND> AND();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -971,31 +1148,51 @@ Access<::fgl::ast::node::AND> AND();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1011,7 +1208,7 @@ Access<::fgl::ast::node::AND> AND();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1045,14 +1242,14 @@ Access<::fgl::ast::node::AND> AND();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__();
-Access<::fgl::ast::node::flavor_capture> flavor_capture();
-Access<::fgl::ast::node::COMMA> COMMA();
-Access<::fgl::ast::node::AND> AND();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__();
+AccessTemplateBase<::fgl::ast::node::flavor_capture> flavor_capture();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
+AccessTemplateBase<::fgl::ast::node::AND> AND();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1061,31 +1258,51 @@ Access<::fgl::ast::node::AND> AND();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::manipulation> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::manipulation> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::manipulation*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::manipulation*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::manipulation*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::manipulation& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::manipulation& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::manipulation* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::manipulation* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::manipulation>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::manipulation>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1101,7 +1318,7 @@ Access<::fgl::ast::node::AND> AND();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::manipulation>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::manipulation>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1135,16 +1352,16 @@ Access<::fgl::ast::node::AND> AND();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____> deamerreserved_arrow__deamerreserved_optional__instruction____();
-Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> deamerreserved_star__COMMA__instruction__();
-Access<::fgl::ast::node::instruction> instruction();
-Access<::fgl::ast::node::LEFT_BRACKET> LEFT_BRACKET();
-Access<::fgl::ast::node::RIGHT_BRACKET> RIGHT_BRACKET();
-Access<::fgl::ast::node::COMMA> COMMA();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____> deamerreserved_arrow__deamerreserved_optional__instruction____();
+AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> deamerreserved_star__COMMA__instruction__();
+AccessTemplateBase<::fgl::ast::node::instruction> instruction();
+AccessTemplateBase<::fgl::ast::node::LEFT_BRACKET> LEFT_BRACKET();
+AccessTemplateBase<::fgl::ast::node::RIGHT_BRACKET> RIGHT_BRACKET();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::manipulation>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::manipulation>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1153,31 +1370,51 @@ Access<::fgl::ast::node::COMMA> COMMA();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1193,7 +1430,7 @@ Access<::fgl::ast::node::COMMA> COMMA();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1227,13 +1464,13 @@ Access<::fgl::ast::node::COMMA> COMMA();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> deamerreserved_star__COMMA__instruction__();
-Access<::fgl::ast::node::instruction> instruction();
-Access<::fgl::ast::node::COMMA> COMMA();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> deamerreserved_star__COMMA__instruction__();
+AccessTemplateBase<::fgl::ast::node::instruction> instruction();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1242,31 +1479,51 @@ Access<::fgl::ast::node::COMMA> COMMA();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_star__COMMA__instruction__*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_star__COMMA__instruction__*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_star__COMMA__instruction__*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__COMMA__instruction__& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__COMMA__instruction__& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__COMMA__instruction__* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__COMMA__instruction__* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1282,7 +1539,7 @@ Access<::fgl::ast::node::COMMA> COMMA();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1316,13 +1573,13 @@ Access<::fgl::ast::node::COMMA> COMMA();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> deamerreserved_star__COMMA__instruction__();
-Access<::fgl::ast::node::instruction> instruction();
-Access<::fgl::ast::node::COMMA> COMMA();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> deamerreserved_star__COMMA__instruction__();
+AccessTemplateBase<::fgl::ast::node::instruction> instruction();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1331,31 +1588,51 @@ Access<::fgl::ast::node::COMMA> COMMA();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::instruction> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::instruction> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::instruction*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::instruction*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::instruction*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::instruction& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::instruction& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::instruction* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::instruction* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::instruction>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::instruction>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1371,7 +1648,7 @@ Access<::fgl::ast::node::COMMA> COMMA();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::instruction>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::instruction>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1405,14 +1682,14 @@ Access<::fgl::ast::node::COMMA> COMMA();
 		}
 
 	public:
-		Access<::fgl::ast::node::new_flavor> new_flavor();
-Access<::fgl::ast::node::delete_flavor> delete_flavor();
-Access<::fgl::ast::node::expand_flavor> expand_flavor();
-Access<::fgl::ast::node::user_defined_instruction> user_defined_instruction();
+		AccessTemplateBase<::fgl::ast::node::new_flavor> new_flavor();
+AccessTemplateBase<::fgl::ast::node::delete_flavor> delete_flavor();
+AccessTemplateBase<::fgl::ast::node::expand_flavor> expand_flavor();
+AccessTemplateBase<::fgl::ast::node::user_defined_instruction> user_defined_instruction();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::instruction>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::instruction>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1421,31 +1698,51 @@ Access<::fgl::ast::node::user_defined_instruction> user_defined_instruction();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::new_flavor> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::new_flavor> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::new_flavor*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::new_flavor*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::new_flavor*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::new_flavor& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::new_flavor& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::new_flavor* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::new_flavor* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::new_flavor>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::new_flavor>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1461,7 +1758,7 @@ Access<::fgl::ast::node::user_defined_instruction> user_defined_instruction();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::new_flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::new_flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1495,13 +1792,13 @@ Access<::fgl::ast::node::user_defined_instruction> user_defined_instruction();
 		}
 
 	public:
-		Access<::fgl::ast::node::flavor> flavor();
-Access<::fgl::ast::node::DOT> DOT();
-Access<::fgl::ast::node::NEW> NEW();
+		AccessTemplateBase<::fgl::ast::node::flavor> flavor();
+AccessTemplateBase<::fgl::ast::node::DOT> DOT();
+AccessTemplateBase<::fgl::ast::node::NEW> NEW();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::new_flavor>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::new_flavor>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1510,31 +1807,51 @@ Access<::fgl::ast::node::NEW> NEW();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::delete_flavor> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::delete_flavor> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::delete_flavor*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::delete_flavor*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::delete_flavor*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::delete_flavor& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::delete_flavor& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::delete_flavor* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::delete_flavor* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::delete_flavor>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::delete_flavor>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1550,7 +1867,7 @@ Access<::fgl::ast::node::NEW> NEW();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::delete_flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::delete_flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1584,13 +1901,13 @@ Access<::fgl::ast::node::NEW> NEW();
 		}
 
 	public:
-		Access<::fgl::ast::node::flavor> flavor();
-Access<::fgl::ast::node::DOT> DOT();
-Access<::fgl::ast::node::DELETE> DELETE();
+		AccessTemplateBase<::fgl::ast::node::flavor> flavor();
+AccessTemplateBase<::fgl::ast::node::DOT> DOT();
+AccessTemplateBase<::fgl::ast::node::DELETE> DELETE();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::delete_flavor>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::delete_flavor>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1599,31 +1916,51 @@ Access<::fgl::ast::node::DELETE> DELETE();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::expand_flavor> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::expand_flavor> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::expand_flavor*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::expand_flavor*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::expand_flavor*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::expand_flavor& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::expand_flavor& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::expand_flavor* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::expand_flavor* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::expand_flavor>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::expand_flavor>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1639,7 +1976,7 @@ Access<::fgl::ast::node::DELETE> DELETE();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::expand_flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::expand_flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1673,17 +2010,17 @@ Access<::fgl::ast::node::DELETE> DELETE();
 		}
 
 	public:
-		Access<::fgl::ast::node::value> value();
-Access<::fgl::ast::node::flavor> flavor();
-Access<::fgl::ast::node::LEFT_PARANTHESIS> LEFT_PARANTHESIS();
-Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
-Access<::fgl::ast::node::DOT> DOT();
-Access<::fgl::ast::node::EXPAND> EXPAND();
-Access<::fgl::ast::node::WITH> WITH();
+		AccessTemplateBase<::fgl::ast::node::value> value();
+AccessTemplateBase<::fgl::ast::node::flavor> flavor();
+AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> LEFT_PARANTHESIS();
+AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
+AccessTemplateBase<::fgl::ast::node::DOT> DOT();
+AccessTemplateBase<::fgl::ast::node::EXPAND> EXPAND();
+AccessTemplateBase<::fgl::ast::node::WITH> WITH();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::expand_flavor>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::expand_flavor>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1692,31 +2029,51 @@ Access<::fgl::ast::node::WITH> WITH();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::flavor_capture> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::flavor_capture> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::flavor_capture*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::flavor_capture*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::flavor_capture*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::flavor_capture& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::flavor_capture& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::flavor_capture* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::flavor_capture* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::flavor_capture>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::flavor_capture>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1732,7 +2089,7 @@ Access<::fgl::ast::node::WITH> WITH();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::flavor_capture>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::flavor_capture>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1766,12 +2123,12 @@ Access<::fgl::ast::node::WITH> WITH();
 		}
 
 	public:
-		Access<::fgl::ast::node::conditional_flavor> conditional_flavor();
-Access<::fgl::ast::node::flavor> flavor();
+		AccessTemplateBase<::fgl::ast::node::conditional_flavor> conditional_flavor();
+AccessTemplateBase<::fgl::ast::node::flavor> flavor();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::flavor_capture>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::flavor_capture>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1780,31 +2137,51 @@ Access<::fgl::ast::node::flavor> flavor();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::conditional_flavor> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::conditional_flavor> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::conditional_flavor*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::conditional_flavor*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::conditional_flavor*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::conditional_flavor& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::conditional_flavor& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::conditional_flavor* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::conditional_flavor* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::conditional_flavor>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::conditional_flavor>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1820,7 +2197,7 @@ Access<::fgl::ast::node::flavor> flavor();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::conditional_flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::conditional_flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1854,16 +2231,16 @@ Access<::fgl::ast::node::flavor> flavor();
 		}
 
 	public:
-		Access<::fgl::ast::node::value> value();
-Access<::fgl::ast::node::EQEQ> EQEQ();
-Access<::fgl::ast::node::GTE> GTE();
-Access<::fgl::ast::node::GT> GT();
-Access<::fgl::ast::node::LTE> LTE();
-Access<::fgl::ast::node::LT> LT();
+		AccessTemplateBase<::fgl::ast::node::value> value();
+AccessTemplateBase<::fgl::ast::node::EQEQ> EQEQ();
+AccessTemplateBase<::fgl::ast::node::GTE> GTE();
+AccessTemplateBase<::fgl::ast::node::GT> GT();
+AccessTemplateBase<::fgl::ast::node::LTE> LTE();
+AccessTemplateBase<::fgl::ast::node::LT> LT();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::conditional_flavor>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::conditional_flavor>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1872,31 +2249,51 @@ Access<::fgl::ast::node::LT> LT();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::value> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::value> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::value*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::value*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::value*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::value& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::value& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::value* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::value* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::value>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::value>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -1912,7 +2309,7 @@ Access<::fgl::ast::node::LT> LT();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::value>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::value>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -1946,13 +2343,13 @@ Access<::fgl::ast::node::LT> LT();
 		}
 
 	public:
-		Access<::fgl::ast::node::object_access> object_access();
-Access<::fgl::ast::node::NUMBER> NUMBER();
-Access<::fgl::ast::node::STRING> STRING();
+		AccessTemplateBase<::fgl::ast::node::object_access> object_access();
+AccessTemplateBase<::fgl::ast::node::NUMBER> NUMBER();
+AccessTemplateBase<::fgl::ast::node::STRING> STRING();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::value>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::value>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -1961,31 +2358,51 @@ Access<::fgl::ast::node::STRING> STRING();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::user_defined_instruction> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::user_defined_instruction> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::user_defined_instruction*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::user_defined_instruction*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::user_defined_instruction*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::user_defined_instruction& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::user_defined_instruction& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::user_defined_instruction* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::user_defined_instruction* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::user_defined_instruction>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::user_defined_instruction>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2001,7 +2418,7 @@ Access<::fgl::ast::node::STRING> STRING();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::user_defined_instruction>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::user_defined_instruction>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2035,11 +2452,11 @@ Access<::fgl::ast::node::STRING> STRING();
 		}
 
 	public:
-		Access<::fgl::ast::node::value> value();
+		AccessTemplateBase<::fgl::ast::node::value> value();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::user_defined_instruction>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::user_defined_instruction>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2048,31 +2465,51 @@ Access<::fgl::ast::node::STRING> STRING();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::object> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::object> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::object*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::object*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::object*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::object& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::object& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::object* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::object* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::object>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::object>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2088,7 +2525,7 @@ Access<::fgl::ast::node::STRING> STRING();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::object>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::object>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2122,11 +2559,11 @@ Access<::fgl::ast::node::STRING> STRING();
 		}
 
 	public:
-		Access<::fgl::ast::node::VARNAME> VARNAME();
+		AccessTemplateBase<::fgl::ast::node::VARNAME> VARNAME();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::object>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::object>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2135,31 +2572,51 @@ Access<::fgl::ast::node::STRING> STRING();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::object_access> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::object_access> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::object_access*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::object_access*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::object_access*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::object_access& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::object_access& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::object_access* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::object_access* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::object_access>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::object_access>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2175,7 +2632,7 @@ Access<::fgl::ast::node::STRING> STRING();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::object_access>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::object_access>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2209,14 +2666,14 @@ Access<::fgl::ast::node::STRING> STRING();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_arrow__member__> deamerreserved_arrow__member__();
-Access<::fgl::ast::node::deamerreserved_star__DOT__member__> deamerreserved_star__DOT__member__();
-Access<::fgl::ast::node::member> member();
-Access<::fgl::ast::node::DOT> DOT();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__> deamerreserved_arrow__member__();
+AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__> deamerreserved_star__DOT__member__();
+AccessTemplateBase<::fgl::ast::node::member> member();
+AccessTemplateBase<::fgl::ast::node::DOT> DOT();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::object_access>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::object_access>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2225,31 +2682,51 @@ Access<::fgl::ast::node::DOT> DOT();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_arrow__member__> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_arrow__member__*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_arrow__member__*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_arrow__member__*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_arrow__member__& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_arrow__member__& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_arrow__member__* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_arrow__member__* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_arrow__member__>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2265,7 +2742,7 @@ Access<::fgl::ast::node::DOT> DOT();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_arrow__member__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2299,13 +2776,13 @@ Access<::fgl::ast::node::DOT> DOT();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__DOT__member__> deamerreserved_star__DOT__member__();
-Access<::fgl::ast::node::member> member();
-Access<::fgl::ast::node::DOT> DOT();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__> deamerreserved_star__DOT__member__();
+AccessTemplateBase<::fgl::ast::node::member> member();
+AccessTemplateBase<::fgl::ast::node::DOT> DOT();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_arrow__member__>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2314,31 +2791,51 @@ Access<::fgl::ast::node::DOT> DOT();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__DOT__member__> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_star__DOT__member__*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_star__DOT__member__*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_star__DOT__member__*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__DOT__member__& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__DOT__member__& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__DOT__member__* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__DOT__member__* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__DOT__member__>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2354,7 +2851,7 @@ Access<::fgl::ast::node::DOT> DOT();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_star__DOT__member__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2388,13 +2885,13 @@ Access<::fgl::ast::node::DOT> DOT();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__DOT__member__> deamerreserved_star__DOT__member__();
-Access<::fgl::ast::node::member> member();
-Access<::fgl::ast::node::DOT> DOT();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__> deamerreserved_star__DOT__member__();
+AccessTemplateBase<::fgl::ast::node::member> member();
+AccessTemplateBase<::fgl::ast::node::DOT> DOT();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_star__DOT__member__>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2403,31 +2900,51 @@ Access<::fgl::ast::node::DOT> DOT();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::member> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::member> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::member*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::member*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::member*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::member& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::member& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::member* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::member* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::member>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::member>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2443,7 +2960,7 @@ Access<::fgl::ast::node::DOT> DOT();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::member>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::member>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2477,17 +2994,17 @@ Access<::fgl::ast::node::DOT> DOT();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> deamerreserved_arrow__deamerreserved_optional__argument____();
-Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
-Access<::fgl::ast::node::argument> argument();
-Access<::fgl::ast::node::LEFT_PARANTHESIS> LEFT_PARANTHESIS();
-Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
-Access<::fgl::ast::node::COMMA> COMMA();
-Access<::fgl::ast::node::VARNAME> VARNAME();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> deamerreserved_arrow__deamerreserved_optional__argument____();
+AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
+AccessTemplateBase<::fgl::ast::node::argument> argument();
+AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> LEFT_PARANTHESIS();
+AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
+AccessTemplateBase<::fgl::ast::node::VARNAME> VARNAME();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::member>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::member>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2496,31 +3013,51 @@ Access<::fgl::ast::node::VARNAME> VARNAME();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2536,7 +3073,7 @@ Access<::fgl::ast::node::VARNAME> VARNAME();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2570,13 +3107,13 @@ Access<::fgl::ast::node::VARNAME> VARNAME();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
-Access<::fgl::ast::node::argument> argument();
-Access<::fgl::ast::node::COMMA> COMMA();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
+AccessTemplateBase<::fgl::ast::node::argument> argument();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2585,31 +3122,51 @@ Access<::fgl::ast::node::COMMA> COMMA();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::deamerreserved_star__COMMA__argument__*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::deamerreserved_star__COMMA__argument__*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::deamerreserved_star__COMMA__argument__*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__COMMA__argument__& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__COMMA__argument__& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::deamerreserved_star__COMMA__argument__* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::deamerreserved_star__COMMA__argument__* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2625,7 +3182,7 @@ Access<::fgl::ast::node::COMMA> COMMA();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2659,13 +3216,13 @@ Access<::fgl::ast::node::COMMA> COMMA();
 		}
 
 	public:
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
-Access<::fgl::ast::node::argument> argument();
-Access<::fgl::ast::node::COMMA> COMMA();
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
+AccessTemplateBase<::fgl::ast::node::argument> argument();
+AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2674,31 +3231,51 @@ Access<::fgl::ast::node::COMMA> COMMA();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::argument> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::argument> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::argument*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::argument*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::argument*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::argument& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::argument& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::argument* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::argument* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::argument>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::argument>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2714,7 +3291,7 @@ Access<::fgl::ast::node::COMMA> COMMA();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::argument>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::argument>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2748,11 +3325,11 @@ Access<::fgl::ast::node::COMMA> COMMA();
 		}
 
 	public:
-		Access<::fgl::ast::node::value> value();
+		AccessTemplateBase<::fgl::ast::node::value> value();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::argument>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::argument>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2761,31 +3338,51 @@ Access<::fgl::ast::node::COMMA> COMMA();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::flavor> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::flavor> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::flavor*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::flavor*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::flavor*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::flavor& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::flavor& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::flavor* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::flavor* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::flavor>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::flavor>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2801,7 +3398,7 @@ Access<::fgl::ast::node::COMMA> COMMA();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::flavor>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2835,12 +3432,12 @@ Access<::fgl::ast::node::COMMA> COMMA();
 		}
 
 	public:
-		Access<::fgl::ast::node::flavor_specialization> flavor_specialization();
-Access<::fgl::ast::node::VARNAME> VARNAME();
+		AccessTemplateBase<::fgl::ast::node::flavor_specialization> flavor_specialization();
+AccessTemplateBase<::fgl::ast::node::VARNAME> VARNAME();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::flavor>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::flavor>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2849,31 +3446,51 @@ Access<::fgl::ast::node::VARNAME> VARNAME();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::flavor_specialization> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::flavor_specialization> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::flavor_specialization*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::flavor_specialization*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::flavor_specialization*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::flavor_specialization& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::flavor_specialization& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::flavor_specialization* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::flavor_specialization* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::flavor_specialization>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::flavor_specialization>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2889,7 +3506,7 @@ Access<::fgl::ast::node::VARNAME> VARNAME();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::flavor_specialization>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::flavor_specialization>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -2923,13 +3540,13 @@ Access<::fgl::ast::node::VARNAME> VARNAME();
 		}
 
 	public:
-		Access<::fgl::ast::node::value> value();
-Access<::fgl::ast::node::LEFT_PARANTHESIS> LEFT_PARANTHESIS();
-Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
+		AccessTemplateBase<::fgl::ast::node::value> value();
+AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> LEFT_PARANTHESIS();
+AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::flavor_specialization>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::flavor_specialization>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -2938,31 +3555,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::COMMENT> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::COMMENT> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::COMMENT*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::COMMENT*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::COMMENT*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::COMMENT& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::COMMENT& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::COMMENT* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::COMMENT* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::COMMENT>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::COMMENT>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -2978,7 +3615,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::COMMENT>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::COMMENT>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3015,7 +3652,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::COMMENT>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::COMMENT>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3024,31 +3661,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::LEFT_SQUARE_BRACKET> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::LEFT_SQUARE_BRACKET> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::LEFT_SQUARE_BRACKET*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::LEFT_SQUARE_BRACKET*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::LEFT_SQUARE_BRACKET*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::LEFT_SQUARE_BRACKET& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::LEFT_SQUARE_BRACKET& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::LEFT_SQUARE_BRACKET* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::LEFT_SQUARE_BRACKET* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::LEFT_SQUARE_BRACKET>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::LEFT_SQUARE_BRACKET>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3064,7 +3721,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::LEFT_SQUARE_BRACKET>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::LEFT_SQUARE_BRACKET>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3101,7 +3758,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::LEFT_SQUARE_BRACKET>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::LEFT_SQUARE_BRACKET>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3110,31 +3767,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::RIGHT_SQUARE_BRACKET> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::RIGHT_SQUARE_BRACKET> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::RIGHT_SQUARE_BRACKET*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::RIGHT_SQUARE_BRACKET*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::RIGHT_SQUARE_BRACKET*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::RIGHT_SQUARE_BRACKET& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::RIGHT_SQUARE_BRACKET& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::RIGHT_SQUARE_BRACKET* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::RIGHT_SQUARE_BRACKET* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::RIGHT_SQUARE_BRACKET>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_SQUARE_BRACKET>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3150,7 +3827,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::RIGHT_SQUARE_BRACKET>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_SQUARE_BRACKET>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3187,7 +3864,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::RIGHT_SQUARE_BRACKET>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_SQUARE_BRACKET>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3196,31 +3873,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::LEFT_BRACKET> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::LEFT_BRACKET> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::LEFT_BRACKET*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::LEFT_BRACKET*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::LEFT_BRACKET*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::LEFT_BRACKET& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::LEFT_BRACKET& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::LEFT_BRACKET* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::LEFT_BRACKET* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::LEFT_BRACKET>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::LEFT_BRACKET>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3236,7 +3933,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::LEFT_BRACKET>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::LEFT_BRACKET>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3273,7 +3970,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::LEFT_BRACKET>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::LEFT_BRACKET>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3282,31 +3979,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::RIGHT_BRACKET> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::RIGHT_BRACKET> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::RIGHT_BRACKET*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::RIGHT_BRACKET*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::RIGHT_BRACKET*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::RIGHT_BRACKET& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::RIGHT_BRACKET& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::RIGHT_BRACKET* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::RIGHT_BRACKET* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::RIGHT_BRACKET>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_BRACKET>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3322,7 +4039,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::RIGHT_BRACKET>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_BRACKET>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3359,7 +4076,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::RIGHT_BRACKET>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_BRACKET>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3368,31 +4085,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::LEFT_PARANTHESIS> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::LEFT_PARANTHESIS*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::LEFT_PARANTHESIS*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::LEFT_PARANTHESIS*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::LEFT_PARANTHESIS& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::LEFT_PARANTHESIS& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::LEFT_PARANTHESIS* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::LEFT_PARANTHESIS* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::LEFT_PARANTHESIS>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3408,7 +4145,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::LEFT_PARANTHESIS>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3445,7 +4182,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::LEFT_PARANTHESIS>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3454,31 +4191,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::RIGHT_PARANTHESIS> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::RIGHT_PARANTHESIS*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::RIGHT_PARANTHESIS*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::RIGHT_PARANTHESIS*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::RIGHT_PARANTHESIS& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::RIGHT_PARANTHESIS& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::RIGHT_PARANTHESIS* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::RIGHT_PARANTHESIS* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::RIGHT_PARANTHESIS>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3494,7 +4251,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::RIGHT_PARANTHESIS>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3531,7 +4288,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::RIGHT_PARANTHESIS>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3540,31 +4297,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::COMMA> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::COMMA> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::COMMA*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::COMMA*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::COMMA*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::COMMA& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::COMMA& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::COMMA* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::COMMA* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::COMMA>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::COMMA>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3580,7 +4357,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::COMMA>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::COMMA>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3617,7 +4394,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::COMMA>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::COMMA>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3626,31 +4403,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::DOT> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::DOT> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::DOT*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::DOT*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::DOT*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::DOT& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::DOT& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::DOT* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::DOT* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::DOT>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::DOT>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3666,7 +4463,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::DOT>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::DOT>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3703,7 +4500,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::DOT>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::DOT>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3712,31 +4509,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::ARROW> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::ARROW> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::ARROW*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::ARROW*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::ARROW*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::ARROW& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::ARROW& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::ARROW* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::ARROW* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::ARROW>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::ARROW>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3752,7 +4569,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::ARROW>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::ARROW>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3789,7 +4606,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::ARROW>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::ARROW>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3798,31 +4615,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::COLON> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::COLON> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::COLON*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::COLON*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::COLON*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::COLON& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::COLON& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::COLON* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::COLON* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::COLON>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::COLON>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3838,7 +4675,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::COLON>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::COLON>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3875,7 +4712,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::COLON>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::COLON>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3884,31 +4721,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::NEW> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::NEW> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::NEW*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::NEW*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::NEW*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::NEW& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::NEW& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::NEW* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::NEW* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::NEW>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::NEW>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -3924,7 +4781,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::NEW>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::NEW>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -3961,7 +4818,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::NEW>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::NEW>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -3970,31 +4827,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::DELETE> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::DELETE> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::DELETE*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::DELETE*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::DELETE*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::DELETE& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::DELETE& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::DELETE* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::DELETE* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::DELETE>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::DELETE>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4010,7 +4887,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::DELETE>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::DELETE>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4047,7 +4924,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::DELETE>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::DELETE>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4056,31 +4933,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::EXPAND> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::EXPAND> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::EXPAND*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::EXPAND*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::EXPAND*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::EXPAND& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::EXPAND& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::EXPAND* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::EXPAND* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::EXPAND>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::EXPAND>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4096,7 +4993,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::EXPAND>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::EXPAND>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4133,7 +5030,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::EXPAND>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::EXPAND>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4142,31 +5039,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::WITH> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::WITH> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::WITH*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::WITH*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::WITH*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::WITH& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::WITH& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::WITH* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::WITH* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::WITH>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::WITH>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4182,7 +5099,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::WITH>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::WITH>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4219,7 +5136,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::WITH>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::WITH>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4228,31 +5145,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::AND> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::AND> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::AND*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::AND*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::AND*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::AND& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::AND& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::AND* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::AND* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::AND>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::AND>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4268,7 +5205,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::AND>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::AND>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4305,7 +5242,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::AND>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::AND>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4314,31 +5251,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::EQEQ> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::EQEQ> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::EQEQ*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::EQEQ*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::EQEQ*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::EQEQ& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::EQEQ& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::EQEQ* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::EQEQ* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::EQEQ>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::EQEQ>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4354,7 +5311,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::EQEQ>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::EQEQ>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4391,7 +5348,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::EQEQ>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::EQEQ>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4400,31 +5357,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::EQ> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::EQ> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::EQ*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::EQ*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::EQ*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::EQ& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::EQ& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::EQ* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::EQ* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::EQ>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::EQ>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4440,7 +5417,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::EQ>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::EQ>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4477,7 +5454,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::EQ>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::EQ>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4486,31 +5463,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::GTE> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::GTE> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::GTE*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::GTE*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::GTE*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::GTE& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::GTE& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::GTE* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::GTE* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::GTE>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::GTE>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4526,7 +5523,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::GTE>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::GTE>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4563,7 +5560,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::GTE>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::GTE>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4572,31 +5569,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::GT> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::GT> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::GT*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::GT*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::GT*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::GT& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::GT& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::GT* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::GT* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::GT>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::GT>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4612,7 +5629,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::GT>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::GT>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4649,7 +5666,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::GT>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::GT>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4658,31 +5675,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::LTE> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::LTE> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::LTE*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::LTE*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::LTE*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::LTE& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::LTE& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::LTE* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::LTE* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::LTE>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::LTE>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4698,7 +5735,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::LTE>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::LTE>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4735,7 +5772,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::LTE>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::LTE>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4744,31 +5781,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::LT> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::LT> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::LT*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::LT*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::LT*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::LT& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::LT& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::LT* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::LT* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::LT>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::LT>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4784,7 +5841,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::LT>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::LT>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4821,7 +5878,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::LT>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::LT>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4830,31 +5887,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::ADD> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::ADD> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::ADD*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::ADD*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::ADD*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::ADD& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::ADD& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::ADD* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::ADD* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::ADD>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::ADD>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4870,7 +5947,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::ADD>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::ADD>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4907,7 +5984,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::ADD>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::ADD>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -4916,31 +5993,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::MINUS> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::MINUS> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::MINUS*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::MINUS*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::MINUS*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::MINUS& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::MINUS& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::MINUS* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::MINUS* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::MINUS>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::MINUS>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -4956,7 +6053,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::MINUS>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::MINUS>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -4993,7 +6090,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::MINUS>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::MINUS>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5002,31 +6099,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::TARGET_SETTING> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::TARGET_SETTING> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::TARGET_SETTING*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::TARGET_SETTING*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::TARGET_SETTING*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::TARGET_SETTING& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::TARGET_SETTING& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::TARGET_SETTING* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::TARGET_SETTING* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::TARGET_SETTING>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::TARGET_SETTING>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5042,7 +6159,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::TARGET_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::TARGET_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5079,7 +6196,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::TARGET_SETTING>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::TARGET_SETTING>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5088,31 +6205,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::INCLUDE_SETTING> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::INCLUDE_SETTING*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::INCLUDE_SETTING*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::INCLUDE_SETTING*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::INCLUDE_SETTING& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::INCLUDE_SETTING& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::INCLUDE_SETTING* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::INCLUDE_SETTING* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::INCLUDE_SETTING>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5128,7 +6265,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::INCLUDE_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5165,7 +6302,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::INCLUDE_SETTING>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5174,31 +6311,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::MEMBER_SETTING> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::MEMBER_SETTING*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::MEMBER_SETTING*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::MEMBER_SETTING*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::MEMBER_SETTING& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::MEMBER_SETTING& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::MEMBER_SETTING* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::MEMBER_SETTING* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::MEMBER_SETTING>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5214,7 +6371,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::MEMBER_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5251,7 +6408,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::MEMBER_SETTING>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5260,31 +6417,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::FUNCTION_SETTING> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::FUNCTION_SETTING*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::FUNCTION_SETTING*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::FUNCTION_SETTING*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::FUNCTION_SETTING& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::FUNCTION_SETTING& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::FUNCTION_SETTING* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::FUNCTION_SETTING* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::FUNCTION_SETTING>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5300,7 +6477,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::FUNCTION_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5337,7 +6514,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::FUNCTION_SETTING>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5346,31 +6523,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::USER_INSERTED_SETTING> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::USER_INSERTED_SETTING*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::USER_INSERTED_SETTING*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::USER_INSERTED_SETTING*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::USER_INSERTED_SETTING& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::USER_INSERTED_SETTING& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::USER_INSERTED_SETTING* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::USER_INSERTED_SETTING* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::USER_INSERTED_SETTING>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5386,7 +6583,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::USER_INSERTED_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5423,7 +6620,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::USER_INSERTED_SETTING>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5432,31 +6629,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::VARNAME> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::VARNAME> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::VARNAME*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::VARNAME*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::VARNAME*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::VARNAME& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::VARNAME& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::VARNAME* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::VARNAME* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::VARNAME>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::VARNAME>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5472,7 +6689,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::VARNAME>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::VARNAME>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5509,7 +6726,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::VARNAME>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::VARNAME>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5518,31 +6735,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::NUMBER> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::NUMBER> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::NUMBER*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::NUMBER*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::NUMBER*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::NUMBER& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::NUMBER& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::NUMBER* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::NUMBER* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::NUMBER>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::NUMBER>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5558,7 +6795,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::NUMBER>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::NUMBER>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5595,7 +6832,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::NUMBER>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::NUMBER>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5604,31 +6841,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::STRING> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::STRING> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::STRING*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::STRING*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::STRING*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::STRING& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::STRING& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::STRING* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::STRING* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::STRING>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::STRING>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5644,7 +6901,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::STRING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::STRING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5681,7 +6938,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::STRING>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::STRING>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5690,31 +6947,51 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 	template<>
-	struct Access<::fgl::ast::node::ESCAPE_CHARS> : public AccessBase
+	struct AccessTemplateBase<::fgl::ast::node::ESCAPE_CHARS> : public AccessBase
 	{
 	protected:
 		std::vector<const ::fgl::ast::node::ESCAPE_CHARS*> ts;
 
 	public:
-		Access(std::vector<const ::fgl::ast::node::ESCAPE_CHARS*> ts_) : ts(std::move(ts_))
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::ESCAPE_CHARS*> ts_) : ts(std::move(ts_))
 		{
 		}
 
-		Access(const ::fgl::ast::node::ESCAPE_CHARS& t) : ts({&t})
+		AccessTemplateBase(const ::fgl::ast::node::ESCAPE_CHARS& t) : ts({&t})
 		{
 		}
 
-		Access(const ::fgl::ast::node::ESCAPE_CHARS* t) : ts({t})
+		AccessTemplateBase(const ::fgl::ast::node::ESCAPE_CHARS* t) : ts({t})
 		{
 		}
 
-		Access() = default;
+		AccessTemplateBase() = default;
 
 	public:
-		Access<::fgl::ast::node::ESCAPE_CHARS>& operator[](::std::size_t index)
+		AccessTemplateBase<::fgl::ast::node::ESCAPE_CHARS>& operator[](::std::size_t index)
 		{
 			if (index >= ts.size())
 			{
@@ -5730,7 +7007,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return *this;
 		}
 
-		Access<::fgl::ast::node::ESCAPE_CHARS>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		AccessTemplateBase<::fgl::ast::node::ESCAPE_CHARS>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
 		{
 			// swap if the other is larger
 			if (indexBegin > indexEnd)
@@ -5767,7 +7044,7 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 		
 
 		template<typename FunctionType>
-		Access<::fgl::ast::node::ESCAPE_CHARS>& for_all(FunctionType function)
+		AccessTemplateBase<::fgl::ast::node::ESCAPE_CHARS>& for_all(FunctionType function)
 		{
 			for (const auto* const t : ts)
 			{
@@ -5776,872 +7053,892 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			return *this;
 		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
 	};
 
 
 	
-		inline Access<::fgl::ast::node::deamerreserved_star__stmt__> Access<::fgl::ast::node::program>::deamerreserved_star__stmt__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__> AccessTemplateBase<::fgl::ast::node::program>::deamerreserved_star__stmt__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__stmt__>(Get<::fgl::ast::Type::deamerreserved_star__stmt__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__>(Get<::fgl::ast::Type::deamerreserved_star__stmt__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::stmt> Access<::fgl::ast::node::program>::stmt()
+		inline AccessTemplateBase<::fgl::ast::node::stmt> AccessTemplateBase<::fgl::ast::node::program>::stmt()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::stmt>(Get<::fgl::ast::Type::stmt>(ts));
+			return AccessTemplateBase<::fgl::ast::node::stmt>(Get<::fgl::ast::Type::stmt>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__stmt__> Access<::fgl::ast::node::deamerreserved_star__stmt__>::deamerreserved_star__stmt__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__>::deamerreserved_star__stmt__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__stmt__>(Get<::fgl::ast::Type::deamerreserved_star__stmt__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__>(Get<::fgl::ast::Type::deamerreserved_star__stmt__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::stmt> Access<::fgl::ast::node::deamerreserved_star__stmt__>::stmt()
+		inline AccessTemplateBase<::fgl::ast::node::stmt> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__stmt__>::stmt()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::stmt>(Get<::fgl::ast::Type::stmt>(ts));
+			return AccessTemplateBase<::fgl::ast::node::stmt>(Get<::fgl::ast::Type::stmt>(ts));
 		}
 
-		inline Access<::fgl::ast::node::setting_rule> Access<::fgl::ast::node::stmt>::setting_rule()
+		inline AccessTemplateBase<::fgl::ast::node::setting_rule> AccessTemplateBase<::fgl::ast::node::stmt>::setting_rule()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::setting_rule>(Get<::fgl::ast::Type::setting_rule>(ts));
+			return AccessTemplateBase<::fgl::ast::node::setting_rule>(Get<::fgl::ast::Type::setting_rule>(ts));
 		}
 
-		inline Access<::fgl::ast::node::entry_manipulation_rule> Access<::fgl::ast::node::stmt>::entry_manipulation_rule()
+		inline AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule> AccessTemplateBase<::fgl::ast::node::stmt>::entry_manipulation_rule()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::entry_manipulation_rule>(Get<::fgl::ast::Type::entry_manipulation_rule>(ts));
+			return AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>(Get<::fgl::ast::Type::entry_manipulation_rule>(ts));
 		}
 
-		inline Access<::fgl::ast::node::exit_manipulation_rule> Access<::fgl::ast::node::stmt>::exit_manipulation_rule()
+		inline AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule> AccessTemplateBase<::fgl::ast::node::stmt>::exit_manipulation_rule()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::exit_manipulation_rule>(Get<::fgl::ast::Type::exit_manipulation_rule>(ts));
+			return AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>(Get<::fgl::ast::Type::exit_manipulation_rule>(ts));
 		}
 
-		inline Access<::fgl::ast::node::TARGET_SETTING> Access<::fgl::ast::node::setting_rule>::TARGET_SETTING()
+		inline AccessTemplateBase<::fgl::ast::node::TARGET_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::TARGET_SETTING()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::TARGET_SETTING>(Get<::fgl::ast::Type::TARGET_SETTING>(ts));
+			return AccessTemplateBase<::fgl::ast::node::TARGET_SETTING>(Get<::fgl::ast::Type::TARGET_SETTING>(ts));
 		}
 
-		inline Access<::fgl::ast::node::INCLUDE_SETTING> Access<::fgl::ast::node::setting_rule>::INCLUDE_SETTING()
+		inline AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::INCLUDE_SETTING()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::INCLUDE_SETTING>(Get<::fgl::ast::Type::INCLUDE_SETTING>(ts));
+			return AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING>(Get<::fgl::ast::Type::INCLUDE_SETTING>(ts));
 		}
 
-		inline Access<::fgl::ast::node::MEMBER_SETTING> Access<::fgl::ast::node::setting_rule>::MEMBER_SETTING()
+		inline AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::MEMBER_SETTING()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::MEMBER_SETTING>(Get<::fgl::ast::Type::MEMBER_SETTING>(ts));
+			return AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING>(Get<::fgl::ast::Type::MEMBER_SETTING>(ts));
 		}
 
-		inline Access<::fgl::ast::node::FUNCTION_SETTING> Access<::fgl::ast::node::setting_rule>::FUNCTION_SETTING()
+		inline AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::FUNCTION_SETTING()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::FUNCTION_SETTING>(Get<::fgl::ast::Type::FUNCTION_SETTING>(ts));
+			return AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING>(Get<::fgl::ast::Type::FUNCTION_SETTING>(ts));
 		}
 
-		inline Access<::fgl::ast::node::USER_INSERTED_SETTING> Access<::fgl::ast::node::setting_rule>::USER_INSERTED_SETTING()
+		inline AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::USER_INSERTED_SETTING()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::USER_INSERTED_SETTING>(Get<::fgl::ast::Type::USER_INSERTED_SETTING>(ts));
+			return AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING>(Get<::fgl::ast::Type::USER_INSERTED_SETTING>(ts));
 		}
 
-		inline Access<::fgl::ast::node::capture> Access<::fgl::ast::node::entry_manipulation_rule>::capture()
+		inline AccessTemplateBase<::fgl::ast::node::capture> AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>::capture()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::capture>(Get<::fgl::ast::Type::capture>(ts));
+			return AccessTemplateBase<::fgl::ast::node::capture>(Get<::fgl::ast::Type::capture>(ts));
 		}
 
-		inline Access<::fgl::ast::node::manipulation> Access<::fgl::ast::node::entry_manipulation_rule>::manipulation()
+		inline AccessTemplateBase<::fgl::ast::node::manipulation> AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>::manipulation()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::manipulation>(Get<::fgl::ast::Type::manipulation>(ts));
+			return AccessTemplateBase<::fgl::ast::node::manipulation>(Get<::fgl::ast::Type::manipulation>(ts));
 		}
 
-		inline Access<::fgl::ast::node::object> Access<::fgl::ast::node::entry_manipulation_rule>::object()
+		inline AccessTemplateBase<::fgl::ast::node::object> AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>::object()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::object>(Get<::fgl::ast::Type::object>(ts));
+			return AccessTemplateBase<::fgl::ast::node::object>(Get<::fgl::ast::Type::object>(ts));
 		}
 
-		inline Access<::fgl::ast::node::ARROW> Access<::fgl::ast::node::entry_manipulation_rule>::ARROW()
+		inline AccessTemplateBase<::fgl::ast::node::ARROW> AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>::ARROW()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::ARROW>(Get<::fgl::ast::Type::ARROW>(ts));
+			return AccessTemplateBase<::fgl::ast::node::ARROW>(Get<::fgl::ast::Type::ARROW>(ts));
 		}
 
-		inline Access<::fgl::ast::node::ADD> Access<::fgl::ast::node::entry_manipulation_rule>::ADD()
+		inline AccessTemplateBase<::fgl::ast::node::ADD> AccessTemplateBase<::fgl::ast::node::entry_manipulation_rule>::ADD()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::ADD>(Get<::fgl::ast::Type::ADD>(ts));
+			return AccessTemplateBase<::fgl::ast::node::ADD>(Get<::fgl::ast::Type::ADD>(ts));
 		}
 
-		inline Access<::fgl::ast::node::capture> Access<::fgl::ast::node::exit_manipulation_rule>::capture()
+		inline AccessTemplateBase<::fgl::ast::node::capture> AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>::capture()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::capture>(Get<::fgl::ast::Type::capture>(ts));
+			return AccessTemplateBase<::fgl::ast::node::capture>(Get<::fgl::ast::Type::capture>(ts));
 		}
 
-		inline Access<::fgl::ast::node::manipulation> Access<::fgl::ast::node::exit_manipulation_rule>::manipulation()
+		inline AccessTemplateBase<::fgl::ast::node::manipulation> AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>::manipulation()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::manipulation>(Get<::fgl::ast::Type::manipulation>(ts));
+			return AccessTemplateBase<::fgl::ast::node::manipulation>(Get<::fgl::ast::Type::manipulation>(ts));
 		}
 
-		inline Access<::fgl::ast::node::object> Access<::fgl::ast::node::exit_manipulation_rule>::object()
+		inline AccessTemplateBase<::fgl::ast::node::object> AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>::object()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::object>(Get<::fgl::ast::Type::object>(ts));
+			return AccessTemplateBase<::fgl::ast::node::object>(Get<::fgl::ast::Type::object>(ts));
 		}
 
-		inline Access<::fgl::ast::node::ARROW> Access<::fgl::ast::node::exit_manipulation_rule>::ARROW()
+		inline AccessTemplateBase<::fgl::ast::node::ARROW> AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>::ARROW()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::ARROW>(Get<::fgl::ast::Type::ARROW>(ts));
+			return AccessTemplateBase<::fgl::ast::node::ARROW>(Get<::fgl::ast::Type::ARROW>(ts));
 		}
 
-		inline Access<::fgl::ast::node::MINUS> Access<::fgl::ast::node::exit_manipulation_rule>::MINUS()
+		inline AccessTemplateBase<::fgl::ast::node::MINUS> AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>::MINUS()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::MINUS>(Get<::fgl::ast::Type::MINUS>(ts));
+			return AccessTemplateBase<::fgl::ast::node::MINUS>(Get<::fgl::ast::Type::MINUS>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____> Access<::fgl::ast::node::capture>::deamerreserved_arrow__deamerreserved_optional__flavor_capture____()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____> AccessTemplateBase<::fgl::ast::node::capture>::deamerreserved_arrow__deamerreserved_optional__flavor_capture____()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>(Get<::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>(Get<::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> Access<::fgl::ast::node::capture>::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> AccessTemplateBase<::fgl::ast::node::capture>::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(Get<::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(Get<::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::flavor_capture> Access<::fgl::ast::node::capture>::flavor_capture()
+		inline AccessTemplateBase<::fgl::ast::node::flavor_capture> AccessTemplateBase<::fgl::ast::node::capture>::flavor_capture()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::flavor_capture>(Get<::fgl::ast::Type::flavor_capture>(ts));
+			return AccessTemplateBase<::fgl::ast::node::flavor_capture>(Get<::fgl::ast::Type::flavor_capture>(ts));
 		}
 
-		inline Access<::fgl::ast::node::LEFT_SQUARE_BRACKET> Access<::fgl::ast::node::capture>::LEFT_SQUARE_BRACKET()
+		inline AccessTemplateBase<::fgl::ast::node::LEFT_SQUARE_BRACKET> AccessTemplateBase<::fgl::ast::node::capture>::LEFT_SQUARE_BRACKET()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::LEFT_SQUARE_BRACKET>(Get<::fgl::ast::Type::LEFT_SQUARE_BRACKET>(ts));
+			return AccessTemplateBase<::fgl::ast::node::LEFT_SQUARE_BRACKET>(Get<::fgl::ast::Type::LEFT_SQUARE_BRACKET>(ts));
 		}
 
-		inline Access<::fgl::ast::node::RIGHT_SQUARE_BRACKET> Access<::fgl::ast::node::capture>::RIGHT_SQUARE_BRACKET()
+		inline AccessTemplateBase<::fgl::ast::node::RIGHT_SQUARE_BRACKET> AccessTemplateBase<::fgl::ast::node::capture>::RIGHT_SQUARE_BRACKET()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::RIGHT_SQUARE_BRACKET>(Get<::fgl::ast::Type::RIGHT_SQUARE_BRACKET>(ts));
+			return AccessTemplateBase<::fgl::ast::node::RIGHT_SQUARE_BRACKET>(Get<::fgl::ast::Type::RIGHT_SQUARE_BRACKET>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::capture>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::capture>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::AND> Access<::fgl::ast::node::capture>::AND()
+		inline AccessTemplateBase<::fgl::ast::node::AND> AccessTemplateBase<::fgl::ast::node::capture>::AND()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::AND>(Get<::fgl::ast::Type::AND>(ts));
+			return AccessTemplateBase<::fgl::ast::node::AND>(Get<::fgl::ast::Type::AND>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(Get<::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(Get<::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::flavor_capture> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>::flavor_capture()
+		inline AccessTemplateBase<::fgl::ast::node::flavor_capture> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>::flavor_capture()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::flavor_capture>(Get<::fgl::ast::Type::flavor_capture>(ts));
+			return AccessTemplateBase<::fgl::ast::node::flavor_capture>(Get<::fgl::ast::Type::flavor_capture>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::AND> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>::AND()
+		inline AccessTemplateBase<::fgl::ast::node::AND> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____>::AND()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::AND>(Get<::fgl::ast::Type::AND>(ts));
+			return AccessTemplateBase<::fgl::ast::node::AND>(Get<::fgl::ast::Type::AND>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(Get<::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(Get<::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::flavor_capture> Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>::flavor_capture()
+		inline AccessTemplateBase<::fgl::ast::node::flavor_capture> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>::flavor_capture()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::flavor_capture>(Get<::fgl::ast::Type::flavor_capture>(ts));
+			return AccessTemplateBase<::fgl::ast::node::flavor_capture>(Get<::fgl::ast::Type::flavor_capture>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::AND> Access<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>::AND()
+		inline AccessTemplateBase<::fgl::ast::node::AND> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__>::AND()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::AND>(Get<::fgl::ast::Type::AND>(ts));
+			return AccessTemplateBase<::fgl::ast::node::AND>(Get<::fgl::ast::Type::AND>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____> Access<::fgl::ast::node::manipulation>::deamerreserved_arrow__deamerreserved_optional__instruction____()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____> AccessTemplateBase<::fgl::ast::node::manipulation>::deamerreserved_arrow__deamerreserved_optional__instruction____()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>(Get<::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>(Get<::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> Access<::fgl::ast::node::manipulation>::deamerreserved_star__COMMA__instruction__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> AccessTemplateBase<::fgl::ast::node::manipulation>::deamerreserved_star__COMMA__instruction__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__instruction__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__instruction__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::instruction> Access<::fgl::ast::node::manipulation>::instruction()
+		inline AccessTemplateBase<::fgl::ast::node::instruction> AccessTemplateBase<::fgl::ast::node::manipulation>::instruction()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::instruction>(Get<::fgl::ast::Type::instruction>(ts));
+			return AccessTemplateBase<::fgl::ast::node::instruction>(Get<::fgl::ast::Type::instruction>(ts));
 		}
 
-		inline Access<::fgl::ast::node::LEFT_BRACKET> Access<::fgl::ast::node::manipulation>::LEFT_BRACKET()
+		inline AccessTemplateBase<::fgl::ast::node::LEFT_BRACKET> AccessTemplateBase<::fgl::ast::node::manipulation>::LEFT_BRACKET()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::LEFT_BRACKET>(Get<::fgl::ast::Type::LEFT_BRACKET>(ts));
+			return AccessTemplateBase<::fgl::ast::node::LEFT_BRACKET>(Get<::fgl::ast::Type::LEFT_BRACKET>(ts));
 		}
 
-		inline Access<::fgl::ast::node::RIGHT_BRACKET> Access<::fgl::ast::node::manipulation>::RIGHT_BRACKET()
+		inline AccessTemplateBase<::fgl::ast::node::RIGHT_BRACKET> AccessTemplateBase<::fgl::ast::node::manipulation>::RIGHT_BRACKET()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::RIGHT_BRACKET>(Get<::fgl::ast::Type::RIGHT_BRACKET>(ts));
+			return AccessTemplateBase<::fgl::ast::node::RIGHT_BRACKET>(Get<::fgl::ast::Type::RIGHT_BRACKET>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::manipulation>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::manipulation>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>::deamerreserved_star__COMMA__instruction__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>::deamerreserved_star__COMMA__instruction__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__instruction__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__instruction__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::instruction> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>::instruction()
+		inline AccessTemplateBase<::fgl::ast::node::instruction> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>::instruction()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::instruction>(Get<::fgl::ast::Type::instruction>(ts));
+			return AccessTemplateBase<::fgl::ast::node::instruction>(Get<::fgl::ast::Type::instruction>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>::deamerreserved_star__COMMA__instruction__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>::deamerreserved_star__COMMA__instruction__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__instruction__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__instruction__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::instruction> Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>::instruction()
+		inline AccessTemplateBase<::fgl::ast::node::instruction> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>::instruction()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::instruction>(Get<::fgl::ast::Type::instruction>(ts));
+			return AccessTemplateBase<::fgl::ast::node::instruction>(Get<::fgl::ast::Type::instruction>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__instruction__>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::new_flavor> Access<::fgl::ast::node::instruction>::new_flavor()
+		inline AccessTemplateBase<::fgl::ast::node::new_flavor> AccessTemplateBase<::fgl::ast::node::instruction>::new_flavor()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::new_flavor>(Get<::fgl::ast::Type::new_flavor>(ts));
+			return AccessTemplateBase<::fgl::ast::node::new_flavor>(Get<::fgl::ast::Type::new_flavor>(ts));
 		}
 
-		inline Access<::fgl::ast::node::delete_flavor> Access<::fgl::ast::node::instruction>::delete_flavor()
+		inline AccessTemplateBase<::fgl::ast::node::delete_flavor> AccessTemplateBase<::fgl::ast::node::instruction>::delete_flavor()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::delete_flavor>(Get<::fgl::ast::Type::delete_flavor>(ts));
+			return AccessTemplateBase<::fgl::ast::node::delete_flavor>(Get<::fgl::ast::Type::delete_flavor>(ts));
 		}
 
-		inline Access<::fgl::ast::node::expand_flavor> Access<::fgl::ast::node::instruction>::expand_flavor()
+		inline AccessTemplateBase<::fgl::ast::node::expand_flavor> AccessTemplateBase<::fgl::ast::node::instruction>::expand_flavor()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::expand_flavor>(Get<::fgl::ast::Type::expand_flavor>(ts));
+			return AccessTemplateBase<::fgl::ast::node::expand_flavor>(Get<::fgl::ast::Type::expand_flavor>(ts));
 		}
 
-		inline Access<::fgl::ast::node::user_defined_instruction> Access<::fgl::ast::node::instruction>::user_defined_instruction()
+		inline AccessTemplateBase<::fgl::ast::node::user_defined_instruction> AccessTemplateBase<::fgl::ast::node::instruction>::user_defined_instruction()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::user_defined_instruction>(Get<::fgl::ast::Type::user_defined_instruction>(ts));
+			return AccessTemplateBase<::fgl::ast::node::user_defined_instruction>(Get<::fgl::ast::Type::user_defined_instruction>(ts));
 		}
 
-		inline Access<::fgl::ast::node::flavor> Access<::fgl::ast::node::new_flavor>::flavor()
+		inline AccessTemplateBase<::fgl::ast::node::flavor> AccessTemplateBase<::fgl::ast::node::new_flavor>::flavor()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::flavor>(Get<::fgl::ast::Type::flavor>(ts));
+			return AccessTemplateBase<::fgl::ast::node::flavor>(Get<::fgl::ast::Type::flavor>(ts));
 		}
 
-		inline Access<::fgl::ast::node::DOT> Access<::fgl::ast::node::new_flavor>::DOT()
+		inline AccessTemplateBase<::fgl::ast::node::DOT> AccessTemplateBase<::fgl::ast::node::new_flavor>::DOT()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
 		}
 
-		inline Access<::fgl::ast::node::NEW> Access<::fgl::ast::node::new_flavor>::NEW()
+		inline AccessTemplateBase<::fgl::ast::node::NEW> AccessTemplateBase<::fgl::ast::node::new_flavor>::NEW()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::NEW>(Get<::fgl::ast::Type::NEW>(ts));
+			return AccessTemplateBase<::fgl::ast::node::NEW>(Get<::fgl::ast::Type::NEW>(ts));
 		}
 
-		inline Access<::fgl::ast::node::flavor> Access<::fgl::ast::node::delete_flavor>::flavor()
+		inline AccessTemplateBase<::fgl::ast::node::flavor> AccessTemplateBase<::fgl::ast::node::delete_flavor>::flavor()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::flavor>(Get<::fgl::ast::Type::flavor>(ts));
+			return AccessTemplateBase<::fgl::ast::node::flavor>(Get<::fgl::ast::Type::flavor>(ts));
 		}
 
-		inline Access<::fgl::ast::node::DOT> Access<::fgl::ast::node::delete_flavor>::DOT()
+		inline AccessTemplateBase<::fgl::ast::node::DOT> AccessTemplateBase<::fgl::ast::node::delete_flavor>::DOT()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
 		}
 
-		inline Access<::fgl::ast::node::DELETE> Access<::fgl::ast::node::delete_flavor>::DELETE()
+		inline AccessTemplateBase<::fgl::ast::node::DELETE> AccessTemplateBase<::fgl::ast::node::delete_flavor>::DELETE()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::DELETE>(Get<::fgl::ast::Type::DELETE>(ts));
+			return AccessTemplateBase<::fgl::ast::node::DELETE>(Get<::fgl::ast::Type::DELETE>(ts));
 		}
 
-		inline Access<::fgl::ast::node::value> Access<::fgl::ast::node::expand_flavor>::value()
+		inline AccessTemplateBase<::fgl::ast::node::value> AccessTemplateBase<::fgl::ast::node::expand_flavor>::value()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
+			return AccessTemplateBase<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
 		}
 
-		inline Access<::fgl::ast::node::flavor> Access<::fgl::ast::node::expand_flavor>::flavor()
+		inline AccessTemplateBase<::fgl::ast::node::flavor> AccessTemplateBase<::fgl::ast::node::expand_flavor>::flavor()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::flavor>(Get<::fgl::ast::Type::flavor>(ts));
+			return AccessTemplateBase<::fgl::ast::node::flavor>(Get<::fgl::ast::Type::flavor>(ts));
 		}
 
-		inline Access<::fgl::ast::node::LEFT_PARANTHESIS> Access<::fgl::ast::node::expand_flavor>::LEFT_PARANTHESIS()
+		inline AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> AccessTemplateBase<::fgl::ast::node::expand_flavor>::LEFT_PARANTHESIS()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::LEFT_PARANTHESIS>(Get<::fgl::ast::Type::LEFT_PARANTHESIS>(ts));
+			return AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS>(Get<::fgl::ast::Type::LEFT_PARANTHESIS>(ts));
 		}
 
-		inline Access<::fgl::ast::node::RIGHT_PARANTHESIS> Access<::fgl::ast::node::expand_flavor>::RIGHT_PARANTHESIS()
+		inline AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> AccessTemplateBase<::fgl::ast::node::expand_flavor>::RIGHT_PARANTHESIS()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::RIGHT_PARANTHESIS>(Get<::fgl::ast::Type::RIGHT_PARANTHESIS>(ts));
+			return AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS>(Get<::fgl::ast::Type::RIGHT_PARANTHESIS>(ts));
 		}
 
-		inline Access<::fgl::ast::node::DOT> Access<::fgl::ast::node::expand_flavor>::DOT()
+		inline AccessTemplateBase<::fgl::ast::node::DOT> AccessTemplateBase<::fgl::ast::node::expand_flavor>::DOT()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
 		}
 
-		inline Access<::fgl::ast::node::EXPAND> Access<::fgl::ast::node::expand_flavor>::EXPAND()
+		inline AccessTemplateBase<::fgl::ast::node::EXPAND> AccessTemplateBase<::fgl::ast::node::expand_flavor>::EXPAND()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::EXPAND>(Get<::fgl::ast::Type::EXPAND>(ts));
+			return AccessTemplateBase<::fgl::ast::node::EXPAND>(Get<::fgl::ast::Type::EXPAND>(ts));
 		}
 
-		inline Access<::fgl::ast::node::WITH> Access<::fgl::ast::node::expand_flavor>::WITH()
+		inline AccessTemplateBase<::fgl::ast::node::WITH> AccessTemplateBase<::fgl::ast::node::expand_flavor>::WITH()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::WITH>(Get<::fgl::ast::Type::WITH>(ts));
+			return AccessTemplateBase<::fgl::ast::node::WITH>(Get<::fgl::ast::Type::WITH>(ts));
 		}
 
-		inline Access<::fgl::ast::node::conditional_flavor> Access<::fgl::ast::node::flavor_capture>::conditional_flavor()
+		inline AccessTemplateBase<::fgl::ast::node::conditional_flavor> AccessTemplateBase<::fgl::ast::node::flavor_capture>::conditional_flavor()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::conditional_flavor>(Get<::fgl::ast::Type::conditional_flavor>(ts));
+			return AccessTemplateBase<::fgl::ast::node::conditional_flavor>(Get<::fgl::ast::Type::conditional_flavor>(ts));
 		}
 
-		inline Access<::fgl::ast::node::flavor> Access<::fgl::ast::node::flavor_capture>::flavor()
+		inline AccessTemplateBase<::fgl::ast::node::flavor> AccessTemplateBase<::fgl::ast::node::flavor_capture>::flavor()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::flavor>(Get<::fgl::ast::Type::flavor>(ts));
+			return AccessTemplateBase<::fgl::ast::node::flavor>(Get<::fgl::ast::Type::flavor>(ts));
 		}
 
-		inline Access<::fgl::ast::node::value> Access<::fgl::ast::node::conditional_flavor>::value()
+		inline AccessTemplateBase<::fgl::ast::node::value> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::value()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
+			return AccessTemplateBase<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
 		}
 
-		inline Access<::fgl::ast::node::EQEQ> Access<::fgl::ast::node::conditional_flavor>::EQEQ()
+		inline AccessTemplateBase<::fgl::ast::node::EQEQ> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::EQEQ()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::EQEQ>(Get<::fgl::ast::Type::EQEQ>(ts));
+			return AccessTemplateBase<::fgl::ast::node::EQEQ>(Get<::fgl::ast::Type::EQEQ>(ts));
 		}
 
-		inline Access<::fgl::ast::node::GTE> Access<::fgl::ast::node::conditional_flavor>::GTE()
+		inline AccessTemplateBase<::fgl::ast::node::GTE> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::GTE()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::GTE>(Get<::fgl::ast::Type::GTE>(ts));
+			return AccessTemplateBase<::fgl::ast::node::GTE>(Get<::fgl::ast::Type::GTE>(ts));
 		}
 
-		inline Access<::fgl::ast::node::GT> Access<::fgl::ast::node::conditional_flavor>::GT()
+		inline AccessTemplateBase<::fgl::ast::node::GT> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::GT()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::GT>(Get<::fgl::ast::Type::GT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::GT>(Get<::fgl::ast::Type::GT>(ts));
 		}
 
-		inline Access<::fgl::ast::node::LTE> Access<::fgl::ast::node::conditional_flavor>::LTE()
+		inline AccessTemplateBase<::fgl::ast::node::LTE> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::LTE()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::LTE>(Get<::fgl::ast::Type::LTE>(ts));
+			return AccessTemplateBase<::fgl::ast::node::LTE>(Get<::fgl::ast::Type::LTE>(ts));
 		}
 
-		inline Access<::fgl::ast::node::LT> Access<::fgl::ast::node::conditional_flavor>::LT()
+		inline AccessTemplateBase<::fgl::ast::node::LT> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::LT()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::LT>(Get<::fgl::ast::Type::LT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::LT>(Get<::fgl::ast::Type::LT>(ts));
 		}
 
-		inline Access<::fgl::ast::node::object_access> Access<::fgl::ast::node::value>::object_access()
+		inline AccessTemplateBase<::fgl::ast::node::object_access> AccessTemplateBase<::fgl::ast::node::value>::object_access()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::object_access>(Get<::fgl::ast::Type::object_access>(ts));
+			return AccessTemplateBase<::fgl::ast::node::object_access>(Get<::fgl::ast::Type::object_access>(ts));
 		}
 
-		inline Access<::fgl::ast::node::NUMBER> Access<::fgl::ast::node::value>::NUMBER()
+		inline AccessTemplateBase<::fgl::ast::node::NUMBER> AccessTemplateBase<::fgl::ast::node::value>::NUMBER()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::NUMBER>(Get<::fgl::ast::Type::NUMBER>(ts));
+			return AccessTemplateBase<::fgl::ast::node::NUMBER>(Get<::fgl::ast::Type::NUMBER>(ts));
 		}
 
-		inline Access<::fgl::ast::node::STRING> Access<::fgl::ast::node::value>::STRING()
+		inline AccessTemplateBase<::fgl::ast::node::STRING> AccessTemplateBase<::fgl::ast::node::value>::STRING()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::STRING>(Get<::fgl::ast::Type::STRING>(ts));
+			return AccessTemplateBase<::fgl::ast::node::STRING>(Get<::fgl::ast::Type::STRING>(ts));
 		}
 
-		inline Access<::fgl::ast::node::value> Access<::fgl::ast::node::user_defined_instruction>::value()
+		inline AccessTemplateBase<::fgl::ast::node::value> AccessTemplateBase<::fgl::ast::node::user_defined_instruction>::value()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
+			return AccessTemplateBase<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
 		}
 
-		inline Access<::fgl::ast::node::VARNAME> Access<::fgl::ast::node::object>::VARNAME()
+		inline AccessTemplateBase<::fgl::ast::node::VARNAME> AccessTemplateBase<::fgl::ast::node::object>::VARNAME()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::VARNAME>(Get<::fgl::ast::Type::VARNAME>(ts));
+			return AccessTemplateBase<::fgl::ast::node::VARNAME>(Get<::fgl::ast::Type::VARNAME>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_arrow__member__> Access<::fgl::ast::node::object_access>::deamerreserved_arrow__member__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__> AccessTemplateBase<::fgl::ast::node::object_access>::deamerreserved_arrow__member__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_arrow__member__>(Get<::fgl::ast::Type::deamerreserved_arrow__member__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__>(Get<::fgl::ast::Type::deamerreserved_arrow__member__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__DOT__member__> Access<::fgl::ast::node::object_access>::deamerreserved_star__DOT__member__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__> AccessTemplateBase<::fgl::ast::node::object_access>::deamerreserved_star__DOT__member__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__DOT__member__>(Get<::fgl::ast::Type::deamerreserved_star__DOT__member__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>(Get<::fgl::ast::Type::deamerreserved_star__DOT__member__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::member> Access<::fgl::ast::node::object_access>::member()
+		inline AccessTemplateBase<::fgl::ast::node::member> AccessTemplateBase<::fgl::ast::node::object_access>::member()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::member>(Get<::fgl::ast::Type::member>(ts));
+			return AccessTemplateBase<::fgl::ast::node::member>(Get<::fgl::ast::Type::member>(ts));
 		}
 
-		inline Access<::fgl::ast::node::DOT> Access<::fgl::ast::node::object_access>::DOT()
+		inline AccessTemplateBase<::fgl::ast::node::DOT> AccessTemplateBase<::fgl::ast::node::object_access>::DOT()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__DOT__member__> Access<::fgl::ast::node::deamerreserved_arrow__member__>::deamerreserved_star__DOT__member__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__>::deamerreserved_star__DOT__member__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__DOT__member__>(Get<::fgl::ast::Type::deamerreserved_star__DOT__member__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>(Get<::fgl::ast::Type::deamerreserved_star__DOT__member__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::member> Access<::fgl::ast::node::deamerreserved_arrow__member__>::member()
+		inline AccessTemplateBase<::fgl::ast::node::member> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__>::member()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::member>(Get<::fgl::ast::Type::member>(ts));
+			return AccessTemplateBase<::fgl::ast::node::member>(Get<::fgl::ast::Type::member>(ts));
 		}
 
-		inline Access<::fgl::ast::node::DOT> Access<::fgl::ast::node::deamerreserved_arrow__member__>::DOT()
+		inline AccessTemplateBase<::fgl::ast::node::DOT> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__member__>::DOT()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__DOT__member__> Access<::fgl::ast::node::deamerreserved_star__DOT__member__>::deamerreserved_star__DOT__member__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>::deamerreserved_star__DOT__member__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__DOT__member__>(Get<::fgl::ast::Type::deamerreserved_star__DOT__member__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>(Get<::fgl::ast::Type::deamerreserved_star__DOT__member__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::member> Access<::fgl::ast::node::deamerreserved_star__DOT__member__>::member()
+		inline AccessTemplateBase<::fgl::ast::node::member> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>::member()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::member>(Get<::fgl::ast::Type::member>(ts));
+			return AccessTemplateBase<::fgl::ast::node::member>(Get<::fgl::ast::Type::member>(ts));
 		}
 
-		inline Access<::fgl::ast::node::DOT> Access<::fgl::ast::node::deamerreserved_star__DOT__member__>::DOT()
+		inline AccessTemplateBase<::fgl::ast::node::DOT> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__DOT__member__>::DOT()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> Access<::fgl::ast::node::member>::deamerreserved_arrow__deamerreserved_optional__argument____()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> AccessTemplateBase<::fgl::ast::node::member>::deamerreserved_arrow__deamerreserved_optional__argument____()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>(Get<::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>(Get<::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__> Access<::fgl::ast::node::member>::deamerreserved_star__COMMA__argument__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> AccessTemplateBase<::fgl::ast::node::member>::deamerreserved_star__COMMA__argument__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::argument> Access<::fgl::ast::node::member>::argument()
+		inline AccessTemplateBase<::fgl::ast::node::argument> AccessTemplateBase<::fgl::ast::node::member>::argument()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
+			return AccessTemplateBase<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
 		}
 
-		inline Access<::fgl::ast::node::LEFT_PARANTHESIS> Access<::fgl::ast::node::member>::LEFT_PARANTHESIS()
+		inline AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> AccessTemplateBase<::fgl::ast::node::member>::LEFT_PARANTHESIS()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::LEFT_PARANTHESIS>(Get<::fgl::ast::Type::LEFT_PARANTHESIS>(ts));
+			return AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS>(Get<::fgl::ast::Type::LEFT_PARANTHESIS>(ts));
 		}
 
-		inline Access<::fgl::ast::node::RIGHT_PARANTHESIS> Access<::fgl::ast::node::member>::RIGHT_PARANTHESIS()
+		inline AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> AccessTemplateBase<::fgl::ast::node::member>::RIGHT_PARANTHESIS()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::RIGHT_PARANTHESIS>(Get<::fgl::ast::Type::RIGHT_PARANTHESIS>(ts));
+			return AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS>(Get<::fgl::ast::Type::RIGHT_PARANTHESIS>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::member>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::member>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::VARNAME> Access<::fgl::ast::node::member>::VARNAME()
+		inline AccessTemplateBase<::fgl::ast::node::VARNAME> AccessTemplateBase<::fgl::ast::node::member>::VARNAME()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::VARNAME>(Get<::fgl::ast::Type::VARNAME>(ts));
+			return AccessTemplateBase<::fgl::ast::node::VARNAME>(Get<::fgl::ast::Type::VARNAME>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::deamerreserved_star__COMMA__argument__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::deamerreserved_star__COMMA__argument__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::argument> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::argument()
+		inline AccessTemplateBase<::fgl::ast::node::argument> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::argument()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
+			return AccessTemplateBase<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__> Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::deamerreserved_star__COMMA__argument__()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::deamerreserved_star__COMMA__argument__()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
 		}
 
-		inline Access<::fgl::ast::node::argument> Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::argument()
+		inline AccessTemplateBase<::fgl::ast::node::argument> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::argument()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
+			return AccessTemplateBase<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
 		}
 
-		inline Access<::fgl::ast::node::COMMA> Access<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::COMMA()
+		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::COMMA()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
+			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline Access<::fgl::ast::node::value> Access<::fgl::ast::node::argument>::value()
+		inline AccessTemplateBase<::fgl::ast::node::value> AccessTemplateBase<::fgl::ast::node::argument>::value()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
+			return AccessTemplateBase<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
 		}
 
-		inline Access<::fgl::ast::node::flavor_specialization> Access<::fgl::ast::node::flavor>::flavor_specialization()
+		inline AccessTemplateBase<::fgl::ast::node::flavor_specialization> AccessTemplateBase<::fgl::ast::node::flavor>::flavor_specialization()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::flavor_specialization>(Get<::fgl::ast::Type::flavor_specialization>(ts));
+			return AccessTemplateBase<::fgl::ast::node::flavor_specialization>(Get<::fgl::ast::Type::flavor_specialization>(ts));
 		}
 
-		inline Access<::fgl::ast::node::VARNAME> Access<::fgl::ast::node::flavor>::VARNAME()
+		inline AccessTemplateBase<::fgl::ast::node::VARNAME> AccessTemplateBase<::fgl::ast::node::flavor>::VARNAME()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::VARNAME>(Get<::fgl::ast::Type::VARNAME>(ts));
+			return AccessTemplateBase<::fgl::ast::node::VARNAME>(Get<::fgl::ast::Type::VARNAME>(ts));
 		}
 
-		inline Access<::fgl::ast::node::value> Access<::fgl::ast::node::flavor_specialization>::value()
+		inline AccessTemplateBase<::fgl::ast::node::value> AccessTemplateBase<::fgl::ast::node::flavor_specialization>::value()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
+			return AccessTemplateBase<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
 		}
 
-		inline Access<::fgl::ast::node::LEFT_PARANTHESIS> Access<::fgl::ast::node::flavor_specialization>::LEFT_PARANTHESIS()
+		inline AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> AccessTemplateBase<::fgl::ast::node::flavor_specialization>::LEFT_PARANTHESIS()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::LEFT_PARANTHESIS>(Get<::fgl::ast::Type::LEFT_PARANTHESIS>(ts));
+			return AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS>(Get<::fgl::ast::Type::LEFT_PARANTHESIS>(ts));
 		}
 
-		inline Access<::fgl::ast::node::RIGHT_PARANTHESIS> Access<::fgl::ast::node::flavor_specialization>::RIGHT_PARANTHESIS()
+		inline AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> AccessTemplateBase<::fgl::ast::node::flavor_specialization>::RIGHT_PARANTHESIS()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return Access<::fgl::ast::node::RIGHT_PARANTHESIS>(Get<::fgl::ast::Type::RIGHT_PARANTHESIS>(ts));
+			return AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS>(Get<::fgl::ast::Type::RIGHT_PARANTHESIS>(ts));
 		}
 
 
@@ -6668,4 +7965,4 @@ Access<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 }}}
 
-#endif // FGL_AST_REFERENCE_ACCESS_H
+#endif // FGL_AST_REFERENCE_ACCESSTEMPLATEBASE_H

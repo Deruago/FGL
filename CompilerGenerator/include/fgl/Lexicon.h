@@ -1,9 +1,20 @@
+/* 
+ * This file is auto-generated and auto-maintained by DLDL
+ * Do not change code in this as it can be overwritten.
+ *
+ * For more information see the DLDL repo: https://github.com/Deruago/DLDL
+ * For more information about Deamer: https://github.com/Deruago/theDeamerProject
+ */
+
 #ifndef FGL_LEXICON_H
 #define FGL_LEXICON_H
+
 #include "Deamer/Language/Generator/Definition/Property/User/Main/Lexicon.h"
+
 namespace fgl
 {
 	class Language;
+
 	class Lexicon : public ::deamer::language::generator::definition::property::user::Lexicon<
 								::fgl::Language>
 	{
@@ -50,6 +61,7 @@ namespace fgl
 					::fgl::Language>(language)
 		{
 		}
+
 		void GenerateObjects() override
 		{
 			// Terminals
@@ -87,6 +99,7 @@ NUMBER.Set(deamer::language::type::definition::object::main::Terminal("NUMBER", 
 STRING.Set(deamer::language::type::definition::object::main::Terminal("STRING", "[\"]([\\\\][\"]|[^\"])*[\"]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 ESCAPE_CHARS.Set(deamer::language::type::definition::object::main::Terminal("ESCAPE_CHARS", "[\\n\\t\\r\\f\\v\\b\\a ]+", ::deamer::language::type::definition::object::main::SpecialType::Delete));
 
+
 			// Add object calls
 			// AddObject(...)
 			AddObject(COMMENT);
@@ -123,6 +136,7 @@ AddObject(NUMBER);
 AddObject(STRING);
 AddObject(ESCAPE_CHARS);
 
+
 			// Place higher level operations here.
 			// ReplaceObject(..., ...)
 			// DeleteObject(..., ...)
@@ -130,4 +144,5 @@ AddObject(ESCAPE_CHARS);
 		}
 	};
 }
+
 #endif // FGL_LEXICON_H

@@ -1,3 +1,7 @@
+%define parse.error verbose
+%define parse.lac full
+
+
 %{
 #include <iostream>
 #include <vector>
@@ -44,6 +48,7 @@
 #include "fgl/Ast/Node/STRING.h"
 #include "fgl/Ast/Node/ESCAPE_CHARS.h"
 
+
 #include "fgl/Ast/Node/program.h"
 #include "fgl/Ast/Node/deamerreserved_star__stmt__.h"
 #include "fgl/Ast/Node/stmt.h"
@@ -75,6 +80,7 @@
 #include "fgl/Ast/Node/flavor.h"
 #include "fgl/Ast/Node/flavor_specialization.h"
 
+
 #ifndef YY_parse_NERRS
 #define YY_parse_NERRS fglnerrs
 #endif //YY_parse_NERRS
@@ -88,6 +94,7 @@ int fgllex();
 static ::deamer::external::cpp::ast::Tree* outputTree = nullptr;
 %}
 
+%token<Terminal> COMMENT
 %token<Terminal> LEFT_SQUARE_BRACKET
 %token<Terminal> RIGHT_SQUARE_BRACKET
 %token<Terminal> LEFT_BRACKET
@@ -119,6 +126,8 @@ static ::deamer::external::cpp::ast::Tree* outputTree = nullptr;
 %token<Terminal> VARNAME
 %token<Terminal> NUMBER
 %token<Terminal> STRING
+%token<Terminal> ESCAPE_CHARS
+
 
 %nterm<fgl_program> program
 %nterm<fgl_deamerreserved_star__stmt__> deamerreserved_star__stmt__
@@ -150,7 +159,6 @@ static ::deamer::external::cpp::ast::Tree* outputTree = nullptr;
 %nterm<fgl_argument> argument
 %nterm<fgl_flavor> flavor
 %nterm<fgl_flavor_specialization> flavor_specialization
-
 
 
 %union{
@@ -218,332 +226,481 @@ static ::deamer::external::cpp::ast::Tree* outputTree = nullptr;
 	::fgl::ast::node::argument* fgl_argument;
 	::fgl::ast::node::flavor* fgl_flavor;
 	::fgl::ast::node::flavor_specialization* fgl_flavor_specialization;
+
 }
 
 %%
 
+
 program:
-	deamerreserved_star__stmt__ {
-		auto* const newNode = new fgl::ast::node::program({::fgl::ast::Type::program, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	deamerreserved_star__stmt__  {
+		auto* const newNode = new fgl::ast::node::program({::fgl::ast::Type::program, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 		outputTree = new ::deamer::external::cpp::ast::Tree(newNode);
 	}
 ;
 
+
 deamerreserved_star__stmt__:
-	stmt deamerreserved_star__stmt__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__stmt__({::fgl::ast::Type::deamerreserved_star__stmt__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, $2 });
+	stmt deamerreserved_star__stmt__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__stmt__({::fgl::ast::Type::deamerreserved_star__stmt__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { $1, $2 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__stmt__({::fgl::ast::Type::deamerreserved_star__stmt__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, {  });
+	|  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__stmt__({::fgl::ast::Type::deamerreserved_star__stmt__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 stmt:
-	entry_manipulation_rule {
-		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	entry_manipulation_rule  {
+		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| exit_manipulation_rule {
-		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	| exit_manipulation_rule  {
+		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| setting_rule {
-		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, {2, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	| setting_rule  {
+		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 setting_rule:
-	TARGET_SETTING {
-		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::TARGET_SETTING({::fgl::ast::Type::TARGET_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	TARGET_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::TARGET_SETTING({::fgl::ast::Type::TARGET_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| MEMBER_SETTING {
-		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::MEMBER_SETTING({::fgl::ast::Type::MEMBER_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	| MEMBER_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::MEMBER_SETTING({::fgl::ast::Type::MEMBER_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| INCLUDE_SETTING {
-		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, {2, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::INCLUDE_SETTING({::fgl::ast::Type::INCLUDE_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	| INCLUDE_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::INCLUDE_SETTING({::fgl::ast::Type::INCLUDE_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| FUNCTION_SETTING {
-		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, {3, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::FUNCTION_SETTING({::fgl::ast::Type::FUNCTION_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	| FUNCTION_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 3, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::FUNCTION_SETTING({::fgl::ast::Type::FUNCTION_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| USER_INSERTED_SETTING {
-		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, {4, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::USER_INSERTED_SETTING({::fgl::ast::Type::USER_INSERTED_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	| USER_INSERTED_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 4, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::USER_INSERTED_SETTING({::fgl::ast::Type::USER_INSERTED_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 entry_manipulation_rule:
-	capture object ARROW ADD manipulation {
-		auto* const newNode = new fgl::ast::node::entry_manipulation_rule({::fgl::ast::Type::entry_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, $2, new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, $3}), new fgl::ast::node::ADD({::fgl::ast::Type::ADD, ::deamer::external::cpp::ast::NodeValue::terminal, $4}), $5 });
+	capture object ARROW ADD manipulation  {
+		auto* const newNode = new fgl::ast::node::entry_manipulation_rule({::fgl::ast::Type::entry_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1, $2, new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, $3 }), new fgl::ast::node::ADD({::fgl::ast::Type::ADD, ::deamer::external::cpp::ast::NodeValue::terminal, $4 }), $5 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| capture object ARROW manipulation {
-		auto* const newNode = new fgl::ast::node::entry_manipulation_rule({::fgl::ast::Type::entry_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, $2, new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, $3}), $4 });
+	| capture object ARROW manipulation  {
+		auto* const newNode = new fgl::ast::node::entry_manipulation_rule({::fgl::ast::Type::entry_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1, $2, new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, $3 }), $4 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 exit_manipulation_rule:
-	capture object ARROW MINUS manipulation {
-		auto* const newNode = new fgl::ast::node::exit_manipulation_rule({::fgl::ast::Type::exit_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, $2, new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, $3}), new fgl::ast::node::MINUS({::fgl::ast::Type::MINUS, ::deamer::external::cpp::ast::NodeValue::terminal, $4}), $5 });
+	capture object ARROW MINUS manipulation  {
+		auto* const newNode = new fgl::ast::node::exit_manipulation_rule({::fgl::ast::Type::exit_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1, $2, new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, $3 }), new fgl::ast::node::MINUS({::fgl::ast::Type::MINUS, ::deamer::external::cpp::ast::NodeValue::terminal, $4 }), $5 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 capture:
-	LEFT_SQUARE_BRACKET deamerreserved_arrow__deamerreserved_optional__flavor_capture____ RIGHT_SQUARE_BRACKET {
-		auto* const newNode = new fgl::ast::node::capture({::fgl::ast::Type::capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::LEFT_SQUARE_BRACKET({::fgl::ast::Type::LEFT_SQUARE_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2, new fgl::ast::node::RIGHT_SQUARE_BRACKET({::fgl::ast::Type::RIGHT_SQUARE_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, $3}) });
+	LEFT_SQUARE_BRACKET deamerreserved_arrow__deamerreserved_optional__flavor_capture____ RIGHT_SQUARE_BRACKET  {
+		auto* const newNode = new fgl::ast::node::capture({::fgl::ast::Type::capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::LEFT_SQUARE_BRACKET({::fgl::ast::Type::LEFT_SQUARE_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2, new fgl::ast::node::RIGHT_SQUARE_BRACKET({::fgl::ast::Type::RIGHT_SQUARE_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, $3 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 deamerreserved_arrow__deamerreserved_optional__flavor_capture____:
-	flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, $2 });
+	flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { $1, $2 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| {
-		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, {  });
+	|  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__:
-	COMMA flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2, $3 });
+	COMMA flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2, $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| AND flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::AND({::fgl::ast::Type::AND, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2, $3 });
+	| AND flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::AND({::fgl::ast::Type::AND, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2, $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {2, ::deamer::external::cpp::ast::ProductionRuleType::user}}, {  });
+	|  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 manipulation:
-	LEFT_BRACKET deamerreserved_arrow__deamerreserved_optional__instruction____ RIGHT_BRACKET {
-		auto* const newNode = new fgl::ast::node::manipulation({::fgl::ast::Type::manipulation, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::LEFT_BRACKET({::fgl::ast::Type::LEFT_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2, new fgl::ast::node::RIGHT_BRACKET({::fgl::ast::Type::RIGHT_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, $3}) });
+	LEFT_BRACKET deamerreserved_arrow__deamerreserved_optional__instruction____ RIGHT_BRACKET  {
+		auto* const newNode = new fgl::ast::node::manipulation({::fgl::ast::Type::manipulation, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::LEFT_BRACKET({::fgl::ast::Type::LEFT_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2, new fgl::ast::node::RIGHT_BRACKET({::fgl::ast::Type::RIGHT_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, $3 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 deamerreserved_arrow__deamerreserved_optional__instruction____:
-	instruction deamerreserved_star__COMMA__instruction__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, $2 });
+	instruction deamerreserved_star__COMMA__instruction__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { $1, $2 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| {
-		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, {  });
+	|  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 deamerreserved_star__COMMA__instruction__:
-	COMMA instruction deamerreserved_star__COMMA__instruction__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__instruction__({::fgl::ast::Type::deamerreserved_star__COMMA__instruction__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2, $3 });
+	COMMA instruction deamerreserved_star__COMMA__instruction__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__instruction__({::fgl::ast::Type::deamerreserved_star__COMMA__instruction__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2, $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__instruction__({::fgl::ast::Type::deamerreserved_star__COMMA__instruction__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, {  });
+	|  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__instruction__({::fgl::ast::Type::deamerreserved_star__COMMA__instruction__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 instruction:
-	new_flavor {
-		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	new_flavor  {
+		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| delete_flavor {
-		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	| delete_flavor  {
+		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| expand_flavor {
-		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, {2, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	| expand_flavor  {
+		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| user_defined_instruction {
-		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, {3, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	| user_defined_instruction  {
+		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 3, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 new_flavor:
-	NEW DOT flavor {
-		auto* const newNode = new fgl::ast::node::new_flavor({::fgl::ast::Type::new_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::NEW({::fgl::ast::Type::NEW, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3 });
+	NEW DOT flavor  {
+		auto* const newNode = new fgl::ast::node::new_flavor({::fgl::ast::Type::new_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::NEW({::fgl::ast::Type::NEW, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 delete_flavor:
-	DELETE DOT flavor {
-		auto* const newNode = new fgl::ast::node::delete_flavor({::fgl::ast::Type::delete_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::DELETE({::fgl::ast::Type::DELETE, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3 });
+	DELETE DOT flavor  {
+		auto* const newNode = new fgl::ast::node::delete_flavor({::fgl::ast::Type::delete_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::DELETE({::fgl::ast::Type::DELETE, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 expand_flavor:
-	EXPAND DOT flavor DOT WITH LEFT_PARANTHESIS value RIGHT_PARANTHESIS {
-		auto* const newNode = new fgl::ast::node::expand_flavor({::fgl::ast::Type::expand_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::EXPAND({::fgl::ast::Type::EXPAND, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3, new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $4}), new fgl::ast::node::WITH({::fgl::ast::Type::WITH, ::deamer::external::cpp::ast::NodeValue::terminal, $5}), new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $6}), $7, new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $8}) });
+	EXPAND DOT flavor DOT WITH LEFT_PARANTHESIS value RIGHT_PARANTHESIS  {
+		auto* const newNode = new fgl::ast::node::expand_flavor({::fgl::ast::Type::expand_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::EXPAND({::fgl::ast::Type::EXPAND, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3, new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $4 }), new fgl::ast::node::WITH({::fgl::ast::Type::WITH, ::deamer::external::cpp::ast::NodeValue::terminal, $5 }), new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $6 }), $7, new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $8 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 flavor_capture:
-	flavor {
-		auto* const newNode = new fgl::ast::node::flavor_capture({::fgl::ast::Type::flavor_capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	flavor  {
+		auto* const newNode = new fgl::ast::node::flavor_capture({::fgl::ast::Type::flavor_capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| conditional_flavor {
-		auto* const newNode = new fgl::ast::node::flavor_capture({::fgl::ast::Type::flavor_capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	| conditional_flavor  {
+		auto* const newNode = new fgl::ast::node::flavor_capture({::fgl::ast::Type::flavor_capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 conditional_flavor:
-	value EQEQ value {
-		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, new fgl::ast::node::EQEQ({::fgl::ast::Type::EQEQ, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3 });
+	value EQEQ value  {
+		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1, new fgl::ast::node::EQEQ({::fgl::ast::Type::EQEQ, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| value LTE value {
-		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, new fgl::ast::node::LTE({::fgl::ast::Type::LTE, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3 });
+	| value LTE value  {
+		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1, new fgl::ast::node::LTE({::fgl::ast::Type::LTE, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| value GTE value {
-		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {2, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, new fgl::ast::node::GTE({::fgl::ast::Type::GTE, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3 });
+	| value GTE value  {
+		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1, new fgl::ast::node::GTE({::fgl::ast::Type::GTE, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| value LT value {
-		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {3, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, new fgl::ast::node::LT({::fgl::ast::Type::LT, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3 });
+	| value LT value  {
+		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 3, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1, new fgl::ast::node::LT({::fgl::ast::Type::LT, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| value GT value {
-		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {4, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, new fgl::ast::node::GT({::fgl::ast::Type::GT, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3 });
+	| value GT value  {
+		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 4, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1, new fgl::ast::node::GT({::fgl::ast::Type::GT, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 value:
-	object_access {
-		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	object_access  {
+		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| NUMBER {
-		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::NUMBER({::fgl::ast::Type::NUMBER, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	| NUMBER  {
+		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::NUMBER({::fgl::ast::Type::NUMBER, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| STRING {
-		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, {2, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::STRING({::fgl::ast::Type::STRING, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	| STRING  {
+		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::STRING({::fgl::ast::Type::STRING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 user_defined_instruction:
-	value {
-		auto* const newNode = new fgl::ast::node::user_defined_instruction({::fgl::ast::Type::user_defined_instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	value  {
+		auto* const newNode = new fgl::ast::node::user_defined_instruction({::fgl::ast::Type::user_defined_instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 object:
-	VARNAME {
-		auto* const newNode = new fgl::ast::node::object({::fgl::ast::Type::object, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	VARNAME  {
+		auto* const newNode = new fgl::ast::node::object({::fgl::ast::Type::object, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 object_access:
-	deamerreserved_arrow__member__ {
-		auto* const newNode = new fgl::ast::node::object_access({::fgl::ast::Type::object_access, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	deamerreserved_arrow__member__  {
+		auto* const newNode = new fgl::ast::node::object_access({::fgl::ast::Type::object_access, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 deamerreserved_arrow__member__:
-	member deamerreserved_star__DOT__member__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__member__({::fgl::ast::Type::deamerreserved_arrow__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, $2 });
+	member deamerreserved_star__DOT__member__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__member__({::fgl::ast::Type::deamerreserved_arrow__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { $1, $2 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 deamerreserved_star__DOT__member__:
-	DOT member deamerreserved_star__DOT__member__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__DOT__member__({::fgl::ast::Type::deamerreserved_star__DOT__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2, $3 });
+	DOT member deamerreserved_star__DOT__member__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__DOT__member__({::fgl::ast::Type::deamerreserved_star__DOT__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2, $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__DOT__member__({::fgl::ast::Type::deamerreserved_star__DOT__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, {  });
+	|  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__DOT__member__({::fgl::ast::Type::deamerreserved_star__DOT__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 member:
-	VARNAME LEFT_PARANTHESIS deamerreserved_arrow__deamerreserved_optional__argument____ RIGHT_PARANTHESIS {
-		auto* const newNode = new fgl::ast::node::member({::fgl::ast::Type::member, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $2}), $3, new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $4}) });
+	VARNAME LEFT_PARANTHESIS deamerreserved_arrow__deamerreserved_optional__argument____ RIGHT_PARANTHESIS  {
+		auto* const newNode = new fgl::ast::node::member({::fgl::ast::Type::member, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $2 }), $3, new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $4 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| VARNAME {
-		auto* const newNode = new fgl::ast::node::member({::fgl::ast::Type::member, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	| VARNAME  {
+		auto* const newNode = new fgl::ast::node::member({::fgl::ast::Type::member, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 deamerreserved_arrow__deamerreserved_optional__argument____:
-	argument deamerreserved_star__COMMA__argument__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1, $2 });
+	argument deamerreserved_star__COMMA__argument__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { $1, $2 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| {
-		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, {  });
+	|  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 deamerreserved_star__COMMA__argument__:
-	COMMA argument deamerreserved_star__COMMA__argument__ {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__argument__({::fgl::ast::Type::deamerreserved_star__COMMA__argument__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2, $3 });
+	COMMA argument deamerreserved_star__COMMA__argument__  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__argument__({::fgl::ast::Type::deamerreserved_star__COMMA__argument__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2, $3 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| {
-		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__argument__({::fgl::ast::Type::deamerreserved_star__COMMA__argument__, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, {  });
+	|  {
+		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__argument__({::fgl::ast::Type::deamerreserved_star__COMMA__argument__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 argument:
-	value {
-		auto* const newNode = new fgl::ast::node::argument({::fgl::ast::Type::argument, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { $1 });
+	value  {
+		auto* const newNode = new fgl::ast::node::argument({::fgl::ast::Type::argument, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { $1 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
 
 flavor:
-	VARNAME flavor_specialization {
-		auto* const newNode = new fgl::ast::node::flavor({::fgl::ast::Type::flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2 });
+	VARNAME flavor_specialization  {
+		auto* const newNode = new fgl::ast::node::flavor({::fgl::ast::Type::flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2 });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
-	| VARNAME {
-		auto* const newNode = new fgl::ast::node::flavor({::fgl::ast::Type::flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, {1, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1}) });
+	| VARNAME  {
+		auto* const newNode = new fgl::ast::node::flavor({::fgl::ast::Type::flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
 
+
 flavor_specialization:
-	LEFT_PARANTHESIS value RIGHT_PARANTHESIS {
-		auto* const newNode = new fgl::ast::node::flavor_specialization({::fgl::ast::Type::flavor_specialization, ::deamer::external::cpp::ast::NodeValue::nonterminal, {0, ::deamer::external::cpp::ast::ProductionRuleType::user}}, { new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $1}), $2, new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $3}) });
+	LEFT_PARANTHESIS value RIGHT_PARANTHESIS  {
+		auto* const newNode = new fgl::ast::node::flavor_specialization({::fgl::ast::Type::flavor_specialization, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }), $2, new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, $3 }) });
 		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
 	}
 ;
+
+
 
 %%
 
@@ -552,7 +709,7 @@ void fglerror(const char* s)
 	std::cout << "Syntax error on line: " << s << '\n';
 }
 
-deamer::external::cpp::ast::Tree* fgl::parser::Parser::Parse(const std::string& text) const
+deamer::external::cpp::ast::Tree* fgl::bison::parser::Parser::Parse(const std::string& text) const
 {
 	outputTree = nullptr;
 	YY_BUFFER_STATE buf;
@@ -563,4 +720,3 @@ deamer::external::cpp::ast::Tree* fgl::parser::Parser::Parse(const std::string& 
 
 	return outputTree;
 }
-

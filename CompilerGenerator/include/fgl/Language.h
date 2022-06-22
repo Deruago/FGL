@@ -1,11 +1,21 @@
+/* 
+ * This file is auto-generated and auto-maintained by DLDL
+ * Do not change code in this as it can be overwritten.
+ *
+ * For more information see the DLDL repo: https://github.com/Deruago/DLDL
+ * For more information about Deamer: https://github.com/Deruago/theDeamerProject
+ */
+
 #ifndef FGL_LANGUAGE_H
 #define FGL_LANGUAGE_H
+
 #include "Deamer/Language/Generator/Definition/Language.h"
 #include "fgl/Threat.h"
 #include "fgl/Identity.h"
 #include "fgl/Generation.h"
 #include "fgl/Grammar.h"
 #include "fgl/Lexicon.h"
+
 
 namespace fgl
 {
@@ -48,7 +58,9 @@ namespace fgl
 
 		{
 		}
+
 		~Language() override = default;
 	};
 }
+
 #endif // FGL_LANGUAGE_H

@@ -1,3 +1,11 @@
+/* 
+ * This file is auto-generated and auto-maintained by DLDL
+ * Do not change code in this as it can be overwritten.
+ *
+ * For more information see the DLDL repo: https://github.com/Deruago/DLDL
+ * For more information about Deamer: https://github.com/Deruago/theDeamerProject
+ */
+
 #ifndef FGL_COMPILERGENERATOR_H
 #define FGL_COMPILERGENERATOR_H
 
@@ -9,6 +17,7 @@
 #include "Deamer/Ast/Generation/CPP/CPP.h"
 #include "Deamer/Lexer/Generator/Flex/Flex.h"
 #include "Deamer/Parser/Generator/Bison/Bison.h"
+#include "Deamer/Tool/Type/DeamerDefaultApplication/DeamerDefaultApplication.h"
 
 
 namespace fgl
@@ -46,12 +55,14 @@ namespace fgl
 			::deamer::ast::generation::cpp::CPP CPP(::deamer::compiler::generator::Compiler<::fgl::Language>::GetLanguageDefinition());
 ::deamer::lexer::generator::flex::Flex Flex(::deamer::compiler::generator::Compiler<::fgl::Language>::GetLanguageDefinition());
 ::deamer::parser::generator::bison::Bison Bison(::deamer::compiler::generator::Compiler<::fgl::Language>::GetLanguageDefinition());
+::deamer::tool::type::deamerdefaultapplication::DeamerDefaultApplication DeamerDefaultApplication(::deamer::compiler::generator::Compiler<::fgl::Language>::GetLanguageDefinition());
 
 
 			// The language generation targets
 			output.AddLanguageToolOutput(CPP.Generate());
 output.AddLanguageToolOutput(Flex.Generate());
 output.AddLanguageToolOutput(Bison.Generate());
+output.AddLanguageToolOutput(DeamerDefaultApplication.Generate());
 
 
 			return output;

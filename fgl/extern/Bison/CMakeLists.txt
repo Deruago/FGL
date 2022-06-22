@@ -9,4 +9,3 @@
 
 set(source_files ./fgl_parser.tab.cpp)
 fgl_add_external_library(Bison ${source_files})
-target_link_libraries(fgl_Bison_static_library PUBLIC fgl_Flex_static_library)

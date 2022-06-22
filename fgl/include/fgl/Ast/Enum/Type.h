@@ -1,14 +1,16 @@
-#ifndef fgl_AST_ENUM_TYPE_H
-#define fgl_AST_ENUM_TYPE_H
+#ifndef FGL_AST_ENUM_TYPE_H
+#define FGL_AST_ENUM_TYPE_H
 
-namespace fgl { namespace ast {
+#include <cstddef>
 
-	enum class Type
+namespace fgl { namespace ast { 
+
+	enum class Type : std::size_t
 	{
 		// Reserved
 		deamerreserved_unknown,
 
-		// Terminals
+		// Terminal
 		COMMENT,
 		LEFT_SQUARE_BRACKET,
 		RIGHT_SQUARE_BRACKET,
@@ -43,7 +45,8 @@ namespace fgl { namespace ast {
 		STRING,
 		ESCAPE_CHARS,
 
-		// Non-Terminals
+
+		// NonTerminal
 		program,
 		deamerreserved_star__stmt__,
 		stmt,
@@ -74,8 +77,28 @@ namespace fgl { namespace ast {
 		argument,
 		flavor,
 		flavor_specialization,
+
 	};
 
+	static inline bool operator==(std::size_t lhs, ::fgl::ast::Type rhs)
+	{
+		return lhs == static_cast<std::size_t>(rhs);
+	}
+
+	static inline bool operator==(::fgl::ast::Type lhs, std::size_t rhs)
+	{
+		return static_cast<std::size_t>(lhs) == rhs;
+	}
+
+	static inline bool operator==(int lhs, ::fgl::ast::Type rhs)
+	{
+		return lhs == static_cast<std::size_t>(rhs);
+	}
+
+	static inline bool operator==(::fgl::ast::Type lhs, int rhs)
+	{
+		return static_cast<std::size_t>(lhs) == rhs;
+	}
 }}
 
-#endif // fgl_AST_ENUM_TYPE_H
+#endif // FGL_AST_ENUM_TYPE_H

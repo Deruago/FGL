@@ -1,7 +1,6 @@
 #ifndef FGL_AST_LISTENER_ENTEREXITLISTENER_H
 #define FGL_AST_LISTENER_ENTEREXITLISTENER_H
 
-#include <Deamer/External/Cpp/Ast/Listener.h>
 #include "fgl/Ast/Node/fgl.h"
 #include "fgl/Ast/Enum/Type.h"
 
@@ -71,6 +70,8 @@
 #include "fgl/Ast/Node/flavor.h"
 #include "fgl/Ast/Node/flavor_specialization.h"
 
+#include <Deamer/External/Cpp/Ast/Listener.h>
+#include <Deamer/Algorithm/Tree/DFS.h>
 
 namespace fgl { namespace ast { namespace listener { 
 
@@ -84,6 +85,16 @@ namespace fgl { namespace ast { namespace listener {
 	public:
 		void Dispatch(const ::deamer::external::cpp::ast::Node* node)  override
 		{
+			::deamer::algorithm::tree::DFS::Execute::Heap::Search(node,
+				&::deamer::external::cpp::ast::Node::GetParent,
+				&::deamer::external::cpp::ast::Node::GetNodes,
+				&EnterExitListener::DispatchEntry,
+				&EnterExitListener::DispatchExit,
+				this);
+		}
+
+		void DispatchEntry(const ::deamer::external::cpp::ast::Node* node) 
+		{
 			const auto enumeratedValue = static_cast<fgl::ast::Type>(node->GetType());
 			switch(enumeratedValue)
 			{
@@ -91,6 +102,7 @@ namespace fgl { namespace ast { namespace listener {
 			
 			case fgl::ast::Type::COMMENT:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::COMMENT*>(node));
@@ -99,6 +111,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::LEFT_SQUARE_BRACKET:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::LEFT_SQUARE_BRACKET*>(node));
@@ -107,6 +120,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::RIGHT_SQUARE_BRACKET:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::RIGHT_SQUARE_BRACKET*>(node));
@@ -115,6 +129,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::LEFT_BRACKET:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::LEFT_BRACKET*>(node));
@@ -123,6 +138,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::RIGHT_BRACKET:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::RIGHT_BRACKET*>(node));
@@ -131,6 +147,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::LEFT_PARANTHESIS:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::LEFT_PARANTHESIS*>(node));
@@ -139,6 +156,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::RIGHT_PARANTHESIS:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::RIGHT_PARANTHESIS*>(node));
@@ -147,6 +165,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::COMMA:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::COMMA*>(node));
@@ -155,6 +174,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::DOT:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::DOT*>(node));
@@ -163,6 +183,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::ARROW:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::ARROW*>(node));
@@ -171,6 +192,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::COLON:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::COLON*>(node));
@@ -179,6 +201,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::NEW:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::NEW*>(node));
@@ -187,6 +210,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::DELETE:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::DELETE*>(node));
@@ -195,6 +219,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::EXPAND:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::EXPAND*>(node));
@@ -203,6 +228,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::WITH:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::WITH*>(node));
@@ -211,6 +237,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::AND:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::AND*>(node));
@@ -219,6 +246,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::EQEQ:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::EQEQ*>(node));
@@ -227,6 +255,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::EQ:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::EQ*>(node));
@@ -235,6 +264,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::GTE:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::GTE*>(node));
@@ -243,6 +273,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::GT:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::GT*>(node));
@@ -251,6 +282,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::LTE:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::LTE*>(node));
@@ -259,6 +291,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::LT:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::LT*>(node));
@@ -267,6 +300,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::ADD:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::ADD*>(node));
@@ -275,6 +309,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::MINUS:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::MINUS*>(node));
@@ -283,6 +318,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::TARGET_SETTING:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::TARGET_SETTING*>(node));
@@ -291,6 +327,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::INCLUDE_SETTING:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::INCLUDE_SETTING*>(node));
@@ -299,6 +336,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::MEMBER_SETTING:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::MEMBER_SETTING*>(node));
@@ -307,6 +345,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::FUNCTION_SETTING:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::FUNCTION_SETTING*>(node));
@@ -315,6 +354,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::USER_INSERTED_SETTING:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::USER_INSERTED_SETTING*>(node));
@@ -323,6 +363,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::VARNAME:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::VARNAME*>(node));
@@ -331,6 +372,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::NUMBER:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::NUMBER*>(node));
@@ -339,6 +381,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::STRING:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::STRING*>(node));
@@ -347,6 +390,7 @@ namespace fgl { namespace ast { namespace listener {
 
 			case fgl::ast::Type::ESCAPE_CHARS:
 			{
+				// Entry terminal
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::ESCAPE_CHARS*>(node));
@@ -362,14 +406,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::program*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::program*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -379,14 +415,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_star__stmt__*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__stmt__*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -396,14 +424,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::stmt*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::stmt*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -413,14 +433,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::setting_rule*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::setting_rule*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -430,14 +442,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::entry_manipulation_rule*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::entry_manipulation_rule*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -447,14 +451,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::exit_manipulation_rule*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::exit_manipulation_rule*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -464,14 +460,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::capture*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::capture*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -481,14 +469,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -498,14 +478,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -515,14 +487,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::manipulation*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::manipulation*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -532,14 +496,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -549,14 +505,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_star__COMMA__instruction__*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__COMMA__instruction__*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -566,14 +514,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::instruction*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::instruction*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -583,14 +523,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::new_flavor*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::new_flavor*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -600,14 +532,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::delete_flavor*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::delete_flavor*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -617,14 +541,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::expand_flavor*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::expand_flavor*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -634,14 +550,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::flavor_capture*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::flavor_capture*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -651,14 +559,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::conditional_flavor*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::conditional_flavor*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -668,14 +568,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::value*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::value*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -685,14 +577,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::user_defined_instruction*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::user_defined_instruction*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -702,14 +586,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::object*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::object*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -719,14 +595,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::object_access*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::object_access*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -736,14 +604,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_arrow__member__*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_arrow__member__*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -753,14 +613,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_star__DOT__member__*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__DOT__member__*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -770,14 +622,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::member*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::member*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -787,14 +631,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -804,14 +640,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::deamerreserved_star__COMMA__argument__*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__COMMA__argument__*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -821,14 +649,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::argument*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::argument*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -838,14 +658,6 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::flavor*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
-
-				// Exit nonterminal
-				ListenExit(static_cast<const fgl::ast::node::flavor*>(node));
-				ExitNonTerminal(node);
-				ExitAnything(node);
 				break;
 			}
 
@@ -855,10 +667,582 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterNonTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::flavor_specialization*>(node));
-				
-				// Go through its children
-				DefaultAction(node);
+				break;
+			}
 
+			}
+		}
+
+		void DispatchExit(const ::deamer::external::cpp::ast::Node* node) 
+		{
+			const auto enumeratedValue = static_cast<fgl::ast::Type>(node->GetType());
+			switch(enumeratedValue)
+			{
+			// Terminal cases
+			
+			case fgl::ast::Type::COMMENT:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::COMMENT*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::LEFT_SQUARE_BRACKET:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::LEFT_SQUARE_BRACKET*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::RIGHT_SQUARE_BRACKET:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::RIGHT_SQUARE_BRACKET*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::LEFT_BRACKET:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::LEFT_BRACKET*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::RIGHT_BRACKET:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::RIGHT_BRACKET*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::LEFT_PARANTHESIS:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::LEFT_PARANTHESIS*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::RIGHT_PARANTHESIS:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::RIGHT_PARANTHESIS*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::COMMA:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::COMMA*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::DOT:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::DOT*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::ARROW:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::ARROW*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::COLON:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::COLON*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::NEW:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::NEW*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::DELETE:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::DELETE*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::EXPAND:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::EXPAND*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::WITH:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::WITH*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::AND:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::AND*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::EQEQ:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::EQEQ*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::EQ:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::EQ*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::GTE:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::GTE*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::GT:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::GT*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::LTE:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::LTE*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::LT:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::LT*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::ADD:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::ADD*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::MINUS:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::MINUS*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::TARGET_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::TARGET_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::INCLUDE_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::INCLUDE_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::MEMBER_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::MEMBER_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::FUNCTION_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::FUNCTION_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::USER_INSERTED_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::USER_INSERTED_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::VARNAME:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::VARNAME*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::NUMBER:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::NUMBER*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::STRING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::STRING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::ESCAPE_CHARS:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::ESCAPE_CHARS*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+
+			// Nonterminal cases
+			
+			case fgl::ast::Type::program:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::program*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_star__stmt__:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__stmt__*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::stmt:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::stmt*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::setting_rule:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::setting_rule*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::entry_manipulation_rule:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::entry_manipulation_rule*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::exit_manipulation_rule:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::exit_manipulation_rule*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::capture:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::capture*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::manipulation:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::manipulation*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_star__COMMA__instruction__:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__COMMA__instruction__*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::instruction:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::instruction*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::new_flavor:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::new_flavor*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::delete_flavor:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::delete_flavor*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::expand_flavor:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::expand_flavor*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::flavor_capture:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::flavor_capture*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::conditional_flavor:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::conditional_flavor*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::value:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::value*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::user_defined_instruction:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::user_defined_instruction*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::object:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::object*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::object_access:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::object_access*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_arrow__member__:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_arrow__member__*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_star__DOT__member__:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__DOT__member__*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::member:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::member*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::deamerreserved_star__COMMA__argument__:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::deamerreserved_star__COMMA__argument__*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::argument:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::argument*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::flavor:
+			{
+				// Exit nonterminal
+				ListenExit(static_cast<const fgl::ast::node::flavor*>(node));
+				ExitNonTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::flavor_specialization:
+			{
 				// Exit nonterminal
 				ListenExit(static_cast<const fgl::ast::node::flavor_specialization*>(node));
 				ExitNonTerminal(node);
@@ -1003,6 +1387,138 @@ namespace fgl { namespace ast { namespace listener {
 		}
 
 		
+		virtual void ListenExit(const fgl::ast::node::COMMENT* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::LEFT_SQUARE_BRACKET* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::RIGHT_SQUARE_BRACKET* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::LEFT_BRACKET* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::RIGHT_BRACKET* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::LEFT_PARANTHESIS* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::RIGHT_PARANTHESIS* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::COMMA* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::DOT* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::ARROW* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::COLON* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::NEW* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::DELETE* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::EXPAND* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::WITH* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::AND* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::EQEQ* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::EQ* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::GTE* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::GT* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::LTE* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::LT* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::ADD* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::MINUS* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::TARGET_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::INCLUDE_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::MEMBER_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::FUNCTION_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::USER_INSERTED_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::VARNAME* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::NUMBER* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::STRING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::ESCAPE_CHARS* node) 
+		{
+		}
+
 
 		
 		virtual void ListenEntry(const fgl::ast::node::program* node) 
@@ -1270,15 +1786,6 @@ namespace fgl { namespace ast { namespace listener {
 
 		virtual void ExitAnything(const ::deamer::external::cpp::ast::Node* node) 
 		{
-		}
-	
-	private:
-		void DefaultAction(const ::deamer::external::cpp::ast::Node* node) 
-		{
-			for(const auto* child : node->GetNodes())
-			{
-				Dispatch(child);
-			}
 		}
 	};
 

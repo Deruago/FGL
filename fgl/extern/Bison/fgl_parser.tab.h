@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.7.5.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -54,37 +54,39 @@ extern int fgldebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    LEFT_SQUARE_BRACKET = 258,     /* LEFT_SQUARE_BRACKET  */
-    RIGHT_SQUARE_BRACKET = 259,    /* RIGHT_SQUARE_BRACKET  */
-    LEFT_BRACKET = 260,            /* LEFT_BRACKET  */
-    RIGHT_BRACKET = 261,           /* RIGHT_BRACKET  */
-    LEFT_PARANTHESIS = 262,        /* LEFT_PARANTHESIS  */
-    RIGHT_PARANTHESIS = 263,       /* RIGHT_PARANTHESIS  */
-    COMMA = 264,                   /* COMMA  */
-    DOT = 265,                     /* DOT  */
-    ARROW = 266,                   /* ARROW  */
-    COLON = 267,                   /* COLON  */
-    NEW = 268,                     /* NEW  */
-    DELETE = 269,                  /* DELETE  */
-    EXPAND = 270,                  /* EXPAND  */
-    WITH = 271,                    /* WITH  */
-    AND = 272,                     /* AND  */
-    EQEQ = 273,                    /* EQEQ  */
-    EQ = 274,                      /* EQ  */
-    GTE = 275,                     /* GTE  */
-    GT = 276,                      /* GT  */
-    LTE = 277,                     /* LTE  */
-    LT = 278,                      /* LT  */
-    ADD = 279,                     /* ADD  */
-    MINUS = 280,                   /* MINUS  */
-    TARGET_SETTING = 281,          /* TARGET_SETTING  */
-    INCLUDE_SETTING = 282,         /* INCLUDE_SETTING  */
-    MEMBER_SETTING = 283,          /* MEMBER_SETTING  */
-    FUNCTION_SETTING = 284,        /* FUNCTION_SETTING  */
-    USER_INSERTED_SETTING = 285,   /* USER_INSERTED_SETTING  */
-    VARNAME = 286,                 /* VARNAME  */
-    NUMBER = 287,                  /* NUMBER  */
-    STRING = 288                   /* STRING  */
+    COMMENT = 258,                 /* COMMENT  */
+    LEFT_SQUARE_BRACKET = 259,     /* LEFT_SQUARE_BRACKET  */
+    RIGHT_SQUARE_BRACKET = 260,    /* RIGHT_SQUARE_BRACKET  */
+    LEFT_BRACKET = 261,            /* LEFT_BRACKET  */
+    RIGHT_BRACKET = 262,           /* RIGHT_BRACKET  */
+    LEFT_PARANTHESIS = 263,        /* LEFT_PARANTHESIS  */
+    RIGHT_PARANTHESIS = 264,       /* RIGHT_PARANTHESIS  */
+    COMMA = 265,                   /* COMMA  */
+    DOT = 266,                     /* DOT  */
+    ARROW = 267,                   /* ARROW  */
+    COLON = 268,                   /* COLON  */
+    NEW = 269,                     /* NEW  */
+    DELETE = 270,                  /* DELETE  */
+    EXPAND = 271,                  /* EXPAND  */
+    WITH = 272,                    /* WITH  */
+    AND = 273,                     /* AND  */
+    EQEQ = 274,                    /* EQEQ  */
+    EQ = 275,                      /* EQ  */
+    GTE = 276,                     /* GTE  */
+    GT = 277,                      /* GT  */
+    LTE = 278,                     /* LTE  */
+    LT = 279,                      /* LT  */
+    ADD = 280,                     /* ADD  */
+    MINUS = 281,                   /* MINUS  */
+    TARGET_SETTING = 282,          /* TARGET_SETTING  */
+    INCLUDE_SETTING = 283,         /* INCLUDE_SETTING  */
+    MEMBER_SETTING = 284,          /* MEMBER_SETTING  */
+    FUNCTION_SETTING = 285,        /* FUNCTION_SETTING  */
+    USER_INSERTED_SETTING = 286,   /* USER_INSERTED_SETTING  */
+    VARNAME = 287,                 /* VARNAME  */
+    NUMBER = 288,                  /* NUMBER  */
+    STRING = 289,                  /* STRING  */
+    ESCAPE_CHARS = 290             /* ESCAPE_CHARS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -93,7 +95,7 @@ extern int fgldebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 156 "./fgl_parser.y"
+#line 164 "./fgl_parser.y"
 
 	::deamer::external::cpp::lexer::TerminalObject* Terminal;
 	::fgl::ast::node::COMMENT* fgl_COMMENT;
@@ -160,7 +162,8 @@ union YYSTYPE
 	::fgl::ast::node::flavor* fgl_flavor;
 	::fgl::ast::node::flavor_specialization* fgl_flavor_specialization;
 
-#line 164 "fgl_parser.tab.h"
+
+#line 167 "fgl_parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -171,6 +174,8 @@ typedef union YYSTYPE YYSTYPE;
 
 extern YYSTYPE fgllval;
 
+
 int fglparse (void);
+
 
 #endif /* !YY_FGL_FGL_PARSER_TAB_H_INCLUDED  */
