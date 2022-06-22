@@ -17,7 +17,7 @@ namespace fgl::ir
 		const ::fgl::ast::node::value* specialization;
 
 	public:
-		Flavor(ast::relation::Access<::fgl::ast::node::flavor> access)
+		Flavor(ast::reference::Access<::fgl::ast::node::flavor> access)
 		{
 			name = access.VARNAME().GetContent()[0]->GetValue();
 
@@ -37,7 +37,7 @@ namespace fgl::ir
 		}
 
 		Flavor(const ::fgl::ast::node::flavor* flavor_)
-			: Flavor(ast::relation::Access<::fgl::ast::node::flavor>(flavor_))
+			: Flavor(ast::reference::Access<::fgl::ast::node::flavor>(flavor_))
 		{
 		}
 
@@ -64,7 +64,7 @@ namespace fgl::ir
 				return "";
 			}
 
-			ast::relation::Access<::fgl::ast::node::value> access(specialization);
+			ast::reference::Access<::fgl::ast::node::value> access(specialization);
 
 			if (!access.NUMBER().GetContent().empty())
 			{

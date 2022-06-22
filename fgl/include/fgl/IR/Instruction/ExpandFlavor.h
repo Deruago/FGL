@@ -33,10 +33,10 @@ namespace fgl::ir
 	public:
 		ExpandFlavor(const ::fgl::ast::node::instruction* instruction)
 			: InstructionTemplateBase<ExpandFlavor>(instruction, InstructionType::expandFlavor),
-			  flavor(Flavor(ast::relation::Access<::fgl::ast::node::instruction>(instruction)
+			  flavor(Flavor(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
 								.expand_flavor()
 								.flavor())),
-			  value(ast::relation::Access<::fgl::ast::node::instruction>(instruction)
+			  value(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
 						.expand_flavor()
 						.value()
 						.GetContent()[0])

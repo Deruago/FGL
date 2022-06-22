@@ -32,7 +32,7 @@ namespace fgl::ir
 	public:
 		UserDefined(const ::fgl::ast::node::instruction* instruction)
 			: InstructionTemplateBase<UserDefined>(instruction, InstructionType::userDefined),
-			  value(ast::relation::Access<::fgl::ast::node::instruction>(instruction)
+			  value(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
 						.user_defined_instruction()
 						.value()
 						.GetContent()[0])

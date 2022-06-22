@@ -30,7 +30,7 @@ namespace fgl::ir
 	public:
 		NewFlavor(const ::fgl::ast::node::instruction* instruction)
 			: InstructionTemplateBase<NewFlavor>(instruction, InstructionType::newFlavor),
-			  flavor(Flavor(ast::relation::Access<::fgl::ast::node::instruction>(instruction)
+			  flavor(Flavor(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
 								.new_flavor()
 								.flavor()))
 		{

@@ -11,7 +11,7 @@ namespace fgl::ir::convertor
 	{
 		static ::std::string ConvertToString(const ast::node::value* value)
 		{
-			ast::relation::Access<ast::node::value> access(value);
+			ast::reference::Access<ast::node::value> access(value);
 			if (!access.NUMBER().GetContent().empty())
 			{
 				return ConvertToString(access.NUMBER().GetContent()[0]);

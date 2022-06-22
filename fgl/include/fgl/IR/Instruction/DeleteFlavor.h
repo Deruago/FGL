@@ -31,7 +31,7 @@ namespace fgl::ir
 	public:
 		DeleteFlavor(const ::fgl::ast::node::instruction* instruction)
 			: InstructionTemplateBase<DeleteFlavor>(instruction, InstructionType::deleteFlavor),
-			  flavor(Flavor(ast::relation::Access<::fgl::ast::node::instruction>(instruction)
+			  flavor(Flavor(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
 								.delete_flavor()
 								.flavor()))
 		{

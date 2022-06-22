@@ -930,6 +930,7 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "./fgl_lexer.l"
+#define YY_NO_UNISTD_H 1
 #line 7 "./fgl_lexer.l"
 #include <iostream>
 #include <string>
@@ -1022,8 +1023,8 @@ local_objects;
 #ifndef yyval
 #define yyval yytext
 #endif // yyval
-#line 1026 "lex.fgl.c"
 #line 1027 "lex.fgl.c"
+#line 1028 "lex.fgl.c"
 
 #define INITIAL 0
 
@@ -1243,7 +1244,7 @@ YY_DECL
 #line 136 "./fgl_lexer.l"
 
 
-#line 1247 "lex.fgl.c"
+#line 1248 "lex.fgl.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1276,16 +1277,12 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 683 );
+		while ( yy_current_state != 135 );
+		yy_cp = (yy_last_accepting_cpos);
+		yy_current_state = (yy_last_accepting_state);
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
-		if ( yy_act == 0 )
-			{ /* have to back up */
-			yy_cp = (yy_last_accepting_cpos);
-			yy_current_state = (yy_last_accepting_state);
-			yy_act = yy_accept[yy_current_state];
-			}
 
 		YY_DO_BEFORE_ACTION;
 
@@ -1493,7 +1490,7 @@ YY_RULE_SETUP
 #line 174 "./fgl_lexer.l"
 ECHO;
 	YY_BREAK
-#line 1530 "lex.fgl.c"
+#line 1527 "lex.fgl.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1560,7 +1557,8 @@ case YY_STATE_EOF(INITIAL):
 
 			else
 				{
-				yy_cp = (yy_c_buf_p);
+				yy_cp = (yy_last_accepting_cpos);
+				yy_current_state = (yy_last_accepting_state);
 				goto yy_find_action;
 				}
 			}
@@ -2084,7 +2082,7 @@ static void yy_load_buffer_state  (void)
         b->yy_bs_column = 0;
     }
 
-        b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+        b->yy_is_interactive = 0;
     
 	errno = oerrno;
 }

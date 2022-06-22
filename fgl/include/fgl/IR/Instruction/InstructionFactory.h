@@ -15,7 +15,7 @@ namespace fgl::ir
 	public:
 		static std::unique_ptr<Instruction> Make(const ::fgl::ast::node::instruction* instruction)
 		{
-			ast::relation::Access<::fgl::ast::node::instruction> access(instruction);
+			ast::reference::Access<::fgl::ast::node::instruction> access(instruction);
 			if (!access.new_flavor().GetContent().empty())
 			{
 				return std::make_unique<NewFlavor>(instruction);

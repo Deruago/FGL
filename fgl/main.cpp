@@ -36,7 +36,7 @@ int main(int argc, const char* argv[])
 		std::cout << text << "\n";
 		std::cout << "\n";
 
-		auto parser = fgl::parser::Parser();
+		auto parser = fgl::bison::parser::Parser();
 		auto* ast = parser.Parse(text);
 		if (ast == nullptr || ast->GetStartNode() == nullptr)
 		{

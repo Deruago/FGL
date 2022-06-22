@@ -51,7 +51,7 @@ namespace fgl::ast::listener::user
 
 		void ListenEntry(const ::fgl::ast::node::entry_manipulation_rule* node) override
 		{
-			relation::Access<::fgl::ast::node::entry_manipulation_rule> access(node);
+			reference::Access<::fgl::ast::node::entry_manipulation_rule> access(node);
 
 			const ir::Object target(access.object().VARNAME().GetContent()[0]->GetValue());
 
@@ -80,7 +80,7 @@ namespace fgl::ast::listener::user
 
 		void ListenEntry(const ::fgl::ast::node::exit_manipulation_rule* node) override
 		{
-			relation::Access<::fgl::ast::node::exit_manipulation_rule> access(node);
+			reference::Access<::fgl::ast::node::exit_manipulation_rule> access(node);
 
 			const ir::Object target(access.object().VARNAME().GetContent()[0]->GetValue());
 

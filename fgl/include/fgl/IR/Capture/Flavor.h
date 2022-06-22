@@ -25,7 +25,7 @@ namespace fgl::ir::capture
 	public:
 		Flavor(const ::fgl::ast::node::flavor_capture* node)
 			: CaptureTemplateBase<Flavor>(node),
-			  flavor(ast::relation::Access<::fgl::ast::node::flavor_capture>(node).flavor())
+			  flavor(ast::reference::Access<::fgl::ast::node::flavor_capture>(node).flavor())
 		{
 		}
 

@@ -37,7 +37,7 @@ namespace fgl
 		::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::GenerateArgument> argument_Flex_Output_terminal_objects;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::GenerateArgument> argument_Bison_Declare_deleted_terminals;
 
-		::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::OSTarget> os_linux;
+		::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::OSTarget> os_windows;
 	
 	public:
 		Generation(fgl::Language* language)
@@ -60,7 +60,7 @@ integrate_BisonAndDeamerAST.Set(::deamer::language::type::definition::object::ma
 			argument_Flex_Output_terminal_objects.Set(::deamer::language::type::definition::object::main::GenerateArgument(::deamer::tool::type::Tool::Flex, "Output-terminal-objects"));
 argument_Bison_Declare_deleted_terminals.Set(::deamer::language::type::definition::object::main::GenerateArgument(::deamer::tool::type::Tool::Bison, "Declare-deleted-terminals"));
 
-			os_linux.Set(::deamer::language::type::definition::object::main::OSTarget(::deamer::file::tool::OSType::os_linux));
+			os_windows.Set(::deamer::language::type::definition::object::main::OSTarget(::deamer::file::tool::OSType::os_windows));
 
 			// Add object calls
 			// AddObject(...)
@@ -76,7 +76,7 @@ AddObject(integrate_BisonAndDeamerAST);
 			AddObject(argument_Flex_Output_terminal_objects);
 AddObject(argument_Bison_Declare_deleted_terminals);
 
-			AddObject(os_linux);
+			AddObject(os_windows);
 
 			// Place higher level operations here.
 			// ReplaceObject(..., ...)

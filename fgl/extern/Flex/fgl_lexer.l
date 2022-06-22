@@ -1,7 +1,7 @@
 %option yylineno
 %option noyywrap
-
-
+%option never-interactive
+%option nounistd
 
 %{
 #include <iostream>

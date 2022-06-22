@@ -10,7 +10,7 @@ fgl::ir::Instruction::Instruction(const ::fgl::ast::node::instruction* instructi
 fgl::ir::Instruction::Instruction(const ::fgl::ast::node::instruction* instruction_)
 	: instruction(instruction_)
 {
-	ast::relation::Access<::fgl::ast::node::instruction> access(instruction);
+	ast::reference::Access<::fgl::ast::node::instruction> access(instruction);
 	if (!access.new_flavor().GetContent().empty())
 	{
 		type = InstructionType::newFlavor;

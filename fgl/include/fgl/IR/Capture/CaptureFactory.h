@@ -14,7 +14,7 @@ namespace fgl::ir
 		static std::unique_ptr<fgl::ir::Capture>
 		Make(const ::fgl::ast::node::flavor_capture* flavorCapture)
 		{
-			ast::relation::Access<::fgl::ast::node::flavor_capture> access(flavorCapture);
+			ast::reference::Access<::fgl::ast::node::flavor_capture> access(flavorCapture);
 			if (!access.flavor().GetContent().empty())
 			{
 				return std::make_unique<fgl::ir::capture::Flavor>(flavorCapture);

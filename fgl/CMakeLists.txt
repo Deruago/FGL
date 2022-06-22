@@ -24,8 +24,9 @@ if(APPLICATIONS)
 	add_subdirectory(sources)
 endif()
 
-add_executable(FGL "main.cpp")
-target_link_libraries(FGL fgl)
+add_executable(FGL)
+target_sources(FGL PRIVATE "main.cpp")
+target_link_libraries(FGL PRIVATE fgl)
 
 include(cmake/deamer_fgl_specialized.cmake)
 
