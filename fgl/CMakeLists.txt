@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(fgl)
+project(fgl VERSION 1.0.0)
+
+include(GNUInstallDirs)
 
 find_package(Deamer_External REQUIRED)
 find_package(Deamer_Algorithm REQUIRED)
@@ -21,3 +23,27 @@ if(APPLICATIONS)
 	message(STATUS "Applications are now available.")
 	add_subdirectory(sources)
 endif()
+
+add_executable(FGL "main.cpp")
+target_link_libraries(FGL fgl)
+
+include(cmake/deamer_fgl_specialized.cmake)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(${fgl_SOURCE_DIR}/cmake/fglConfig.cmake.in
+  "${fgl_BINARY_DIR}/fglConfig.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fgl
+)
+
+write_basic_package_version_file(
+	"fglConfigVersion.cmake"
+	VERSION ${PROJECT_VERSION}
+	COMPATIBILITY SameMajorVersion
+)
+
+install(FILES
+	${fgl_BINARY_DIR}/fglConfig.cmake
+	${fgl_BINARY_DIR}/fglConfigVersion.cmake
+	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/fgl
+)
