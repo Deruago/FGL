@@ -28,7 +28,7 @@ add_executable(FGL)
 target_sources(FGL PRIVATE "main.cpp")
 target_link_libraries(FGL PRIVATE fgl)
 
-include(cmake/deamer_fgl_specialized.cmake)
+install(TARGETS FGL)
 
 include(CMakePackageConfigHelpers)
 
