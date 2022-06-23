@@ -24,7 +24,7 @@ namespace fgl::ir::generate
 		Fgl fgl;
 
 	public:
-		File<LanguageTarget::cpp>(const Fgl& fgl_);
+		File(const Fgl& fgl_);
 
 	public:
 		std::string Generate();

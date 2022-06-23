@@ -29,20 +29,10 @@ namespace fgl::ir
 		Flavor flavor;
 
 	public:
-		DeleteFlavor(const ::fgl::ast::node::instruction* instruction)
-			: InstructionTemplateBase<DeleteFlavor>(instruction, InstructionType::deleteFlavor),
-			  flavor(Flavor(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
-								.delete_flavor()
-								.flavor()))
-		{
-		}
+		DeleteFlavor(const ::fgl::ast::node::instruction* instruction);
 
 	public:
-		std::vector<DifferenceFlavor> GetFlavors() const override
-		{
-			const DifferenceFlavor DifferenceFlavor(flavor, Operation::Delete);
-			return {DifferenceFlavor};
-		}
+		std::vector<DifferenceFlavor> GetFlavors() const override;
 
 	public:
 		template<LanguageTarget languageTarget>
@@ -57,10 +47,7 @@ namespace fgl::ir
 			return DeleteFlavorDetail::GetInverseInstruction<languageTarget>(this);
 		}
 
-		std::unique_ptr<Instruction> DeepCopy() override
-		{
-			return ::std::make_unique<DeleteFlavor>(this->instruction);
-		}
+		std::unique_ptr<Instruction> DeepCopy() override;
 	};
 
 	namespace DeleteFlavorDetail

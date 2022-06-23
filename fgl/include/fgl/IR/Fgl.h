@@ -33,7 +33,7 @@ namespace fgl::ir
 	public:
 		/*!	\fn SetUnderlyingNodes
 		 *
-		 * \brief Sets the function or memeber that needs to be called to get the underlying nodes.
+		 * \brief Sets the function or member that needs to be called to get the underlying nodes.
 		 */
 		void SetUnderlyingNodes(const ::std::string& text);
 

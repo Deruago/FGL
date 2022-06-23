@@ -30,14 +30,7 @@ namespace fgl::ir
 		const ast::node::value* value;
 
 	public:
-		UserDefined(const ::fgl::ast::node::instruction* instruction)
-			: InstructionTemplateBase<UserDefined>(instruction, InstructionType::userDefined),
-			  value(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
-						.user_defined_instruction()
-						.value()
-						.GetContent()[0])
-		{
-		}
+		UserDefined(const ::fgl::ast::node::instruction* instruction);
 
 	public:
 		template<LanguageTarget languageTarget>
@@ -52,10 +45,7 @@ namespace fgl::ir
 			return UserDefinedDetail::GetInverseInstruction<languageTarget>(this);
 		}
 
-		std::unique_ptr<Instruction> DeepCopy() override
-		{
-			return ::std::make_unique<UserDefined>(this->instruction);
-		}
+		std::unique_ptr<Instruction> DeepCopy() override;
 	};
 
 	namespace UserDefinedDetail

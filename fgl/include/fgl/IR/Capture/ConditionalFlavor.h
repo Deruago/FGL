@@ -20,16 +20,10 @@ namespace fgl::ir::capture
 	class ConditionalFlavor : public CaptureTemplateBase<ConditionalFlavor>
 	{
 	public:
-		ConditionalFlavor(const ::fgl::ast::node::flavor_capture* node)
-			: CaptureTemplateBase<ConditionalFlavor>(node)
-		{
-		}
+		ConditionalFlavor(const ::fgl::ast::node::flavor_capture* node);
 
 	public:
-		std::vector<DifferenceFlavor> GetFlavors() override
-		{
-			return {};
-		}
+		std::vector<DifferenceFlavor> GetFlavors() override;
 
 		template<LanguageTarget target>
 		std::string GetConditional()
@@ -37,10 +31,7 @@ namespace fgl::ir::capture
 			return ConditionalFlavorDetails::GetConditional<target>(this);
 		}
 
-		std::unique_ptr<Capture> DeepCopy() override
-		{
-			return ::std::make_unique<ConditionalFlavor>(this->node);
-		}
+		std::unique_ptr<Capture> DeepCopy() override;
 	};
 
 	namespace ConditionalFlavorDetails

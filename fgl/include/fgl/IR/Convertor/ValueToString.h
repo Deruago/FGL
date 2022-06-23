@@ -9,38 +9,13 @@ namespace fgl::ir::convertor
 {
 	struct Value
 	{
-		static ::std::string ConvertToString(const ast::node::value* value)
-		{
-			ast::reference::Access<ast::node::value> access(value);
-			if (!access.NUMBER().GetContent().empty())
-			{
-				return ConvertToString(access.NUMBER().GetContent()[0]);
-			}
-			if (!access.STRING().GetContent().empty())
-			{
-				return ConvertToString(access.STRING().GetContent()[0]);
-			}
-			if (!access.object_access().GetContent().empty())
-			{
-				return ConvertToString(access.object_access().GetContent()[0]);
-			}
+		static ::std::string ConvertToString(const ast::node::value* value);
 
-			return "";
-		}
-		static std::string ConvertToString(const ast::node::NUMBER* value)
-		{
-			return value->GetValue();
-		}
+		static std::string ConvertToString(const ast::node::NUMBER* value);
 
-		static std::string ConvertToString(const ast::node::STRING* value)
-		{
-			return value->GetValue();
-		}
+		static std::string ConvertToString(const ast::node::STRING* value);
 
-		static std::string ConvertToString(const ast::node::object_access* value)
-		{
-			return value->GetText() + ';';
-		}
+		static std::string ConvertToString(const ast::node::object_access* value);
 	};
 }
 

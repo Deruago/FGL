@@ -31,17 +31,7 @@ namespace fgl::ir
 		const ast::node::value* value;
 
 	public:
-		ExpandFlavor(const ::fgl::ast::node::instruction* instruction)
-			: InstructionTemplateBase<ExpandFlavor>(instruction, InstructionType::expandFlavor),
-			  flavor(Flavor(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
-								.expand_flavor()
-								.flavor())),
-			  value(ast::reference::Access<::fgl::ast::node::instruction>(instruction)
-						.expand_flavor()
-						.value()
-						.GetContent()[0])
-		{
-		}
+		ExpandFlavor(const ::fgl::ast::node::instruction* instruction);
 
 	public:
 		template<LanguageTarget languageTarget>
@@ -56,10 +46,7 @@ namespace fgl::ir
 			return ExpandFlavorDetail::GetInverseInstruction<languageTarget>(this);
 		}
 
-		std::unique_ptr<Instruction> DeepCopy() override
-		{
-			return ::std::make_unique<ExpandFlavor>(this->instruction);
-		}
+		std::unique_ptr<Instruction> DeepCopy() override;
 	};
 
 	namespace ExpandFlavorDetail

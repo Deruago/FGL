@@ -12,11 +12,7 @@ namespace fgl::ir
 		const Flavor flavor;
 		const Operation operation;
 
-		DifferenceFlavor(const Flavor& flavor_, Operation operation_)
-			: flavor(flavor_),
-			  operation(operation_)
-		{
-		}
+		DifferenceFlavor(const Flavor& flavor_, Operation operation_);
 	};
 }
 
