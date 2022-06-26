@@ -148,6 +148,26 @@ namespace fgl { namespace ast { namespace relation {
 			return true;
 		}
 
+		if (t == ::fgl::ast::Type::NAMINGCONVENTION_SETTING)
+		{
+			return true;
+		}
+
+		if (t == ::fgl::ast::Type::DISPATCH_SETTING)
+		{
+			return true;
+		}
+
+		if (t == ::fgl::ast::Type::INHERITANCE_SETTING)
+		{
+			return true;
+		}
+
+		if (t == ::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING)
+		{
+			return true;
+		}
+
 		if (t == ::fgl::ast::Type::USER_INSERTED_SETTING)
 		{
 			return true;

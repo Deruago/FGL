@@ -32,6 +32,10 @@
 #include "fgl/Ast/Node/INCLUDE_SETTING.h"
 #include "fgl/Ast/Node/MEMBER_SETTING.h"
 #include "fgl/Ast/Node/FUNCTION_SETTING.h"
+#include "fgl/Ast/Node/NAMINGCONVENTION_SETTING.h"
+#include "fgl/Ast/Node/DISPATCH_SETTING.h"
+#include "fgl/Ast/Node/INHERITANCE_SETTING.h"
+#include "fgl/Ast/Node/DEAMER_LANGUAGE_NAME_SETTING.h"
 #include "fgl/Ast/Node/USER_INSERTED_SETTING.h"
 #include "fgl/Ast/Node/VARNAME.h"
 #include "fgl/Ast/Node/NUMBER.h"
@@ -349,6 +353,42 @@ namespace fgl { namespace ast { namespace listener {
 				EnterAnything(node);
 				EnterTerminal(node);
 				ListenEntry(static_cast<const fgl::ast::node::FUNCTION_SETTING*>(node));
+				break;
+			}
+
+			case fgl::ast::Type::NAMINGCONVENTION_SETTING:
+			{
+				// Entry terminal
+				EnterAnything(node);
+				EnterTerminal(node);
+				ListenEntry(static_cast<const fgl::ast::node::NAMINGCONVENTION_SETTING*>(node));
+				break;
+			}
+
+			case fgl::ast::Type::DISPATCH_SETTING:
+			{
+				// Entry terminal
+				EnterAnything(node);
+				EnterTerminal(node);
+				ListenEntry(static_cast<const fgl::ast::node::DISPATCH_SETTING*>(node));
+				break;
+			}
+
+			case fgl::ast::Type::INHERITANCE_SETTING:
+			{
+				// Entry terminal
+				EnterAnything(node);
+				EnterTerminal(node);
+				ListenEntry(static_cast<const fgl::ast::node::INHERITANCE_SETTING*>(node));
+				break;
+			}
+
+			case fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING:
+			{
+				// Entry terminal
+				EnterAnything(node);
+				EnterTerminal(node);
+				ListenEntry(static_cast<const fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING*>(node));
 				break;
 			}
 
@@ -932,6 +972,42 @@ namespace fgl { namespace ast { namespace listener {
 				break;
 			}
 
+			case fgl::ast::Type::NAMINGCONVENTION_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::NAMINGCONVENTION_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::DISPATCH_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::DISPATCH_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::INHERITANCE_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::INHERITANCE_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
+			case fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING:
+			{
+				// Exit terminal
+				ListenExit(static_cast<const fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING*>(node));
+				ExitTerminal(node);
+				ExitAnything(node);
+				break;
+			}
+
 			case fgl::ast::Type::USER_INSERTED_SETTING:
 			{
 				// Exit terminal
@@ -1366,6 +1442,22 @@ namespace fgl { namespace ast { namespace listener {
 		{
 		}
 
+		virtual void ListenEntry(const fgl::ast::node::NAMINGCONVENTION_SETTING* node) 
+		{
+		}
+
+		virtual void ListenEntry(const fgl::ast::node::DISPATCH_SETTING* node) 
+		{
+		}
+
+		virtual void ListenEntry(const fgl::ast::node::INHERITANCE_SETTING* node) 
+		{
+		}
+
+		virtual void ListenEntry(const fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING* node) 
+		{
+		}
+
 		virtual void ListenEntry(const fgl::ast::node::USER_INSERTED_SETTING* node) 
 		{
 		}
@@ -1496,6 +1588,22 @@ namespace fgl { namespace ast { namespace listener {
 		}
 
 		virtual void ListenExit(const fgl::ast::node::FUNCTION_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::NAMINGCONVENTION_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::DISPATCH_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::INHERITANCE_SETTING* node) 
+		{
+		}
+
+		virtual void ListenExit(const fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING* node) 
 		{
 		}
 

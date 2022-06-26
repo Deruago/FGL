@@ -186,6 +186,18 @@ namespace fgl { namespace ast { namespace relation {
 		{ "FUNCTION_SETTING", ::fgl::ast::Type::FUNCTION_SETTING },
 	
 
+		{ "NAMINGCONVENTION_SETTING", ::fgl::ast::Type::NAMINGCONVENTION_SETTING },
+	
+
+		{ "DISPATCH_SETTING", ::fgl::ast::Type::DISPATCH_SETTING },
+	
+
+		{ "INHERITANCE_SETTING", ::fgl::ast::Type::INHERITANCE_SETTING },
+	
+
+		{ "DEAMER_LANGUAGE_NAME_SETTING", ::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING },
+	
+
 		{ "USER_INSERTED_SETTING", ::fgl::ast::Type::USER_INSERTED_SETTING },
 	
 

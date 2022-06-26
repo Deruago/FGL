@@ -20,6 +20,11 @@ void fgl::ir::Fgl::AddIncludeSetting(const std::string& text)
 	includes.push_back(text);
 }
 
+void fgl::ir::Fgl::AddInheritanceSetting(const std::string& text)
+{
+	inheritances.push_back(text);
+}
+
 void fgl::ir::Fgl::AddFunctionSetting(const std::string& text)
 {
 	functions.push_back(text);
@@ -33,6 +38,36 @@ void fgl::ir::Fgl::SetManipulationRules(
 	const std::map<ir::Object, std::vector<ir::ManipulationRule>>& manipulationRules_)
 {
 	manipulationRules = manipulationRules_;
+}
+
+void fgl::ir::Fgl::SetEnterFunction(const std::string& enterFunction_)
+{
+	enterFunction = enterFunction_;
+}
+
+void fgl::ir::Fgl::SetExitFunction(const std::string& exitFunction_)
+{
+	exitFunction = exitFunction_;
+}
+
+void fgl::ir::Fgl::SetNodeType(const std::string& nodeType_)
+{
+	nodeType = nodeType_;
+}
+
+void fgl::ir::Fgl::SetDeamerLanguageName(const std::string& deamerLanguageName_)
+{
+	deamerLanguageName = deamerLanguageName_;
+}
+
+void fgl::ir::Fgl::SetNamingConvention(NamingConvention namingConvention_)
+{
+	namingConvention = namingConvention_;
+}
+
+void fgl::ir::Fgl::SetDispatchUsage(bool useDispatch_)
+{
+	utilizeDispatch = useDispatch_;
 }
 
 std::set<fgl::ir::Flavor> fgl::ir::Fgl::GetFlavors() const
@@ -103,6 +138,11 @@ fgl::ir::Fgl::GetManipulation() const
 	return manipulationRules;
 }
 
+std::vector<std::string> fgl::ir::Fgl::GetInheritances() const
+{
+	return inheritances;
+}
+
 std::vector<std::string> fgl::ir::Fgl::GetIncludes() const
 {
 	return includes;
@@ -121,4 +161,34 @@ std::vector<std::string> fgl::ir::Fgl::GetIncludes() const
 ::std::string fgl::ir::Fgl::GetUnderlyingNodes() const
 {
 	return underlyingNodes;
+}
+
+std::string fgl::ir::Fgl::GetEnterFunction() const
+{
+	return enterFunction;
+}
+
+std::string fgl::ir::Fgl::GetExitFunction() const
+{
+	return exitFunction;
+}
+
+std::string fgl::ir::Fgl::GetNodeType() const
+{
+	return nodeType;
+}
+
+std::string fgl::ir::Fgl::GetDeamerLanguageName() const
+{
+	return deamerLanguageName;
+}
+
+fgl::ir::NamingConvention fgl::ir::Fgl::GetNamingConvention() const
+{
+	return namingConvention;
+}
+
+bool fgl::ir::Fgl::GetDispatchUsage() const
+{
+	return utilizeDispatch;
 }

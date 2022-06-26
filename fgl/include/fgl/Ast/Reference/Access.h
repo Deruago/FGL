@@ -64,6 +64,10 @@
 #include "fgl/Ast/Node/INCLUDE_SETTING.h"
 #include "fgl/Ast/Node/MEMBER_SETTING.h"
 #include "fgl/Ast/Node/FUNCTION_SETTING.h"
+#include "fgl/Ast/Node/NAMINGCONVENTION_SETTING.h"
+#include "fgl/Ast/Node/DISPATCH_SETTING.h"
+#include "fgl/Ast/Node/INHERITANCE_SETTING.h"
+#include "fgl/Ast/Node/DEAMER_LANGUAGE_NAME_SETTING.h"
 #include "fgl/Ast/Node/USER_INSERTED_SETTING.h"
 #include "fgl/Ast/Node/VARNAME.h"
 #include "fgl/Ast/Node/NUMBER.h"
@@ -276,6 +280,14 @@ namespace fgl { namespace ast { namespace reference {
 	struct AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING>;
 	template<>
 	struct AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING>;
+	template<>
+	struct AccessTemplateBase<::fgl::ast::node::NAMINGCONVENTION_SETTING>;
+	template<>
+	struct AccessTemplateBase<::fgl::ast::node::DISPATCH_SETTING>;
+	template<>
+	struct AccessTemplateBase<::fgl::ast::node::INHERITANCE_SETTING>;
+	template<>
+	struct AccessTemplateBase<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING>;
 	template<>
 	struct AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING>;
 	template<>
@@ -686,10 +698,14 @@ AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule> exit_manipulation_r
 		}
 
 	public:
-		AccessTemplateBase<::fgl::ast::node::TARGET_SETTING> TARGET_SETTING();
+		AccessTemplateBase<::fgl::ast::node::DISPATCH_SETTING> DISPATCH_SETTING();
+AccessTemplateBase<::fgl::ast::node::INHERITANCE_SETTING> INHERITANCE_SETTING();
+AccessTemplateBase<::fgl::ast::node::TARGET_SETTING> TARGET_SETTING();
 AccessTemplateBase<::fgl::ast::node::INCLUDE_SETTING> INCLUDE_SETTING();
 AccessTemplateBase<::fgl::ast::node::MEMBER_SETTING> MEMBER_SETTING();
 AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING> FUNCTION_SETTING();
+AccessTemplateBase<::fgl::ast::node::NAMINGCONVENTION_SETTING> NAMINGCONVENTION_SETTING();
+AccessTemplateBase<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING> DEAMER_LANGUAGE_NAME_SETTING();
 AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING> USER_INSERTED_SETTING();
 
 
@@ -2232,11 +2248,11 @@ AccessTemplateBase<::fgl::ast::node::flavor> flavor();
 
 	public:
 		AccessTemplateBase<::fgl::ast::node::value> value();
-AccessTemplateBase<::fgl::ast::node::EQEQ> EQEQ();
-AccessTemplateBase<::fgl::ast::node::GTE> GTE();
-AccessTemplateBase<::fgl::ast::node::GT> GT();
 AccessTemplateBase<::fgl::ast::node::LTE> LTE();
 AccessTemplateBase<::fgl::ast::node::LT> LT();
+AccessTemplateBase<::fgl::ast::node::GTE> GTE();
+AccessTemplateBase<::fgl::ast::node::GT> GT();
+AccessTemplateBase<::fgl::ast::node::EQEQ> EQEQ();
 
 
 		template<typename FunctionType>
@@ -2994,9 +3010,9 @@ AccessTemplateBase<::fgl::ast::node::DOT> DOT();
 		}
 
 	public:
-		AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> deamerreserved_arrow__deamerreserved_optional__argument____();
+		AccessTemplateBase<::fgl::ast::node::argument> argument();
 AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
-AccessTemplateBase<::fgl::ast::node::argument> argument();
+AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> deamerreserved_arrow__deamerreserved_optional__argument____();
 AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> LEFT_PARANTHESIS();
 AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
@@ -3107,8 +3123,8 @@ AccessTemplateBase<::fgl::ast::node::VARNAME> VARNAME();
 		}
 
 	public:
-		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
-AccessTemplateBase<::fgl::ast::node::argument> argument();
+		AccessTemplateBase<::fgl::ast::node::argument> argument();
+AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
 AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
 
 
@@ -3216,8 +3232,8 @@ AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
 		}
 
 	public:
-		AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
-AccessTemplateBase<::fgl::ast::node::argument> argument();
+		AccessTemplateBase<::fgl::ast::node::argument> argument();
+AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> deamerreserved_star__COMMA__argument__();
 AccessTemplateBase<::fgl::ast::node::COMMA> COMMA();
 
 
@@ -6546,6 +6562,430 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 	};
 
 	template<>
+	struct AccessTemplateBase<::fgl::ast::node::NAMINGCONVENTION_SETTING> : public AccessBase
+	{
+	protected:
+		std::vector<const ::fgl::ast::node::NAMINGCONVENTION_SETTING*> ts;
+
+	public:
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::NAMINGCONVENTION_SETTING*> ts_) : ts(std::move(ts_))
+		{
+		}
+
+		AccessTemplateBase(const ::fgl::ast::node::NAMINGCONVENTION_SETTING& t) : ts({&t})
+		{
+		}
+
+		AccessTemplateBase(const ::fgl::ast::node::NAMINGCONVENTION_SETTING* t) : ts({t})
+		{
+		}
+
+		AccessTemplateBase() = default;
+
+	public:
+		AccessTemplateBase<::fgl::ast::node::NAMINGCONVENTION_SETTING>& operator[](::std::size_t index)
+		{
+			if (index >= ts.size())
+			{
+				ts.clear();
+			}
+			else
+			{
+				const auto* const copy = ts[index];
+				ts.clear();
+				ts.push_back(copy);
+			}
+
+			return *this;
+		}
+
+		AccessTemplateBase<::fgl::ast::node::NAMINGCONVENTION_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		{
+			// swap if the other is larger
+			if (indexBegin > indexEnd)
+			{
+				const auto tmp = indexBegin;
+				indexBegin = indexEnd;
+				indexEnd = tmp;
+			}
+
+			if (indexBegin >= ts.size())
+			{
+				ts.clear();
+			}
+			else
+			{
+				std::vector<const ::fgl::ast::node::NAMINGCONVENTION_SETTING*> temporaries;
+				for (auto i = indexBegin; i < ts.size() && i <= indexEnd; i++)
+				{
+					temporaries.push_back(ts[i]);
+				}
+				ts.clear();
+				ts = temporaries;
+			}
+
+			return *this;
+		}
+
+		std::vector<const ::fgl::ast::node::NAMINGCONVENTION_SETTING*> GetContent()
+		{
+			return ts;
+		}
+
+	public:
+		
+
+		template<typename FunctionType>
+		AccessTemplateBase<::fgl::ast::node::NAMINGCONVENTION_SETTING>& for_all(FunctionType function)
+		{
+			for (const auto* const t : ts)
+			{
+				function(t);
+			}
+
+			return *this;
+		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
+	};
+
+	template<>
+	struct AccessTemplateBase<::fgl::ast::node::DISPATCH_SETTING> : public AccessBase
+	{
+	protected:
+		std::vector<const ::fgl::ast::node::DISPATCH_SETTING*> ts;
+
+	public:
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::DISPATCH_SETTING*> ts_) : ts(std::move(ts_))
+		{
+		}
+
+		AccessTemplateBase(const ::fgl::ast::node::DISPATCH_SETTING& t) : ts({&t})
+		{
+		}
+
+		AccessTemplateBase(const ::fgl::ast::node::DISPATCH_SETTING* t) : ts({t})
+		{
+		}
+
+		AccessTemplateBase() = default;
+
+	public:
+		AccessTemplateBase<::fgl::ast::node::DISPATCH_SETTING>& operator[](::std::size_t index)
+		{
+			if (index >= ts.size())
+			{
+				ts.clear();
+			}
+			else
+			{
+				const auto* const copy = ts[index];
+				ts.clear();
+				ts.push_back(copy);
+			}
+
+			return *this;
+		}
+
+		AccessTemplateBase<::fgl::ast::node::DISPATCH_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		{
+			// swap if the other is larger
+			if (indexBegin > indexEnd)
+			{
+				const auto tmp = indexBegin;
+				indexBegin = indexEnd;
+				indexEnd = tmp;
+			}
+
+			if (indexBegin >= ts.size())
+			{
+				ts.clear();
+			}
+			else
+			{
+				std::vector<const ::fgl::ast::node::DISPATCH_SETTING*> temporaries;
+				for (auto i = indexBegin; i < ts.size() && i <= indexEnd; i++)
+				{
+					temporaries.push_back(ts[i]);
+				}
+				ts.clear();
+				ts = temporaries;
+			}
+
+			return *this;
+		}
+
+		std::vector<const ::fgl::ast::node::DISPATCH_SETTING*> GetContent()
+		{
+			return ts;
+		}
+
+	public:
+		
+
+		template<typename FunctionType>
+		AccessTemplateBase<::fgl::ast::node::DISPATCH_SETTING>& for_all(FunctionType function)
+		{
+			for (const auto* const t : ts)
+			{
+				function(t);
+			}
+
+			return *this;
+		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
+	};
+
+	template<>
+	struct AccessTemplateBase<::fgl::ast::node::INHERITANCE_SETTING> : public AccessBase
+	{
+	protected:
+		std::vector<const ::fgl::ast::node::INHERITANCE_SETTING*> ts;
+
+	public:
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::INHERITANCE_SETTING*> ts_) : ts(std::move(ts_))
+		{
+		}
+
+		AccessTemplateBase(const ::fgl::ast::node::INHERITANCE_SETTING& t) : ts({&t})
+		{
+		}
+
+		AccessTemplateBase(const ::fgl::ast::node::INHERITANCE_SETTING* t) : ts({t})
+		{
+		}
+
+		AccessTemplateBase() = default;
+
+	public:
+		AccessTemplateBase<::fgl::ast::node::INHERITANCE_SETTING>& operator[](::std::size_t index)
+		{
+			if (index >= ts.size())
+			{
+				ts.clear();
+			}
+			else
+			{
+				const auto* const copy = ts[index];
+				ts.clear();
+				ts.push_back(copy);
+			}
+
+			return *this;
+		}
+
+		AccessTemplateBase<::fgl::ast::node::INHERITANCE_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		{
+			// swap if the other is larger
+			if (indexBegin > indexEnd)
+			{
+				const auto tmp = indexBegin;
+				indexBegin = indexEnd;
+				indexEnd = tmp;
+			}
+
+			if (indexBegin >= ts.size())
+			{
+				ts.clear();
+			}
+			else
+			{
+				std::vector<const ::fgl::ast::node::INHERITANCE_SETTING*> temporaries;
+				for (auto i = indexBegin; i < ts.size() && i <= indexEnd; i++)
+				{
+					temporaries.push_back(ts[i]);
+				}
+				ts.clear();
+				ts = temporaries;
+			}
+
+			return *this;
+		}
+
+		std::vector<const ::fgl::ast::node::INHERITANCE_SETTING*> GetContent()
+		{
+			return ts;
+		}
+
+	public:
+		
+
+		template<typename FunctionType>
+		AccessTemplateBase<::fgl::ast::node::INHERITANCE_SETTING>& for_all(FunctionType function)
+		{
+			for (const auto* const t : ts)
+			{
+				function(t);
+			}
+
+			return *this;
+		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
+	};
+
+	template<>
+	struct AccessTemplateBase<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING> : public AccessBase
+	{
+	protected:
+		std::vector<const ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING*> ts;
+
+	public:
+		AccessTemplateBase(std::vector<const ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING*> ts_) : ts(std::move(ts_))
+		{
+		}
+
+		AccessTemplateBase(const ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING& t) : ts({&t})
+		{
+		}
+
+		AccessTemplateBase(const ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING* t) : ts({t})
+		{
+		}
+
+		AccessTemplateBase() = default;
+
+	public:
+		AccessTemplateBase<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING>& operator[](::std::size_t index)
+		{
+			if (index >= ts.size())
+			{
+				ts.clear();
+			}
+			else
+			{
+				const auto* const copy = ts[index];
+				ts.clear();
+				ts.push_back(copy);
+			}
+
+			return *this;
+		}
+
+		AccessTemplateBase<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING>& operator()(::std::size_t indexBegin, ::std::size_t indexEnd)
+		{
+			// swap if the other is larger
+			if (indexBegin > indexEnd)
+			{
+				const auto tmp = indexBegin;
+				indexBegin = indexEnd;
+				indexEnd = tmp;
+			}
+
+			if (indexBegin >= ts.size())
+			{
+				ts.clear();
+			}
+			else
+			{
+				std::vector<const ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING*> temporaries;
+				for (auto i = indexBegin; i < ts.size() && i <= indexEnd; i++)
+				{
+					temporaries.push_back(ts[i]);
+				}
+				ts.clear();
+				ts = temporaries;
+			}
+
+			return *this;
+		}
+
+		std::vector<const ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING*> GetContent()
+		{
+			return ts;
+		}
+
+	public:
+		
+
+		template<typename FunctionType>
+		AccessTemplateBase<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING>& for_all(FunctionType function)
+		{
+			for (const auto* const t : ts)
+			{
+				function(t);
+			}
+
+			return *this;
+		}
+
+	public:
+		auto begin()
+		{
+			return ts.begin();
+		}
+		auto cbegin()
+		{
+			return ts.cbegin();
+		}
+		
+		auto end()
+		{
+			return ts.end();
+		}
+		
+		auto cend()
+		{
+			return ts.cend();
+		}
+	};
+
+	template<>
 	struct AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING> : public AccessBase
 	{
 	protected:
@@ -7133,6 +7573,22 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return AccessTemplateBase<::fgl::ast::node::exit_manipulation_rule>(Get<::fgl::ast::Type::exit_manipulation_rule>(ts));
 		}
 
+		inline AccessTemplateBase<::fgl::ast::node::DISPATCH_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::DISPATCH_SETTING()
+		{
+			// Optimized search, if it fails continue using unoptimized search.
+
+			// Unoptimized search
+			return AccessTemplateBase<::fgl::ast::node::DISPATCH_SETTING>(Get<::fgl::ast::Type::DISPATCH_SETTING>(ts));
+		}
+
+		inline AccessTemplateBase<::fgl::ast::node::INHERITANCE_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::INHERITANCE_SETTING()
+		{
+			// Optimized search, if it fails continue using unoptimized search.
+
+			// Unoptimized search
+			return AccessTemplateBase<::fgl::ast::node::INHERITANCE_SETTING>(Get<::fgl::ast::Type::INHERITANCE_SETTING>(ts));
+		}
+
 		inline AccessTemplateBase<::fgl::ast::node::TARGET_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::TARGET_SETTING()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
@@ -7163,6 +7619,22 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 
 			// Unoptimized search
 			return AccessTemplateBase<::fgl::ast::node::FUNCTION_SETTING>(Get<::fgl::ast::Type::FUNCTION_SETTING>(ts));
+		}
+
+		inline AccessTemplateBase<::fgl::ast::node::NAMINGCONVENTION_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::NAMINGCONVENTION_SETTING()
+		{
+			// Optimized search, if it fails continue using unoptimized search.
+
+			// Unoptimized search
+			return AccessTemplateBase<::fgl::ast::node::NAMINGCONVENTION_SETTING>(Get<::fgl::ast::Type::NAMINGCONVENTION_SETTING>(ts));
+		}
+
+		inline AccessTemplateBase<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::DEAMER_LANGUAGE_NAME_SETTING()
+		{
+			// Optimized search, if it fails continue using unoptimized search.
+
+			// Unoptimized search
+			return AccessTemplateBase<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING>(Get<::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING>(ts));
 		}
 
 		inline AccessTemplateBase<::fgl::ast::node::USER_INSERTED_SETTING> AccessTemplateBase<::fgl::ast::node::setting_rule>::USER_INSERTED_SETTING()
@@ -7629,12 +8101,20 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return AccessTemplateBase<::fgl::ast::node::value>(Get<::fgl::ast::Type::value>(ts));
 		}
 
-		inline AccessTemplateBase<::fgl::ast::node::EQEQ> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::EQEQ()
+		inline AccessTemplateBase<::fgl::ast::node::LTE> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::LTE()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return AccessTemplateBase<::fgl::ast::node::EQEQ>(Get<::fgl::ast::Type::EQEQ>(ts));
+			return AccessTemplateBase<::fgl::ast::node::LTE>(Get<::fgl::ast::Type::LTE>(ts));
+		}
+
+		inline AccessTemplateBase<::fgl::ast::node::LT> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::LT()
+		{
+			// Optimized search, if it fails continue using unoptimized search.
+
+			// Unoptimized search
+			return AccessTemplateBase<::fgl::ast::node::LT>(Get<::fgl::ast::Type::LT>(ts));
 		}
 
 		inline AccessTemplateBase<::fgl::ast::node::GTE> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::GTE()
@@ -7653,20 +8133,12 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return AccessTemplateBase<::fgl::ast::node::GT>(Get<::fgl::ast::Type::GT>(ts));
 		}
 
-		inline AccessTemplateBase<::fgl::ast::node::LTE> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::LTE()
+		inline AccessTemplateBase<::fgl::ast::node::EQEQ> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::EQEQ()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return AccessTemplateBase<::fgl::ast::node::LTE>(Get<::fgl::ast::Type::LTE>(ts));
-		}
-
-		inline AccessTemplateBase<::fgl::ast::node::LT> AccessTemplateBase<::fgl::ast::node::conditional_flavor>::LT()
-		{
-			// Optimized search, if it fails continue using unoptimized search.
-
-			// Unoptimized search
-			return AccessTemplateBase<::fgl::ast::node::LT>(Get<::fgl::ast::Type::LT>(ts));
+			return AccessTemplateBase<::fgl::ast::node::EQEQ>(Get<::fgl::ast::Type::EQEQ>(ts));
 		}
 
 		inline AccessTemplateBase<::fgl::ast::node::object_access> AccessTemplateBase<::fgl::ast::node::value>::object_access()
@@ -7789,12 +8261,12 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return AccessTemplateBase<::fgl::ast::node::DOT>(Get<::fgl::ast::Type::DOT>(ts));
 		}
 
-		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> AccessTemplateBase<::fgl::ast::node::member>::deamerreserved_arrow__deamerreserved_optional__argument____()
+		inline AccessTemplateBase<::fgl::ast::node::argument> AccessTemplateBase<::fgl::ast::node::member>::argument()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>(Get<::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____>(ts));
+			return AccessTemplateBase<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
 		}
 
 		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> AccessTemplateBase<::fgl::ast::node::member>::deamerreserved_star__COMMA__argument__()
@@ -7805,12 +8277,12 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
 		}
 
-		inline AccessTemplateBase<::fgl::ast::node::argument> AccessTemplateBase<::fgl::ast::node::member>::argument()
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____> AccessTemplateBase<::fgl::ast::node::member>::deamerreserved_arrow__deamerreserved_optional__argument____()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
-			return AccessTemplateBase<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>(Get<::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____>(ts));
 		}
 
 		inline AccessTemplateBase<::fgl::ast::node::LEFT_PARANTHESIS> AccessTemplateBase<::fgl::ast::node::member>::LEFT_PARANTHESIS()
@@ -7845,20 +8317,20 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return AccessTemplateBase<::fgl::ast::node::VARNAME>(Get<::fgl::ast::Type::VARNAME>(ts));
 		}
 
-		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::deamerreserved_star__COMMA__argument__()
-		{
-			// Optimized search, if it fails continue using unoptimized search.
-
-			// Unoptimized search
-			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
-		}
-
 		inline AccessTemplateBase<::fgl::ast::node::argument> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::argument()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
 			return AccessTemplateBase<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
+		}
+
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::deamerreserved_star__COMMA__argument__()
+		{
+			// Optimized search, if it fails continue using unoptimized search.
+
+			// Unoptimized search
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
 		}
 
 		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____>::COMMA()
@@ -7869,20 +8341,20 @@ AccessTemplateBase<::fgl::ast::node::RIGHT_PARANTHESIS> RIGHT_PARANTHESIS();
 			return AccessTemplateBase<::fgl::ast::node::COMMA>(Get<::fgl::ast::Type::COMMA>(ts));
 		}
 
-		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::deamerreserved_star__COMMA__argument__()
-		{
-			// Optimized search, if it fails continue using unoptimized search.
-
-			// Unoptimized search
-			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
-		}
-
 		inline AccessTemplateBase<::fgl::ast::node::argument> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::argument()
 		{
 			// Optimized search, if it fails continue using unoptimized search.
 
 			// Unoptimized search
 			return AccessTemplateBase<::fgl::ast::node::argument>(Get<::fgl::ast::Type::argument>(ts));
+		}
+
+		inline AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::deamerreserved_star__COMMA__argument__()
+		{
+			// Optimized search, if it fails continue using unoptimized search.
+
+			// Unoptimized search
+			return AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>(Get<::fgl::ast::Type::deamerreserved_star__COMMA__argument__>(ts));
 		}
 
 		inline AccessTemplateBase<::fgl::ast::node::COMMA> AccessTemplateBase<::fgl::ast::node::deamerreserved_star__COMMA__argument__>::COMMA()

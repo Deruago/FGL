@@ -63,6 +63,10 @@ class TARGET_SETTING;
 class INCLUDE_SETTING;
 class MEMBER_SETTING;
 class FUNCTION_SETTING;
+class NAMINGCONVENTION_SETTING;
+class DISPATCH_SETTING;
+class INHERITANCE_SETTING;
+class DEAMER_LANGUAGE_NAME_SETTING;
 class USER_INSERTED_SETTING;
 class VARNAME;
 class NUMBER;
@@ -485,6 +489,34 @@ namespace fgl { namespace ast { namespace relation {
 	{
 		constexpr static auto value = ::fgl::ast::Type::FUNCTION_SETTING;
 		using type = ::fgl::ast::node::FUNCTION_SETTING;
+	};
+
+	template<>
+	struct NodeTypeToEnum<::fgl::ast::node::NAMINGCONVENTION_SETTING>
+	{
+		constexpr static auto value = ::fgl::ast::Type::NAMINGCONVENTION_SETTING;
+		using type = ::fgl::ast::node::NAMINGCONVENTION_SETTING;
+	};
+
+	template<>
+	struct NodeTypeToEnum<::fgl::ast::node::DISPATCH_SETTING>
+	{
+		constexpr static auto value = ::fgl::ast::Type::DISPATCH_SETTING;
+		using type = ::fgl::ast::node::DISPATCH_SETTING;
+	};
+
+	template<>
+	struct NodeTypeToEnum<::fgl::ast::node::INHERITANCE_SETTING>
+	{
+		constexpr static auto value = ::fgl::ast::Type::INHERITANCE_SETTING;
+		using type = ::fgl::ast::node::INHERITANCE_SETTING;
+	};
+
+	template<>
+	struct NodeTypeToEnum<::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING>
+	{
+		constexpr static auto value = ::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING;
+		using type = ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING;
 	};
 
 	template<>

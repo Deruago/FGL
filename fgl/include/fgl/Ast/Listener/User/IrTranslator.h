@@ -19,11 +19,15 @@ namespace fgl::ast::listener::user
 	{
 		std::map<ir::Object, std::vector<ir::ManipulationRule>> manipulationRules;
 		mutable std::optional<ir::Fgl> fgl; // lazy initialized;
-		::std::vector<::std::string> functions;
-		::std::vector<::std::string> includes;
-		::std::vector<::std::string> members;
+		std::vector<std::string> inheritances;
+		std::vector<std::string> functions;
+		std::vector<std::string> includes;
+		std::vector<std::string> members;
+		ir::NamingConvention namingConvention = ir::NamingConvention::standard;
+		std::string languageName;
+		bool enableDispatch = false;
 
-		void ListenEntry(const fgl::ast::node::INCLUDE_SETTING* node) override
+		void ListenEntry(const node::INCLUDE_SETTING* node) override
 		{
 			auto include = node->GetValue();
 			include.pop_back();
@@ -32,7 +36,7 @@ namespace fgl::ast::listener::user
 			includes.push_back(include);
 		}
 
-		void ListenEntry(const fgl::ast::node::MEMBER_SETTING* node) override
+		void ListenEntry(const node::MEMBER_SETTING* node) override
 		{
 			auto member = node->GetValue();
 			member.pop_back();
@@ -41,7 +45,7 @@ namespace fgl::ast::listener::user
 			members.push_back(member);
 		}
 
-		void ListenEntry(const fgl::ast::node::FUNCTION_SETTING* node) override
+		void ListenEntry(const node::FUNCTION_SETTING* node) override
 		{
 			auto function = node->GetValue();
 			function.erase(0, 9);
@@ -49,9 +53,62 @@ namespace fgl::ast::listener::user
 			functions.push_back(function);
 		}
 
-		void ListenEntry(const ::fgl::ast::node::entry_manipulation_rule* node) override
+		void ListenEntry(const node::INHERITANCE_SETTING* node) override
 		{
-			reference::Access<::fgl::ast::node::entry_manipulation_rule> access(node);
+			auto inheritance = node->GetValue();
+			inheritance.erase(0, 12);
+
+			inheritances.push_back(inheritance);
+		}
+
+		void ListenEntry(const node::NAMINGCONVENTION_SETTING* node) override
+		{
+			auto namingConventionText = node->GetValue();
+			namingConventionText.pop_back();
+			namingConventionText.erase(0, 15);
+
+			if (namingConventionText == "LS")
+			{
+				namingConvention = ir::NamingConvention::DeamerLS;
+			}
+			else if (namingConventionText == "AST")
+			{
+				namingConvention = ir::NamingConvention::DeamerLegacyAst;
+			}
+			else
+			{
+				namingConvention = ir::NamingConvention::standard;
+			}
+		}
+
+		void ListenEntry(const node::DEAMER_LANGUAGE_NAME_SETTING* node) override
+		{
+			auto language_name = node->GetValue();
+			language_name.pop_back();
+			language_name.erase(0, 21);
+
+			languageName = language_name;
+		}
+
+		void ListenEntry(const node::DISPATCH_SETTING* node) override
+		{
+			auto dispatch = node->GetValue();
+			dispatch.pop_back();
+			dispatch.erase(0, 9);
+
+			if (dispatch == "false")
+			{
+				enableDispatch = false;
+			}
+			else
+			{
+				enableDispatch = true;
+			}
+		}
+
+		void ListenEntry(const node::entry_manipulation_rule* node) override
+		{
+			reference::Access<node::entry_manipulation_rule> access(node);
 
 			const ir::Object target(access.object().VARNAME().GetContent()[0]->GetValue());
 
@@ -78,9 +135,9 @@ namespace fgl::ast::listener::user
 			manipulationRules[target].emplace_back(std::move(manipulationRule));
 		}
 
-		void ListenEntry(const ::fgl::ast::node::exit_manipulation_rule* node) override
+		void ListenEntry(const node::exit_manipulation_rule* node) override
 		{
-			reference::Access<::fgl::ast::node::exit_manipulation_rule> access(node);
+			reference::Access<node::exit_manipulation_rule> access(node);
 
 			const ir::Object target(access.object().VARNAME().GetContent()[0]->GetValue());
 
@@ -122,6 +179,9 @@ namespace fgl::ast::listener::user
 			}
 
 			fgl = ir::Fgl();
+			fgl->SetNamingConvention(namingConvention);
+			fgl->SetDeamerLanguageName(languageName);
+			fgl->SetDispatchUsage(enableDispatch);
 			fgl.value().SetManipulationRules(manipulationRules);
 
 			for (const auto& include : includes)
@@ -137,6 +197,11 @@ namespace fgl::ast::listener::user
 			for (const auto& function : functions)
 			{
 				fgl.value().AddFunctionSetting(function);
+			}
+
+			for (const auto& inheritance : inheritances)
+			{
+				fgl->AddInheritanceSetting(inheritance);
 			}
 
 			return fgl.value();

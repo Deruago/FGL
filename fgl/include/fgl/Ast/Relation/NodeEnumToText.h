@@ -300,6 +300,26 @@ namespace fgl { namespace ast { namespace relation {
 	}
 	
 
+	case ::fgl::ast::Type::NAMINGCONVENTION_SETTING: {
+		return "NAMINGCONVENTION_SETTING";
+	}
+	
+
+	case ::fgl::ast::Type::DISPATCH_SETTING: {
+		return "DISPATCH_SETTING";
+	}
+	
+
+	case ::fgl::ast::Type::INHERITANCE_SETTING: {
+		return "INHERITANCE_SETTING";
+	}
+	
+
+	case ::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING: {
+		return "DEAMER_LANGUAGE_NAME_SETTING";
+	}
+	
+
 	case ::fgl::ast::Type::USER_INSERTED_SETTING: {
 		return "USER_INSERTED_SETTING";
 	}

@@ -42,6 +42,10 @@
 #include "fgl/Ast/Node/INCLUDE_SETTING.h"
 #include "fgl/Ast/Node/MEMBER_SETTING.h"
 #include "fgl/Ast/Node/FUNCTION_SETTING.h"
+#include "fgl/Ast/Node/NAMINGCONVENTION_SETTING.h"
+#include "fgl/Ast/Node/DISPATCH_SETTING.h"
+#include "fgl/Ast/Node/INHERITANCE_SETTING.h"
+#include "fgl/Ast/Node/DEAMER_LANGUAGE_NAME_SETTING.h"
 #include "fgl/Ast/Node/USER_INSERTED_SETTING.h"
 #include "fgl/Ast/Node/VARNAME.h"
 #include "fgl/Ast/Node/NUMBER.h"
@@ -122,6 +126,10 @@ static ::deamer::external::cpp::ast::Tree* outputTree = nullptr;
 %token<Terminal> INCLUDE_SETTING
 %token<Terminal> MEMBER_SETTING
 %token<Terminal> FUNCTION_SETTING
+%token<Terminal> NAMINGCONVENTION_SETTING
+%token<Terminal> DISPATCH_SETTING
+%token<Terminal> INHERITANCE_SETTING
+%token<Terminal> DEAMER_LANGUAGE_NAME_SETTING
 %token<Terminal> USER_INSERTED_SETTING
 %token<Terminal> VARNAME
 %token<Terminal> NUMBER
@@ -191,6 +199,10 @@ static ::deamer::external::cpp::ast::Tree* outputTree = nullptr;
 	::fgl::ast::node::INCLUDE_SETTING* fgl_INCLUDE_SETTING;
 	::fgl::ast::node::MEMBER_SETTING* fgl_MEMBER_SETTING;
 	::fgl::ast::node::FUNCTION_SETTING* fgl_FUNCTION_SETTING;
+	::fgl::ast::node::NAMINGCONVENTION_SETTING* fgl_NAMINGCONVENTION_SETTING;
+	::fgl::ast::node::DISPATCH_SETTING* fgl_DISPATCH_SETTING;
+	::fgl::ast::node::INHERITANCE_SETTING* fgl_INHERITANCE_SETTING;
+	::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING* fgl_DEAMER_LANGUAGE_NAME_SETTING;
 	::fgl::ast::node::USER_INSERTED_SETTING* fgl_USER_INSERTED_SETTING;
 	::fgl::ast::node::VARNAME* fgl_VARNAME;
 	::fgl::ast::node::NUMBER* fgl_NUMBER;
@@ -306,8 +318,32 @@ setting_rule:
 
 		// Ignored, Deleted, tokens are deleted
 	}
+	| NAMINGCONVENTION_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 4, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::NAMINGCONVENTION_SETTING({::fgl::ast::Type::NAMINGCONVENTION_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
+		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
+	}
+	| DEAMER_LANGUAGE_NAME_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 5, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING({::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
+		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
+	}
+	| DISPATCH_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 6, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::DISPATCH_SETTING({::fgl::ast::Type::DISPATCH_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
+		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
+	}
+	| INHERITANCE_SETTING  {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 7, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::INHERITANCE_SETTING({::fgl::ast::Type::INHERITANCE_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
+		$$ = newNode;
+
+		// Ignored, Deleted, tokens are deleted
+	}
 	| USER_INSERTED_SETTING  {
-		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 4, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::USER_INSERTED_SETTING({::fgl::ast::Type::USER_INSERTED_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 8, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::USER_INSERTED_SETTING({::fgl::ast::Type::USER_INSERTED_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, $1 }) });
 		$$ = newNode;
 
 		// Ignored, Deleted, tokens are deleted

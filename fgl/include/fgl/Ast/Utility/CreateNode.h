@@ -30,6 +30,10 @@
 #include "fgl/Ast/Node/INCLUDE_SETTING.h"
 #include "fgl/Ast/Node/MEMBER_SETTING.h"
 #include "fgl/Ast/Node/FUNCTION_SETTING.h"
+#include "fgl/Ast/Node/NAMINGCONVENTION_SETTING.h"
+#include "fgl/Ast/Node/DISPATCH_SETTING.h"
+#include "fgl/Ast/Node/INHERITANCE_SETTING.h"
+#include "fgl/Ast/Node/DEAMER_LANGUAGE_NAME_SETTING.h"
 #include "fgl/Ast/Node/USER_INSERTED_SETTING.h"
 #include "fgl/Ast/Node/VARNAME.h"
 #include "fgl/Ast/Node/NUMBER.h"
@@ -231,6 +235,18 @@ namespace fgl { namespace ast { namespace utility {
 			}
 			case ::fgl::ast::Type::FUNCTION_SETTING: {
 				return new ::fgl::ast::node::FUNCTION_SETTING({nodeType, ::deamer::external::cpp::ast::NodeValue::terminal, nodeValue, lineNumber, columnNumber});
+			}
+			case ::fgl::ast::Type::NAMINGCONVENTION_SETTING: {
+				return new ::fgl::ast::node::NAMINGCONVENTION_SETTING({nodeType, ::deamer::external::cpp::ast::NodeValue::terminal, nodeValue, lineNumber, columnNumber});
+			}
+			case ::fgl::ast::Type::DISPATCH_SETTING: {
+				return new ::fgl::ast::node::DISPATCH_SETTING({nodeType, ::deamer::external::cpp::ast::NodeValue::terminal, nodeValue, lineNumber, columnNumber});
+			}
+			case ::fgl::ast::Type::INHERITANCE_SETTING: {
+				return new ::fgl::ast::node::INHERITANCE_SETTING({nodeType, ::deamer::external::cpp::ast::NodeValue::terminal, nodeValue, lineNumber, columnNumber});
+			}
+			case ::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING: {
+				return new ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING({nodeType, ::deamer::external::cpp::ast::NodeValue::terminal, nodeValue, lineNumber, columnNumber});
 			}
 			case ::fgl::ast::Type::USER_INSERTED_SETTING: {
 				return new ::fgl::ast::node::USER_INSERTED_SETTING({nodeType, ::deamer::external::cpp::ast::NodeValue::terminal, nodeValue, lineNumber, columnNumber});

@@ -32,6 +32,10 @@
 #include "fgl/Ast/Node/INCLUDE_SETTING.h"
 #include "fgl/Ast/Node/MEMBER_SETTING.h"
 #include "fgl/Ast/Node/FUNCTION_SETTING.h"
+#include "fgl/Ast/Node/NAMINGCONVENTION_SETTING.h"
+#include "fgl/Ast/Node/DISPATCH_SETTING.h"
+#include "fgl/Ast/Node/INHERITANCE_SETTING.h"
+#include "fgl/Ast/Node/DEAMER_LANGUAGE_NAME_SETTING.h"
 #include "fgl/Ast/Node/USER_INSERTED_SETTING.h"
 #include "fgl/Ast/Node/VARNAME.h"
 #include "fgl/Ast/Node/NUMBER.h"
@@ -221,6 +225,26 @@ namespace fgl { namespace ast { namespace Visitor {
 			case fgl::ast::Type::FUNCTION_SETTING:
 			{
 				Visit(static_cast<const fgl::ast::node::FUNCTION_SETTING*>(node));
+				break;
+			}
+			case fgl::ast::Type::NAMINGCONVENTION_SETTING:
+			{
+				Visit(static_cast<const fgl::ast::node::NAMINGCONVENTION_SETTING*>(node));
+				break;
+			}
+			case fgl::ast::Type::DISPATCH_SETTING:
+			{
+				Visit(static_cast<const fgl::ast::node::DISPATCH_SETTING*>(node));
+				break;
+			}
+			case fgl::ast::Type::INHERITANCE_SETTING:
+			{
+				Visit(static_cast<const fgl::ast::node::INHERITANCE_SETTING*>(node));
+				break;
+			}
+			case fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING:
+			{
+				Visit(static_cast<const fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING*>(node));
 				break;
 			}
 			case fgl::ast::Type::USER_INSERTED_SETTING:
@@ -483,6 +507,18 @@ namespace fgl { namespace ast { namespace Visitor {
 		{
 		}
 		virtual void Visit(const fgl::ast::node::FUNCTION_SETTING* node)
+		{
+		}
+		virtual void Visit(const fgl::ast::node::NAMINGCONVENTION_SETTING* node)
+		{
+		}
+		virtual void Visit(const fgl::ast::node::DISPATCH_SETTING* node)
+		{
+		}
+		virtual void Visit(const fgl::ast::node::INHERITANCE_SETTING* node)
+		{
+		}
+		virtual void Visit(const fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING* node)
 		{
 		}
 		virtual void Visit(const fgl::ast::node::USER_INSERTED_SETTING* node)

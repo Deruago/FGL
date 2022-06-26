@@ -1,5 +1,6 @@
 #include "fgl/IR/Generate/File.h"
-#include "fgl/Template/IR/Generate/cpp/VisitorTemplate.h"
+#include "fgl/Template/IR/Generate/cpp/Deamer/TemplatedEntryExitListener/EntryExitListenerTemplate.h"
+#include "fgl/Template/IR/Generate/cpp/Visitor/VisitorTemplate.h"
 
 fgl::ir::generate::File<LanguageTarget::cpp>::File(const Fgl& fgl_) : fgl(fgl_)
 {
@@ -7,9 +8,11 @@ fgl::ir::generate::File<LanguageTarget::cpp>::File(const Fgl& fgl_) : fgl(fgl_)
 
 std::string fgl::ir::generate::File<LanguageTarget::cpp>::Generate()
 {
-	auto visitorTemplate = cpp::VisitorTemplate();
+	auto visitorTemplate = cpp::EntryExitListenerTemplate();
 
 	visitorTemplate.sub_member_access_name_->Set(fgl.GetUnderlyingNodes());
+
+	SetupGeneral(visitorTemplate);
 
 	ImplementActions(visitorTemplate);
 
@@ -20,13 +23,47 @@ std::string fgl::ir::generate::File<LanguageTarget::cpp>::Generate()
 	return visitorTemplate.GetOutput();
 }
 
+void fgl::ir::generate::File<LanguageTarget::cpp>::SetupGeneral(
+	const cpp::EntryExitListenerTemplate& visitorTemplate)
+{
+	if (fgl.GetDispatchUsage())
+	{
+		visitorTemplate.optional_dispatch_mechanic_->Set(visitorTemplate.dispatch_mechanic_);
+	}
+	else
+	{
+		visitorTemplate.optional_dispatch_mechanic_->Set("");
+	}
+
+	visitorTemplate.language_name_->Set(fgl.GetDeamerLanguageName());
+
+	switch (fgl.GetNamingConvention())
+	{
+	case NamingConvention::standard: {
+		visitorTemplate.enter_function_name_->Set(fgl.GetEnterFunction());
+		visitorTemplate.exit_function_name_->Set(fgl.GetExitFunction());
+		break;
+	}
+	case NamingConvention::DeamerLS: {
+		visitorTemplate.function_type_->Set(visitorTemplate.function_type_ls_);
+		visitorTemplate.enter_function_name_->Set(visitorTemplate.enter_function_name_ls_);
+		visitorTemplate.exit_function_name_->Set(visitorTemplate.exit_function_name_ls_);
+		visitorTemplate.optional_dispatch_mechanic_->Set("");
+		break;
+	}
+	case NamingConvention::DeamerLegacyAst: {
+		break;
+	}
+	}
+}
+
 void fgl::ir::generate::File<LanguageTarget::cpp>::ImplementActions(
-	fgl::ir::generate::cpp::VisitorTemplate& visitorTemplate)
+	fgl::ir::generate::cpp::EntryExitListenerTemplate& visitorTemplate)
 {
 	for (auto [target, manipulationRules] : fgl.GetManipulation())
 	{
 		auto name = target.GetName();
-		name.erase(0, name.find_last_of(":") + 1);
+		name.erase(0, name.find_last_of(':') + 1);
 
 		visitorTemplate.object_type_->Set(target.GetName());
 		visitorTemplate.object_type_name_->Set(name);
@@ -57,7 +94,7 @@ void fgl::ir::generate::File<LanguageTarget::cpp>::ImplementActions(
 }
 
 void fgl::ir::generate::File<LanguageTarget::cpp>::ImplementFlavorDeclarations(
-	fgl::ir::generate::cpp::VisitorTemplate& visitorTemplate)
+	fgl::ir::generate::cpp::EntryExitListenerTemplate& visitorTemplate)
 {
 	for (const auto& baseFlavor : fgl.GetBaseFlavors())
 	{
@@ -91,7 +128,7 @@ void fgl::ir::generate::File<LanguageTarget::cpp>::ImplementFlavorDeclarations(
 }
 
 void fgl::ir::generate::File<LanguageTarget::cpp>::ImplementUserInjections(
-	cpp::VisitorTemplate& visitorTemplate)
+	cpp::EntryExitListenerTemplate& visitorTemplate)
 {
 	for (const auto& include : fgl.GetIncludes())
 	{
@@ -109,6 +146,21 @@ void fgl::ir::generate::File<LanguageTarget::cpp>::ImplementUserInjections(
 	{
 		visitorTemplate.user_member_section_->Set(member);
 		visitorTemplate.user_member_section_->ExpandVariableField();
+	}
+
+	bool first = true;
+	for (auto inheritance : fgl.GetInheritances())
+	{
+		if (first)
+		{
+			visitorTemplate.inherit_->Set(" : " + inheritance);
+			first = false;
+		}
+		else
+		{
+			visitorTemplate.inherit_->Set(", " + inheritance);
+		}
+		visitorTemplate.inherit_->ExpandVariableField();
 	}
 }
 

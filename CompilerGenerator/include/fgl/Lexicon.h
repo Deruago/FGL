@@ -1,25 +1,25 @@
-/* 
- * This file is auto-generated and auto-maintained by DLDL
- * Do not change code in this as it can be overwritten.
- *
- * For more information see the DLDL repo: https://github.com/Deruago/DLDL
- * For more information about Deamer: https://github.com/Deruago/theDeamerProject
- */
-
-#ifndef FGL_LEXICON_H
-#define FGL_LEXICON_H
-
-#include "Deamer/Language/Generator/Definition/Property/User/Main/Lexicon.h"
-
-namespace fgl
-{
-	class Language;
-
-	class Lexicon : public ::deamer::language::generator::definition::property::user::Lexicon<
-								::fgl::Language>
-	{
-	public:
-		// Terminal declarations
+/* 
+ * This file is auto-generated and auto-maintained by DLDL
+ * Do not change code in this as it can be overwritten.
+ *
+ * For more information see the DLDL repo: https://github.com/Deruago/DLDL
+ * For more information about Deamer: https://github.com/Deruago/theDeamerProject
+ */
+
+#ifndef FGL_LEXICON_H
+#define FGL_LEXICON_H
+
+#include "Deamer/Language/Generator/Definition/Property/User/Main/Lexicon.h"
+
+namespace fgl
+{
+	class Language;
+
+	class Lexicon : public ::deamer::language::generator::definition::property::user::Lexicon<
+								::fgl::Language>
+	{
+	public:
+		// Terminal declarations
 		::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> COMMENT;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> LEFT_SQUARE_BRACKET;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> RIGHT_SQUARE_BRACKET;
@@ -48,23 +48,27 @@ namespace fgl
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> INCLUDE_SETTING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> MEMBER_SETTING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> FUNCTION_SETTING;
+::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> NAMINGCONVENTION_SETTING;
+::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> DISPATCH_SETTING;
+::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> INHERITANCE_SETTING;
+::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> DEAMER_LANGUAGE_NAME_SETTING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> USER_INSERTED_SETTING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> VARNAME;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> NUMBER;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> STRING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::Terminal> ESCAPE_CHARS;
-
-	
-	public:
-		Lexicon(fgl::Language* language)
-			:	::deamer::language::generator::definition::property::user::Lexicon<
-					::fgl::Language>(language)
-		{
-		}
-
-		void GenerateObjects() override
-		{
-			// Terminals
+
+	
+	public:
+		Lexicon(fgl::Language* language)
+			:	::deamer::language::generator::definition::property::user::Lexicon<
+					::fgl::Language>(language)
+		{
+		}
+
+		void GenerateObjects() override
+		{
+			// Terminals
 			COMMENT.Set(deamer::language::type::definition::object::main::Terminal("COMMENT", "[/][^\\n\\r]*[\\n\\r]{0,1}", ::deamer::language::type::definition::object::main::SpecialType::Delete));
 LEFT_SQUARE_BRACKET.Set(deamer::language::type::definition::object::main::Terminal("LEFT_SQUARE_BRACKET", "[\\[]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 RIGHT_SQUARE_BRACKET.Set(deamer::language::type::definition::object::main::Terminal("RIGHT_SQUARE_BRACKET", "[\\]]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
@@ -93,15 +97,19 @@ TARGET_SETTING.Set(deamer::language::type::definition::object::main::Terminal("T
 INCLUDE_SETTING.Set(deamer::language::type::definition::object::main::Terminal("INCLUDE_SETTING", "[@]include[^{]*[{]([\\\\][}]|[^}])*[}]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 MEMBER_SETTING.Set(deamer::language::type::definition::object::main::Terminal("MEMBER_SETTING", "[@]member[^{]*[{]([\\\\][}]|[^}])*[}]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 FUNCTION_SETTING.Set(deamer::language::type::definition::object::main::Terminal("FUNCTION_SETTING", "[@]function[^{]*[{]([\\\\][}]|[^}])*[}]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
+NAMINGCONVENTION_SETTING.Set(deamer::language::type::definition::object::main::Terminal("NAMINGCONVENTION_SETTING", "[@]nameconvention[^{]*[{]([\\\\][}]|[^}])*[}]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
+DISPATCH_SETTING.Set(deamer::language::type::definition::object::main::Terminal("DISPATCH_SETTING", "[@]dispatch[^{]*[{]([\\\\][}]|[^}])*[}]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
+INHERITANCE_SETTING.Set(deamer::language::type::definition::object::main::Terminal("INHERITANCE_SETTING", "[@]inheritance[^{]*[{]([\\\\][}]|[^}])*[}]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
+DEAMER_LANGUAGE_NAME_SETTING.Set(deamer::language::type::definition::object::main::Terminal("DEAMER_LANGUAGE_NAME_SETTING", "[@]deamer-language-name[^{]*[{]([\\\\][}]|[^}])*[}]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 USER_INSERTED_SETTING.Set(deamer::language::type::definition::object::main::Terminal("USER_INSERTED_SETTING", "[@][a-zA-Z_]+[a-zA-Z_0-9]*[^{]*[{]([\\\\][}]|[^}])*[}]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 VARNAME.Set(deamer::language::type::definition::object::main::Terminal("VARNAME", "[a-zA-Z_]+[a-zA-Z_0-9]*([:][:][a-zA-Z_]+[a-zA-Z_0-9]*)*", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 NUMBER.Set(deamer::language::type::definition::object::main::Terminal("NUMBER", "[0-9]+", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 STRING.Set(deamer::language::type::definition::object::main::Terminal("STRING", "[\"]([\\\\][\"]|[^\"])*[\"]", ::deamer::language::type::definition::object::main::SpecialType::Standard));
 ESCAPE_CHARS.Set(deamer::language::type::definition::object::main::Terminal("ESCAPE_CHARS", "[\\n\\t\\r\\f\\v\\b\\a ]+", ::deamer::language::type::definition::object::main::SpecialType::Delete));
-
-
-			// Add object calls
-			// AddObject(...)
+
+
+			// Add object calls
+			// AddObject(...)
 			AddObject(COMMENT);
 AddObject(LEFT_SQUARE_BRACKET);
 AddObject(RIGHT_SQUARE_BRACKET);
@@ -130,19 +138,23 @@ AddObject(TARGET_SETTING);
 AddObject(INCLUDE_SETTING);
 AddObject(MEMBER_SETTING);
 AddObject(FUNCTION_SETTING);
+AddObject(NAMINGCONVENTION_SETTING);
+AddObject(DISPATCH_SETTING);
+AddObject(INHERITANCE_SETTING);
+AddObject(DEAMER_LANGUAGE_NAME_SETTING);
 AddObject(USER_INSERTED_SETTING);
 AddObject(VARNAME);
 AddObject(NUMBER);
 AddObject(STRING);
 AddObject(ESCAPE_CHARS);
-
-
-			// Place higher level operations here.
-			// ReplaceObject(..., ...)
-			// DeleteObject(..., ...)
-			
-		}
-	};
-}
-
-#endif // FGL_LEXICON_H
+
+
+			// Place higher level operations here.
+			// ReplaceObject(..., ...)
+			// DeleteObject(..., ...)
+			
+		}
+	};
+}
+
+#endif // FGL_LEXICON_H

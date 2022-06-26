@@ -606,6 +606,46 @@ namespace fgl { namespace ast { namespace listener { namespace deamer { namespac
 			output += "\t" + std::to_string(::std::size_t(node)) + " [label=\"FUNCTION_SETTING\"];\n";
 		}
 
+		void ListenEntry(const ::fgl::ast::node::NAMINGCONVENTION_SETTING* node) override
+		{
+			for (const auto* child : node->GetNodes())
+			{
+				AddConnection(node, child);
+			}
+
+			output += "\t" + std::to_string(::std::size_t(node)) + " [label=\"NAMINGCONVENTION_SETTING\"];\n";
+		}
+
+		void ListenEntry(const ::fgl::ast::node::DISPATCH_SETTING* node) override
+		{
+			for (const auto* child : node->GetNodes())
+			{
+				AddConnection(node, child);
+			}
+
+			output += "\t" + std::to_string(::std::size_t(node)) + " [label=\"DISPATCH_SETTING\"];\n";
+		}
+
+		void ListenEntry(const ::fgl::ast::node::INHERITANCE_SETTING* node) override
+		{
+			for (const auto* child : node->GetNodes())
+			{
+				AddConnection(node, child);
+			}
+
+			output += "\t" + std::to_string(::std::size_t(node)) + " [label=\"INHERITANCE_SETTING\"];\n";
+		}
+
+		void ListenEntry(const ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING* node) override
+		{
+			for (const auto* child : node->GetNodes())
+			{
+				AddConnection(node, child);
+			}
+
+			output += "\t" + std::to_string(::std::size_t(node)) + " [label=\"DEAMER_LANGUAGE_NAME_SETTING\"];\n";
+		}
+
 		void ListenEntry(const ::fgl::ast::node::USER_INSERTED_SETTING* node) override
 		{
 			for (const auto* child : node->GetNodes())

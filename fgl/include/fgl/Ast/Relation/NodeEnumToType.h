@@ -61,6 +61,10 @@
 #include "fgl/Ast/Node/INCLUDE_SETTING.h"
 #include "fgl/Ast/Node/MEMBER_SETTING.h"
 #include "fgl/Ast/Node/FUNCTION_SETTING.h"
+#include "fgl/Ast/Node/NAMINGCONVENTION_SETTING.h"
+#include "fgl/Ast/Node/DISPATCH_SETTING.h"
+#include "fgl/Ast/Node/INHERITANCE_SETTING.h"
+#include "fgl/Ast/Node/DEAMER_LANGUAGE_NAME_SETTING.h"
 #include "fgl/Ast/Node/USER_INSERTED_SETTING.h"
 #include "fgl/Ast/Node/VARNAME.h"
 #include "fgl/Ast/Node/NUMBER.h"
@@ -482,6 +486,34 @@ namespace fgl { namespace ast { namespace relation {
 	{
 		constexpr static auto value = ::fgl::ast::Type::FUNCTION_SETTING;
 		using type = ::fgl::ast::node::FUNCTION_SETTING;
+	};
+
+	template<>
+	struct NodeEnumToType<::fgl::ast::Type::NAMINGCONVENTION_SETTING>
+	{
+		constexpr static auto value = ::fgl::ast::Type::NAMINGCONVENTION_SETTING;
+		using type = ::fgl::ast::node::NAMINGCONVENTION_SETTING;
+	};
+
+	template<>
+	struct NodeEnumToType<::fgl::ast::Type::DISPATCH_SETTING>
+	{
+		constexpr static auto value = ::fgl::ast::Type::DISPATCH_SETTING;
+		using type = ::fgl::ast::node::DISPATCH_SETTING;
+	};
+
+	template<>
+	struct NodeEnumToType<::fgl::ast::Type::INHERITANCE_SETTING>
+	{
+		constexpr static auto value = ::fgl::ast::Type::INHERITANCE_SETTING;
+		using type = ::fgl::ast::node::INHERITANCE_SETTING;
+	};
+
+	template<>
+	struct NodeEnumToType<::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING>
+	{
+		constexpr static auto value = ::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING;
+		using type = ::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING;
 	};
 
 	template<>

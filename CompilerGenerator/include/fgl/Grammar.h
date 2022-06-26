@@ -1,32 +1,32 @@
-/* 
- * This file is auto-generated and auto-maintained by DLDL
- * Do not change code in this as it can be overwritten.
- *
- * For more information see the DLDL repo: https://github.com/Deruago/DLDL
- * For more information about Deamer: https://github.com/Deruago/theDeamerProject
- */
-
-#ifndef FGL_GRAMMAR_H
-#define FGL_GRAMMAR_H
-
-#include "Deamer/Language/Generator/Definition/Property/User/Main/Grammar.h"
-#include "Deamer/Language/Type/Definition/Object/Special/Uninitialized.h"
-
-namespace fgl
-{
-	class Language;
-
-	/*!	\class Grammar
-	 *
-	 *	\brief This contains the grammar LPD of the language fgl
-	 *
-	 *	\note This is auto-generated via the DLDL definition.
-	 */
-	class Grammar : public ::deamer::language::generator::definition::property::user::Grammar<
-								::fgl::Language>
-	{
-	public:
-		// Non-Terminal declarations
+/* 
+ * This file is auto-generated and auto-maintained by DLDL
+ * Do not change code in this as it can be overwritten.
+ *
+ * For more information see the DLDL repo: https://github.com/Deruago/DLDL
+ * For more information about Deamer: https://github.com/Deruago/theDeamerProject
+ */
+
+#ifndef FGL_GRAMMAR_H
+#define FGL_GRAMMAR_H
+
+#include "Deamer/Language/Generator/Definition/Property/User/Main/Grammar.h"
+#include "Deamer/Language/Type/Definition/Object/Special/Uninitialized.h"
+
+namespace fgl
+{
+	class Language;
+
+	/*!	\class Grammar
+	 *
+	 *	\brief This contains the grammar LPD of the language fgl
+	 *
+	 *	\note This is auto-generated via the DLDL definition.
+	 */
+	class Grammar : public ::deamer::language::generator::definition::property::user::Grammar<
+								::fgl::Language>
+	{
+	public:
+		// Non-Terminal declarations
 		::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::NonTerminal> program;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::NonTerminal> deamerreserved_star__stmt__;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::NonTerminal> stmt;
@@ -57,9 +57,9 @@ namespace fgl
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::NonTerminal> argument;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::NonTerminal> flavor;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::NonTerminal> flavor_specialization;
-
-	
-		// Production-Rule declarations
+
+	
+		// Production-Rule declarations
 		::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> deamerreserved_star__stmt___stmt_deamerreserved_star__stmt__;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> deamerreserved_star__stmt___EMPTY;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> program_deamerreserved_star__stmt__;
@@ -70,6 +70,10 @@ namespace fgl
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> setting_rule_MEMBER_SETTING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> setting_rule_INCLUDE_SETTING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> setting_rule_FUNCTION_SETTING;
+::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> setting_rule_NAMINGCONVENTION_SETTING;
+::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> setting_rule_DEAMER_LANGUAGE_NAME_SETTING;
+::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> setting_rule_DISPATCH_SETTING;
+::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> setting_rule_INHERITANCE_SETTING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> setting_rule_USER_INSERTED_SETTING;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> entry_manipulation_rule_capture_object_ARROW_ADD_manipulation;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> entry_manipulation_rule_capture_object_ARROW_manipulation;
@@ -118,17 +122,17 @@ namespace fgl
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> flavor_VARNAME_flavor_specialization;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> flavor_VARNAME;
 ::deamer::type::SafeReserve<::deamer::language::type::definition::object::main::ProductionRule> flavor_specialization_LEFT_PARANTHESIS_value_RIGHT_PARANTHESIS;
-
-	
-	private:
-		// Unknown reference declarations
-		
-	
-	public:
-		Grammar(fgl::Language* language);
-
-		void GenerateObjects() override;
-	};
-}
-
-#endif // FGL_GRAMMAR_H
+
+	
+	private:
+		// Unknown reference declarations
+		
+	
+	public:
+		Grammar(fgl::Language* language);
+
+		void GenerateObjects() override;
+	};
+}
+
+#endif // FGL_GRAMMAR_H

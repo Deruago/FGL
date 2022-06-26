@@ -82,11 +82,15 @@ extern int fgldebug;
     INCLUDE_SETTING = 283,         /* INCLUDE_SETTING  */
     MEMBER_SETTING = 284,          /* MEMBER_SETTING  */
     FUNCTION_SETTING = 285,        /* FUNCTION_SETTING  */
-    USER_INSERTED_SETTING = 286,   /* USER_INSERTED_SETTING  */
-    VARNAME = 287,                 /* VARNAME  */
-    NUMBER = 288,                  /* NUMBER  */
-    STRING = 289,                  /* STRING  */
-    ESCAPE_CHARS = 290             /* ESCAPE_CHARS  */
+    NAMINGCONVENTION_SETTING = 286, /* NAMINGCONVENTION_SETTING  */
+    DISPATCH_SETTING = 287,        /* DISPATCH_SETTING  */
+    INHERITANCE_SETTING = 288,     /* INHERITANCE_SETTING  */
+    DEAMER_LANGUAGE_NAME_SETTING = 289, /* DEAMER_LANGUAGE_NAME_SETTING  */
+    USER_INSERTED_SETTING = 290,   /* USER_INSERTED_SETTING  */
+    VARNAME = 291,                 /* VARNAME  */
+    NUMBER = 292,                  /* NUMBER  */
+    STRING = 293,                  /* STRING  */
+    ESCAPE_CHARS = 294             /* ESCAPE_CHARS  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -95,7 +99,7 @@ extern int fgldebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 164 "./fgl_parser.y"
+#line 172 "./fgl_parser.y"
 
 	::deamer::external::cpp::lexer::TerminalObject* Terminal;
 	::fgl::ast::node::COMMENT* fgl_COMMENT;
@@ -126,6 +130,10 @@ union YYSTYPE
 	::fgl::ast::node::INCLUDE_SETTING* fgl_INCLUDE_SETTING;
 	::fgl::ast::node::MEMBER_SETTING* fgl_MEMBER_SETTING;
 	::fgl::ast::node::FUNCTION_SETTING* fgl_FUNCTION_SETTING;
+	::fgl::ast::node::NAMINGCONVENTION_SETTING* fgl_NAMINGCONVENTION_SETTING;
+	::fgl::ast::node::DISPATCH_SETTING* fgl_DISPATCH_SETTING;
+	::fgl::ast::node::INHERITANCE_SETTING* fgl_INHERITANCE_SETTING;
+	::fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING* fgl_DEAMER_LANGUAGE_NAME_SETTING;
 	::fgl::ast::node::USER_INSERTED_SETTING* fgl_USER_INSERTED_SETTING;
 	::fgl::ast::node::VARNAME* fgl_VARNAME;
 	::fgl::ast::node::NUMBER* fgl_NUMBER;
@@ -163,7 +171,7 @@ union YYSTYPE
 	::fgl::ast::node::flavor_specialization* fgl_flavor_specialization;
 
 
-#line 167 "fgl_parser.tab.h"
+#line 175 "fgl_parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

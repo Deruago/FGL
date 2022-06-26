@@ -21,7 +21,7 @@ std::string ReadInFile(const std::string& file)
 
 int main(int argc, const char* argv[])
 {
-	std::vector<std::string> filenames = {"./test.txt"};
+	std::vector<std::string> filenames;
 
 	for (auto i = 1; i < argc; i++)
 	{
@@ -45,7 +45,6 @@ int main(int argc, const char* argv[])
 
 		auto graph = ::fgl::ast::listener::deamer::visualisation::Graph();
 		graph.Dispatch(ast->GetStartNode());
-		// std::cout << graph.GetGraph() << "\n";
 
 		auto translator = fgl::ast::listener::user::IrTranslator();
 		translator.Dispatch(ast->GetStartNode());

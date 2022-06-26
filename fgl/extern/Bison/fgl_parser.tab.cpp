@@ -115,6 +115,10 @@
 #include "fgl/Ast/Node/INCLUDE_SETTING.h"
 #include "fgl/Ast/Node/MEMBER_SETTING.h"
 #include "fgl/Ast/Node/FUNCTION_SETTING.h"
+#include "fgl/Ast/Node/NAMINGCONVENTION_SETTING.h"
+#include "fgl/Ast/Node/DISPATCH_SETTING.h"
+#include "fgl/Ast/Node/INHERITANCE_SETTING.h"
+#include "fgl/Ast/Node/DEAMER_LANGUAGE_NAME_SETTING.h"
 #include "fgl/Ast/Node/USER_INSERTED_SETTING.h"
 #include "fgl/Ast/Node/VARNAME.h"
 #include "fgl/Ast/Node/NUMBER.h"
@@ -166,7 +170,7 @@ void fglerror(const char* s);
 int fgllex();
 static ::deamer::external::cpp::ast::Tree* outputTree = nullptr;
 
-#line 170 "fgl_parser.tab.c"
+#line 174 "fgl_parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -225,42 +229,46 @@ enum yysymbol_kind_t
   YYSYMBOL_INCLUDE_SETTING = 28,           /* INCLUDE_SETTING  */
   YYSYMBOL_MEMBER_SETTING = 29,            /* MEMBER_SETTING  */
   YYSYMBOL_FUNCTION_SETTING = 30,          /* FUNCTION_SETTING  */
-  YYSYMBOL_USER_INSERTED_SETTING = 31,     /* USER_INSERTED_SETTING  */
-  YYSYMBOL_VARNAME = 32,                   /* VARNAME  */
-  YYSYMBOL_NUMBER = 33,                    /* NUMBER  */
-  YYSYMBOL_STRING = 34,                    /* STRING  */
-  YYSYMBOL_ESCAPE_CHARS = 35,              /* ESCAPE_CHARS  */
-  YYSYMBOL_YYACCEPT = 36,                  /* $accept  */
-  YYSYMBOL_program = 37,                   /* program  */
-  YYSYMBOL_deamerreserved_star__stmt__ = 38, /* deamerreserved_star__stmt__  */
-  YYSYMBOL_stmt = 39,                      /* stmt  */
-  YYSYMBOL_setting_rule = 40,              /* setting_rule  */
-  YYSYMBOL_entry_manipulation_rule = 41,   /* entry_manipulation_rule  */
-  YYSYMBOL_exit_manipulation_rule = 42,    /* exit_manipulation_rule  */
-  YYSYMBOL_capture = 43,                   /* capture  */
-  YYSYMBOL_deamerreserved_arrow__deamerreserved_optional__flavor_capture____ = 44, /* deamerreserved_arrow__deamerreserved_optional__flavor_capture____  */
-  YYSYMBOL_deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__ = 45, /* deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  */
-  YYSYMBOL_manipulation = 46,              /* manipulation  */
-  YYSYMBOL_deamerreserved_arrow__deamerreserved_optional__instruction____ = 47, /* deamerreserved_arrow__deamerreserved_optional__instruction____  */
-  YYSYMBOL_deamerreserved_star__COMMA__instruction__ = 48, /* deamerreserved_star__COMMA__instruction__  */
-  YYSYMBOL_instruction = 49,               /* instruction  */
-  YYSYMBOL_new_flavor = 50,                /* new_flavor  */
-  YYSYMBOL_delete_flavor = 51,             /* delete_flavor  */
-  YYSYMBOL_expand_flavor = 52,             /* expand_flavor  */
-  YYSYMBOL_flavor_capture = 53,            /* flavor_capture  */
-  YYSYMBOL_conditional_flavor = 54,        /* conditional_flavor  */
-  YYSYMBOL_value = 55,                     /* value  */
-  YYSYMBOL_user_defined_instruction = 56,  /* user_defined_instruction  */
-  YYSYMBOL_object = 57,                    /* object  */
-  YYSYMBOL_object_access = 58,             /* object_access  */
-  YYSYMBOL_deamerreserved_arrow__member__ = 59, /* deamerreserved_arrow__member__  */
-  YYSYMBOL_deamerreserved_star__DOT__member__ = 60, /* deamerreserved_star__DOT__member__  */
-  YYSYMBOL_member = 61,                    /* member  */
-  YYSYMBOL_deamerreserved_arrow__deamerreserved_optional__argument____ = 62, /* deamerreserved_arrow__deamerreserved_optional__argument____  */
-  YYSYMBOL_deamerreserved_star__COMMA__argument__ = 63, /* deamerreserved_star__COMMA__argument__  */
-  YYSYMBOL_argument = 64,                  /* argument  */
-  YYSYMBOL_flavor = 65,                    /* flavor  */
-  YYSYMBOL_flavor_specialization = 66      /* flavor_specialization  */
+  YYSYMBOL_NAMINGCONVENTION_SETTING = 31,  /* NAMINGCONVENTION_SETTING  */
+  YYSYMBOL_DISPATCH_SETTING = 32,          /* DISPATCH_SETTING  */
+  YYSYMBOL_INHERITANCE_SETTING = 33,       /* INHERITANCE_SETTING  */
+  YYSYMBOL_DEAMER_LANGUAGE_NAME_SETTING = 34, /* DEAMER_LANGUAGE_NAME_SETTING  */
+  YYSYMBOL_USER_INSERTED_SETTING = 35,     /* USER_INSERTED_SETTING  */
+  YYSYMBOL_VARNAME = 36,                   /* VARNAME  */
+  YYSYMBOL_NUMBER = 37,                    /* NUMBER  */
+  YYSYMBOL_STRING = 38,                    /* STRING  */
+  YYSYMBOL_ESCAPE_CHARS = 39,              /* ESCAPE_CHARS  */
+  YYSYMBOL_YYACCEPT = 40,                  /* $accept  */
+  YYSYMBOL_program = 41,                   /* program  */
+  YYSYMBOL_deamerreserved_star__stmt__ = 42, /* deamerreserved_star__stmt__  */
+  YYSYMBOL_stmt = 43,                      /* stmt  */
+  YYSYMBOL_setting_rule = 44,              /* setting_rule  */
+  YYSYMBOL_entry_manipulation_rule = 45,   /* entry_manipulation_rule  */
+  YYSYMBOL_exit_manipulation_rule = 46,    /* exit_manipulation_rule  */
+  YYSYMBOL_capture = 47,                   /* capture  */
+  YYSYMBOL_deamerreserved_arrow__deamerreserved_optional__flavor_capture____ = 48, /* deamerreserved_arrow__deamerreserved_optional__flavor_capture____  */
+  YYSYMBOL_deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__ = 49, /* deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  */
+  YYSYMBOL_manipulation = 50,              /* manipulation  */
+  YYSYMBOL_deamerreserved_arrow__deamerreserved_optional__instruction____ = 51, /* deamerreserved_arrow__deamerreserved_optional__instruction____  */
+  YYSYMBOL_deamerreserved_star__COMMA__instruction__ = 52, /* deamerreserved_star__COMMA__instruction__  */
+  YYSYMBOL_instruction = 53,               /* instruction  */
+  YYSYMBOL_new_flavor = 54,                /* new_flavor  */
+  YYSYMBOL_delete_flavor = 55,             /* delete_flavor  */
+  YYSYMBOL_expand_flavor = 56,             /* expand_flavor  */
+  YYSYMBOL_flavor_capture = 57,            /* flavor_capture  */
+  YYSYMBOL_conditional_flavor = 58,        /* conditional_flavor  */
+  YYSYMBOL_value = 59,                     /* value  */
+  YYSYMBOL_user_defined_instruction = 60,  /* user_defined_instruction  */
+  YYSYMBOL_object = 61,                    /* object  */
+  YYSYMBOL_object_access = 62,             /* object_access  */
+  YYSYMBOL_deamerreserved_arrow__member__ = 63, /* deamerreserved_arrow__member__  */
+  YYSYMBOL_deamerreserved_star__DOT__member__ = 64, /* deamerreserved_star__DOT__member__  */
+  YYSYMBOL_member = 65,                    /* member  */
+  YYSYMBOL_deamerreserved_arrow__deamerreserved_optional__argument____ = 66, /* deamerreserved_arrow__deamerreserved_optional__argument____  */
+  YYSYMBOL_deamerreserved_star__COMMA__argument__ = 67, /* deamerreserved_star__COMMA__argument__  */
+  YYSYMBOL_argument = 68,                  /* argument  */
+  YYSYMBOL_flavor = 69,                    /* flavor  */
+  YYSYMBOL_flavor_specialization = 70      /* flavor_specialization  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -563,21 +571,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  25
+#define YYFINAL  29
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   81
+#define YYLAST   85
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  36
+#define YYNTOKENS  40
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  31
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  59
+#define YYNRULES  63
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  101
+#define YYNSTATES  105
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   290
+#define YYMAXUTOK   294
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -620,19 +628,20 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35
+      35,    36,    37,    38,    39
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   236,   236,   247,   253,   263,   269,   275,   285,   291,
-     297,   303,   309,   319,   325,   335,   345,   355,   361,   371,
-     377,   383,   393,   403,   409,   419,   425,   435,   441,   447,
-     453,   463,   473,   483,   493,   499,   509,   515,   521,   527,
-     533,   543,   549,   555,   565,   575,   585,   595,   605,   611,
-     621,   627,   637,   643,   653,   659,   669,   679,   685,   695
+       0,   248,   248,   259,   265,   275,   281,   287,   297,   303,
+     309,   315,   321,   327,   333,   339,   345,   355,   361,   371,
+     381,   391,   397,   407,   413,   419,   429,   439,   445,   455,
+     461,   471,   477,   483,   489,   499,   509,   519,   529,   535,
+     545,   551,   557,   563,   569,   579,   585,   591,   601,   611,
+     621,   631,   641,   647,   657,   663,   673,   679,   689,   695,
+     705,   715,   721,   731
 };
 #endif
 
@@ -654,10 +663,11 @@ static const char *const yytname[] =
   "ARROW", "COLON", "NEW", "DELETE", "EXPAND", "WITH", "AND", "EQEQ", "EQ",
   "GTE", "GT", "LTE", "LT", "ADD", "MINUS", "TARGET_SETTING",
   "INCLUDE_SETTING", "MEMBER_SETTING", "FUNCTION_SETTING",
-  "USER_INSERTED_SETTING", "VARNAME", "NUMBER", "STRING", "ESCAPE_CHARS",
-  "$accept", "program", "deamerreserved_star__stmt__", "stmt",
-  "setting_rule", "entry_manipulation_rule", "exit_manipulation_rule",
-  "capture",
+  "NAMINGCONVENTION_SETTING", "DISPATCH_SETTING", "INHERITANCE_SETTING",
+  "DEAMER_LANGUAGE_NAME_SETTING", "USER_INSERTED_SETTING", "VARNAME",
+  "NUMBER", "STRING", "ESCAPE_CHARS", "$accept", "program",
+  "deamerreserved_star__stmt__", "stmt", "setting_rule",
+  "entry_manipulation_rule", "exit_manipulation_rule", "capture",
   "deamerreserved_arrow__deamerreserved_optional__flavor_capture____",
   "deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__",
   "manipulation",
@@ -678,12 +688,12 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-55)
+#define YYPACT_NINF (-37)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-59)
+#define YYTABLE_NINF (-63)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -692,17 +702,17 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       7,    13,   -55,   -55,   -55,   -55,   -55,    18,   -55,     7,
-     -55,   -55,   -55,   -10,    34,   -55,   -55,    20,    -5,   -55,
-      -7,   -55,   -55,    32,   -55,   -55,   -55,   -55,    39,    16,
-     -55,   -55,    13,    13,   -55,    16,    16,    16,    16,    16,
-      23,   -55,    -2,    49,    50,    51,    48,    -5,    -5,   -55,
-     -55,   -55,   -55,   -55,    32,   -13,    55,    55,   -55,    16,
-     -55,   -55,    16,   -55,   -55,   -55,   -55,    52,    54,    56,
-      59,    58,   -55,   -55,   -55,   -55,   -55,   -55,   -55,   -55,
-      48,    30,    30,    30,   -55,   -13,   -55,   -55,    62,   -55,
-     -55,    60,    58,    16,    57,   -55,    50,    64,    16,    66,
-     -55
+       7,   -16,   -37,   -37,   -37,   -37,   -37,   -37,   -37,   -37,
+     -37,     4,   -37,     7,   -37,   -37,   -37,   -18,     9,   -37,
+     -37,    39,    -5,   -37,    24,   -37,   -37,    41,   -37,   -37,
+     -37,   -37,    47,    13,   -37,   -37,   -16,   -16,   -37,    13,
+      13,    13,    13,    13,    25,   -37,     6,    52,    53,    54,
+      55,    -5,    -5,   -37,   -37,   -37,   -37,   -37,    41,   -13,
+      60,    60,   -37,    13,   -37,   -37,    13,   -37,   -37,   -37,
+     -37,    56,    57,    59,    64,    62,   -37,   -37,   -37,   -37,
+     -37,   -37,   -37,   -37,    55,    37,    37,    37,   -37,   -13,
+     -37,   -37,    66,   -37,   -37,    65,    62,    13,    58,   -37,
+      53,    69,    13,    70,   -37
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -710,35 +720,35 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       4,    18,     8,    10,     9,    11,    12,     0,     2,     4,
-       7,     5,     6,     0,    51,    42,    43,     0,    21,    35,
-       0,    41,    46,    49,    34,     1,     3,    45,     0,    53,
-      57,    16,     0,     0,    17,     0,     0,     0,     0,     0,
-       0,    47,     0,    51,    56,     0,    55,    21,    21,    36,
-      38,    40,    37,    39,    49,    24,     0,     0,    14,    53,
-      59,    50,     0,    52,    19,    20,    48,     0,     0,     0,
-       0,    26,    27,    28,    29,    44,    30,    13,    15,    56,
-      55,     0,     0,     0,    22,     0,    23,    54,    58,    31,
-      32,     0,    26,     0,     0,    25,     0,     0,     0,     0,
-      33
+       4,    22,     8,    10,     9,    11,    12,    14,    15,    13,
+      16,     0,     2,     4,     7,     5,     6,     0,    55,    46,
+      47,     0,    25,    39,     0,    45,    50,    53,    38,     1,
+       3,    49,     0,    57,    61,    20,     0,     0,    21,     0,
+       0,     0,     0,     0,     0,    51,     0,    55,    60,     0,
+      59,    25,    25,    40,    42,    44,    41,    43,    53,    28,
+       0,     0,    18,    57,    63,    54,     0,    56,    23,    24,
+      52,     0,     0,     0,     0,    30,    31,    32,    33,    48,
+      34,    17,    19,    60,    59,     0,     0,     0,    26,     0,
+      27,    58,    62,    35,    36,     0,    30,     0,     0,    29,
+       0,     0,     0,     0,    37
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -55,   -55,    67,   -55,   -55,   -55,   -55,   -55,   -55,   -16,
-      -3,   -55,   -19,    -8,   -55,   -55,   -55,     8,   -55,   -29,
-     -55,   -55,   -55,   -55,    24,    40,   -55,    -1,    19,   -54,
-     -55
+     -37,   -37,    67,   -37,   -37,   -37,   -37,   -37,   -37,   -36,
+      -3,   -37,   -15,   -11,   -37,   -37,   -37,    -8,   -37,   -33,
+     -37,   -37,   -37,   -37,    26,    38,   -37,    -1,    19,   -32,
+     -37
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     7,     8,     9,    10,    11,    12,    13,    17,    34,
-      58,    70,    86,    71,    72,    73,    74,    18,    19,    20,
-      76,    28,    21,    22,    41,    23,    45,    63,    46,    24,
-      30
+       0,    11,    12,    13,    14,    15,    16,    17,    21,    38,
+      62,    74,    90,    75,    76,    77,    78,    22,    23,    24,
+      80,    32,    25,    26,    45,    27,    49,    67,    50,    28,
+      34
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -746,67 +756,69 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      44,    67,    68,    69,    55,    32,    49,    50,    51,    52,
-      53,     1,    35,    33,    36,    37,    38,    39,    25,    43,
-      15,    16,    27,    56,    57,    31,    75,    89,    90,    91,
-      79,    64,    65,    79,     2,     3,     4,     5,     6,   -58,
-      47,    48,    29,    40,   -58,    14,    15,    16,    43,    15,
-      16,    42,   -58,    77,    78,    43,    75,    59,    62,    60,
-      61,    55,    88,    81,    96,    82,    84,    83,    85,    99,
-      93,    94,    98,    95,    97,   100,    26,    92,    66,    87,
-      54,    80
+      48,    71,    72,    73,    29,    36,    53,    54,    55,    56,
+      57,     1,    59,    37,   -62,    68,    69,    33,    31,   -62,
+      18,    19,    20,    47,    19,    20,    79,   -62,    51,    52,
+      83,    60,    61,    83,     2,     3,     4,     5,     6,     7,
+       8,     9,    10,    39,    35,    40,    41,    42,    43,    47,
+      19,    20,    44,    93,    94,    95,    79,    81,    82,    46,
+      63,    47,    64,    65,   100,    66,    59,    85,    86,   103,
+      87,    88,    89,    92,    97,   101,    98,   102,    96,   104,
+      30,    99,    58,    91,    70,    84
 };
 
 static const yytype_int8 yycheck[] =
 {
-      29,    14,    15,    16,     6,    10,    35,    36,    37,    38,
-      39,     4,    19,    18,    21,    22,    23,    24,     0,    32,
-      33,    34,    32,    25,    26,     5,    55,    81,    82,    83,
-      59,    47,    48,    62,    27,    28,    29,    30,    31,     5,
-      32,    33,     8,    11,    10,    32,    33,    34,    32,    33,
-      34,    12,    18,    56,    57,    32,    85,     8,    10,     9,
-       9,     6,    32,    11,    93,    11,     7,    11,    10,    98,
-       8,    11,     8,    92,    17,     9,     9,    85,    54,    80,
-      40,    62
+      33,    14,    15,    16,     0,    10,    39,    40,    41,    42,
+      43,     4,     6,    18,     5,    51,    52,     8,    36,    10,
+      36,    37,    38,    36,    37,    38,    59,    18,    36,    37,
+      63,    25,    26,    66,    27,    28,    29,    30,    31,    32,
+      33,    34,    35,    19,     5,    21,    22,    23,    24,    36,
+      37,    38,    11,    85,    86,    87,    89,    60,    61,    12,
+       8,    36,     9,     9,    97,    10,     6,    11,    11,   102,
+      11,     7,    10,    36,     8,    17,    11,     8,    89,     9,
+      13,    96,    44,    84,    58,    66
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,    27,    28,    29,    30,    31,    37,    38,    39,
-      40,    41,    42,    43,    32,    33,    34,    44,    53,    54,
-      55,    58,    59,    61,    65,     0,    38,    32,    57,     8,
-      66,     5,    10,    18,    45,    19,    21,    22,    23,    24,
-      11,    60,    12,    32,    55,    62,    64,    53,    53,    55,
-      55,    55,    55,    55,    61,     6,    25,    26,    46,     8,
-       9,     9,    10,    63,    45,    45,    60,    14,    15,    16,
-      47,    49,    50,    51,    52,    55,    56,    46,    46,    55,
-      64,    11,    11,    11,     7,    10,    48,    63,    32,    65,
-      65,    65,    49,     8,    11,    48,    55,    17,     8,    55,
-       9
+       0,     4,    27,    28,    29,    30,    31,    32,    33,    34,
+      35,    41,    42,    43,    44,    45,    46,    47,    36,    37,
+      38,    48,    57,    58,    59,    62,    63,    65,    69,     0,
+      42,    36,    61,     8,    70,     5,    10,    18,    49,    19,
+      21,    22,    23,    24,    11,    64,    12,    36,    59,    66,
+      68,    57,    57,    59,    59,    59,    59,    59,    65,     6,
+      25,    26,    50,     8,     9,     9,    10,    67,    49,    49,
+      64,    14,    15,    16,    51,    53,    54,    55,    56,    59,
+      60,    50,    50,    59,    68,    11,    11,    11,     7,    10,
+      52,    67,    36,    69,    69,    69,    53,     8,    11,    52,
+      59,    17,     8,    59,     9
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    36,    37,    38,    38,    39,    39,    39,    40,    40,
-      40,    40,    40,    41,    41,    42,    43,    44,    44,    45,
-      45,    45,    46,    47,    47,    48,    48,    49,    49,    49,
-      49,    50,    51,    52,    53,    53,    54,    54,    54,    54,
-      54,    55,    55,    55,    56,    57,    58,    59,    60,    60,
-      61,    61,    62,    62,    63,    63,    64,    65,    65,    66
+       0,    40,    41,    42,    42,    43,    43,    43,    44,    44,
+      44,    44,    44,    44,    44,    44,    44,    45,    45,    46,
+      47,    48,    48,    49,    49,    49,    50,    51,    51,    52,
+      52,    53,    53,    53,    53,    54,    55,    56,    57,    57,
+      58,    58,    58,    58,    58,    59,    59,    59,    60,    61,
+      62,    63,    64,    64,    65,    65,    66,    66,    67,    67,
+      68,    69,    69,    70
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     2,     0,     1,     1,     1,     1,     1,
-       1,     1,     1,     5,     4,     5,     3,     2,     0,     3,
-       3,     0,     3,     2,     0,     3,     0,     1,     1,     1,
-       1,     3,     3,     8,     1,     1,     3,     3,     3,     3,
-       3,     1,     1,     1,     1,     1,     1,     2,     3,     0,
-       4,     1,     2,     0,     3,     0,     1,     2,     1,     3
+       1,     1,     1,     1,     1,     1,     1,     5,     4,     5,
+       3,     2,     0,     3,     3,     0,     3,     2,     0,     3,
+       0,     1,     1,     1,     1,     3,     3,     8,     1,     1,
+       3,     3,     3,     3,     3,     1,     1,     1,     1,     1,
+       1,     2,     3,     0,     4,     1,     2,     0,     3,     0,
+       1,     2,     1,     3
 };
 
 
@@ -1800,7 +1812,7 @@ yyreduce:
     switch (yyn)
       {
   case 2: /* program: deamerreserved_star__stmt__  */
-#line 236 "./fgl_parser.y"
+#line 248 "./fgl_parser.y"
                                      {
 		auto* const newNode = new fgl::ast::node::program({::fgl::ast::Type::program, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_deamerreserved_star__stmt__) });
 		(yyval.fgl_program) = newNode;
@@ -1808,638 +1820,682 @@ yyreduce:
 		// Ignored, Deleted, tokens are deleted
 		outputTree = new ::deamer::external::cpp::ast::Tree(newNode);
 	}
-#line 1812 "fgl_parser.tab.c"
+#line 1824 "fgl_parser.tab.c"
     break;
 
   case 3: /* deamerreserved_star__stmt__: stmt deamerreserved_star__stmt__  */
-#line 247 "./fgl_parser.y"
+#line 259 "./fgl_parser.y"
                                           {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__stmt__({::fgl::ast::Type::deamerreserved_star__stmt__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { (yyvsp[-1].fgl_stmt), (yyvsp[0].fgl_deamerreserved_star__stmt__) });
 		(yyval.fgl_deamerreserved_star__stmt__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1823 "fgl_parser.tab.c"
+#line 1835 "fgl_parser.tab.c"
     break;
 
   case 4: /* deamerreserved_star__stmt__: %empty  */
-#line 253 "./fgl_parser.y"
+#line 265 "./fgl_parser.y"
            {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__stmt__({::fgl::ast::Type::deamerreserved_star__stmt__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		(yyval.fgl_deamerreserved_star__stmt__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1834 "fgl_parser.tab.c"
+#line 1846 "fgl_parser.tab.c"
     break;
 
   case 5: /* stmt: entry_manipulation_rule  */
-#line 263 "./fgl_parser.y"
+#line 275 "./fgl_parser.y"
                                  {
 		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_entry_manipulation_rule) });
 		(yyval.fgl_stmt) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1845 "fgl_parser.tab.c"
+#line 1857 "fgl_parser.tab.c"
     break;
 
   case 6: /* stmt: exit_manipulation_rule  */
-#line 269 "./fgl_parser.y"
+#line 281 "./fgl_parser.y"
                                   {
 		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_exit_manipulation_rule) });
 		(yyval.fgl_stmt) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1856 "fgl_parser.tab.c"
+#line 1868 "fgl_parser.tab.c"
     break;
 
   case 7: /* stmt: setting_rule  */
-#line 275 "./fgl_parser.y"
+#line 287 "./fgl_parser.y"
                         {
 		auto* const newNode = new fgl::ast::node::stmt({::fgl::ast::Type::stmt, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_setting_rule) });
 		(yyval.fgl_stmt) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1867 "fgl_parser.tab.c"
+#line 1879 "fgl_parser.tab.c"
     break;
 
   case 8: /* setting_rule: TARGET_SETTING  */
-#line 285 "./fgl_parser.y"
+#line 297 "./fgl_parser.y"
                         {
 		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::TARGET_SETTING({::fgl::ast::Type::TARGET_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_setting_rule) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1878 "fgl_parser.tab.c"
+#line 1890 "fgl_parser.tab.c"
     break;
 
   case 9: /* setting_rule: MEMBER_SETTING  */
-#line 291 "./fgl_parser.y"
+#line 303 "./fgl_parser.y"
                           {
 		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::MEMBER_SETTING({::fgl::ast::Type::MEMBER_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_setting_rule) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1889 "fgl_parser.tab.c"
+#line 1901 "fgl_parser.tab.c"
     break;
 
   case 10: /* setting_rule: INCLUDE_SETTING  */
-#line 297 "./fgl_parser.y"
+#line 309 "./fgl_parser.y"
                            {
 		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::INCLUDE_SETTING({::fgl::ast::Type::INCLUDE_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_setting_rule) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1900 "fgl_parser.tab.c"
+#line 1912 "fgl_parser.tab.c"
     break;
 
   case 11: /* setting_rule: FUNCTION_SETTING  */
-#line 303 "./fgl_parser.y"
+#line 315 "./fgl_parser.y"
                             {
 		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 3, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::FUNCTION_SETTING({::fgl::ast::Type::FUNCTION_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_setting_rule) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1911 "fgl_parser.tab.c"
+#line 1923 "fgl_parser.tab.c"
     break;
 
-  case 12: /* setting_rule: USER_INSERTED_SETTING  */
-#line 309 "./fgl_parser.y"
-                                 {
-		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 4, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::USER_INSERTED_SETTING({::fgl::ast::Type::USER_INSERTED_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
+  case 12: /* setting_rule: NAMINGCONVENTION_SETTING  */
+#line 321 "./fgl_parser.y"
+                                    {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 4, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::NAMINGCONVENTION_SETTING({::fgl::ast::Type::NAMINGCONVENTION_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_setting_rule) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1922 "fgl_parser.tab.c"
+#line 1934 "fgl_parser.tab.c"
     break;
 
-  case 13: /* entry_manipulation_rule: capture object ARROW ADD manipulation  */
-#line 319 "./fgl_parser.y"
+  case 13: /* setting_rule: DEAMER_LANGUAGE_NAME_SETTING  */
+#line 327 "./fgl_parser.y"
+                                        {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 5, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::DEAMER_LANGUAGE_NAME_SETTING({::fgl::ast::Type::DEAMER_LANGUAGE_NAME_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
+		(yyval.fgl_setting_rule) = newNode;
+
+		// Ignored, Deleted, tokens are deleted
+	}
+#line 1945 "fgl_parser.tab.c"
+    break;
+
+  case 14: /* setting_rule: DISPATCH_SETTING  */
+#line 333 "./fgl_parser.y"
+                            {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 6, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::DISPATCH_SETTING({::fgl::ast::Type::DISPATCH_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
+		(yyval.fgl_setting_rule) = newNode;
+
+		// Ignored, Deleted, tokens are deleted
+	}
+#line 1956 "fgl_parser.tab.c"
+    break;
+
+  case 15: /* setting_rule: INHERITANCE_SETTING  */
+#line 339 "./fgl_parser.y"
+                               {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 7, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::INHERITANCE_SETTING({::fgl::ast::Type::INHERITANCE_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
+		(yyval.fgl_setting_rule) = newNode;
+
+		// Ignored, Deleted, tokens are deleted
+	}
+#line 1967 "fgl_parser.tab.c"
+    break;
+
+  case 16: /* setting_rule: USER_INSERTED_SETTING  */
+#line 345 "./fgl_parser.y"
+                                 {
+		auto* const newNode = new fgl::ast::node::setting_rule({::fgl::ast::Type::setting_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 8, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::USER_INSERTED_SETTING({::fgl::ast::Type::USER_INSERTED_SETTING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
+		(yyval.fgl_setting_rule) = newNode;
+
+		// Ignored, Deleted, tokens are deleted
+	}
+#line 1978 "fgl_parser.tab.c"
+    break;
+
+  case 17: /* entry_manipulation_rule: capture object ARROW ADD manipulation  */
+#line 355 "./fgl_parser.y"
                                                {
 		auto* const newNode = new fgl::ast::node::entry_manipulation_rule({::fgl::ast::Type::entry_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[-4].fgl_capture), (yyvsp[-3].fgl_object), new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), new fgl::ast::node::ADD({::fgl::ast::Type::ADD, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_manipulation) });
 		(yyval.fgl_entry_manipulation_rule) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1933 "fgl_parser.tab.c"
+#line 1989 "fgl_parser.tab.c"
     break;
 
-  case 14: /* entry_manipulation_rule: capture object ARROW manipulation  */
-#line 325 "./fgl_parser.y"
+  case 18: /* entry_manipulation_rule: capture object ARROW manipulation  */
+#line 361 "./fgl_parser.y"
                                              {
 		auto* const newNode = new fgl::ast::node::entry_manipulation_rule({::fgl::ast::Type::entry_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[-3].fgl_capture), (yyvsp[-2].fgl_object), new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_manipulation) });
 		(yyval.fgl_entry_manipulation_rule) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1944 "fgl_parser.tab.c"
+#line 2000 "fgl_parser.tab.c"
     break;
 
-  case 15: /* exit_manipulation_rule: capture object ARROW MINUS manipulation  */
-#line 335 "./fgl_parser.y"
+  case 19: /* exit_manipulation_rule: capture object ARROW MINUS manipulation  */
+#line 371 "./fgl_parser.y"
                                                  {
 		auto* const newNode = new fgl::ast::node::exit_manipulation_rule({::fgl::ast::Type::exit_manipulation_rule, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[-4].fgl_capture), (yyvsp[-3].fgl_object), new fgl::ast::node::ARROW({::fgl::ast::Type::ARROW, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), new fgl::ast::node::MINUS({::fgl::ast::Type::MINUS, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_manipulation) });
 		(yyval.fgl_exit_manipulation_rule) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1955 "fgl_parser.tab.c"
+#line 2011 "fgl_parser.tab.c"
     break;
 
-  case 16: /* capture: LEFT_SQUARE_BRACKET deamerreserved_arrow__deamerreserved_optional__flavor_capture____ RIGHT_SQUARE_BRACKET  */
-#line 345 "./fgl_parser.y"
+  case 20: /* capture: LEFT_SQUARE_BRACKET deamerreserved_arrow__deamerreserved_optional__flavor_capture____ RIGHT_SQUARE_BRACKET  */
+#line 381 "./fgl_parser.y"
                                                                                                                     {
 		auto* const newNode = new fgl::ast::node::capture({::fgl::ast::Type::capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::LEFT_SQUARE_BRACKET({::fgl::ast::Type::LEFT_SQUARE_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_deamerreserved_arrow__deamerreserved_optional__flavor_capture____), new fgl::ast::node::RIGHT_SQUARE_BRACKET({::fgl::ast::Type::RIGHT_SQUARE_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_capture) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1966 "fgl_parser.tab.c"
+#line 2022 "fgl_parser.tab.c"
     break;
 
-  case 17: /* deamerreserved_arrow__deamerreserved_optional__flavor_capture____: flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  */
-#line 355 "./fgl_parser.y"
+  case 21: /* deamerreserved_arrow__deamerreserved_optional__flavor_capture____: flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  */
+#line 391 "./fgl_parser.y"
                                                                                                {
 		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { (yyvsp[-1].fgl_flavor_capture), (yyvsp[0].fgl_deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__) });
 		(yyval.fgl_deamerreserved_arrow__deamerreserved_optional__flavor_capture____) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1977 "fgl_parser.tab.c"
+#line 2033 "fgl_parser.tab.c"
     break;
 
-  case 18: /* deamerreserved_arrow__deamerreserved_optional__flavor_capture____: %empty  */
-#line 361 "./fgl_parser.y"
+  case 22: /* deamerreserved_arrow__deamerreserved_optional__flavor_capture____: %empty  */
+#line 397 "./fgl_parser.y"
            {
 		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__flavor_capture____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__flavor_capture____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		(yyval.fgl_deamerreserved_arrow__deamerreserved_optional__flavor_capture____) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1988 "fgl_parser.tab.c"
+#line 2044 "fgl_parser.tab.c"
     break;
 
-  case 19: /* deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__: COMMA flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  */
-#line 371 "./fgl_parser.y"
+  case 23: /* deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__: COMMA flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  */
+#line 407 "./fgl_parser.y"
                                                                                                      {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_flavor_capture), (yyvsp[0].fgl_deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__) });
 		(yyval.fgl_deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 1999 "fgl_parser.tab.c"
+#line 2055 "fgl_parser.tab.c"
     break;
 
-  case 20: /* deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__: AND flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  */
-#line 377 "./fgl_parser.y"
+  case 24: /* deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__: AND flavor_capture deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__  */
+#line 413 "./fgl_parser.y"
                                                                                                      {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::AND({::fgl::ast::Type::AND, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_flavor_capture), (yyvsp[0].fgl_deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__) });
 		(yyval.fgl_deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2010 "fgl_parser.tab.c"
+#line 2066 "fgl_parser.tab.c"
     break;
 
-  case 21: /* deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__: %empty  */
-#line 383 "./fgl_parser.y"
+  case 25: /* deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__: %empty  */
+#line 419 "./fgl_parser.y"
            {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__({::fgl::ast::Type::deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		(yyval.fgl_deamerreserved_star__deamerreserved_or__COMMA__AND____flavor_capture__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2021 "fgl_parser.tab.c"
+#line 2077 "fgl_parser.tab.c"
     break;
 
-  case 22: /* manipulation: LEFT_BRACKET deamerreserved_arrow__deamerreserved_optional__instruction____ RIGHT_BRACKET  */
-#line 393 "./fgl_parser.y"
+  case 26: /* manipulation: LEFT_BRACKET deamerreserved_arrow__deamerreserved_optional__instruction____ RIGHT_BRACKET  */
+#line 429 "./fgl_parser.y"
                                                                                                    {
 		auto* const newNode = new fgl::ast::node::manipulation({::fgl::ast::Type::manipulation, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::LEFT_BRACKET({::fgl::ast::Type::LEFT_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_deamerreserved_arrow__deamerreserved_optional__instruction____), new fgl::ast::node::RIGHT_BRACKET({::fgl::ast::Type::RIGHT_BRACKET, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_manipulation) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2032 "fgl_parser.tab.c"
+#line 2088 "fgl_parser.tab.c"
     break;
 
-  case 23: /* deamerreserved_arrow__deamerreserved_optional__instruction____: instruction deamerreserved_star__COMMA__instruction__  */
-#line 403 "./fgl_parser.y"
+  case 27: /* deamerreserved_arrow__deamerreserved_optional__instruction____: instruction deamerreserved_star__COMMA__instruction__  */
+#line 439 "./fgl_parser.y"
                                                                {
 		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { (yyvsp[-1].fgl_instruction), (yyvsp[0].fgl_deamerreserved_star__COMMA__instruction__) });
 		(yyval.fgl_deamerreserved_arrow__deamerreserved_optional__instruction____) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2043 "fgl_parser.tab.c"
+#line 2099 "fgl_parser.tab.c"
     break;
 
-  case 24: /* deamerreserved_arrow__deamerreserved_optional__instruction____: %empty  */
-#line 409 "./fgl_parser.y"
+  case 28: /* deamerreserved_arrow__deamerreserved_optional__instruction____: %empty  */
+#line 445 "./fgl_parser.y"
            {
 		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__instruction____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__instruction____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		(yyval.fgl_deamerreserved_arrow__deamerreserved_optional__instruction____) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2054 "fgl_parser.tab.c"
+#line 2110 "fgl_parser.tab.c"
     break;
 
-  case 25: /* deamerreserved_star__COMMA__instruction__: COMMA instruction deamerreserved_star__COMMA__instruction__  */
-#line 419 "./fgl_parser.y"
+  case 29: /* deamerreserved_star__COMMA__instruction__: COMMA instruction deamerreserved_star__COMMA__instruction__  */
+#line 455 "./fgl_parser.y"
                                                                      {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__instruction__({::fgl::ast::Type::deamerreserved_star__COMMA__instruction__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_instruction), (yyvsp[0].fgl_deamerreserved_star__COMMA__instruction__) });
 		(yyval.fgl_deamerreserved_star__COMMA__instruction__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2065 "fgl_parser.tab.c"
+#line 2121 "fgl_parser.tab.c"
     break;
 
-  case 26: /* deamerreserved_star__COMMA__instruction__: %empty  */
-#line 425 "./fgl_parser.y"
+  case 30: /* deamerreserved_star__COMMA__instruction__: %empty  */
+#line 461 "./fgl_parser.y"
            {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__instruction__({::fgl::ast::Type::deamerreserved_star__COMMA__instruction__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		(yyval.fgl_deamerreserved_star__COMMA__instruction__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2076 "fgl_parser.tab.c"
+#line 2132 "fgl_parser.tab.c"
     break;
 
-  case 27: /* instruction: new_flavor  */
-#line 435 "./fgl_parser.y"
+  case 31: /* instruction: new_flavor  */
+#line 471 "./fgl_parser.y"
                     {
 		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_new_flavor) });
 		(yyval.fgl_instruction) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2087 "fgl_parser.tab.c"
+#line 2143 "fgl_parser.tab.c"
     break;
 
-  case 28: /* instruction: delete_flavor  */
-#line 441 "./fgl_parser.y"
+  case 32: /* instruction: delete_flavor  */
+#line 477 "./fgl_parser.y"
                          {
 		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_delete_flavor) });
 		(yyval.fgl_instruction) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2098 "fgl_parser.tab.c"
+#line 2154 "fgl_parser.tab.c"
     break;
 
-  case 29: /* instruction: expand_flavor  */
-#line 447 "./fgl_parser.y"
+  case 33: /* instruction: expand_flavor  */
+#line 483 "./fgl_parser.y"
                          {
 		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_expand_flavor) });
 		(yyval.fgl_instruction) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2109 "fgl_parser.tab.c"
+#line 2165 "fgl_parser.tab.c"
     break;
 
-  case 30: /* instruction: user_defined_instruction  */
-#line 453 "./fgl_parser.y"
+  case 34: /* instruction: user_defined_instruction  */
+#line 489 "./fgl_parser.y"
                                     {
 		auto* const newNode = new fgl::ast::node::instruction({::fgl::ast::Type::instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 3, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_user_defined_instruction) });
 		(yyval.fgl_instruction) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2120 "fgl_parser.tab.c"
+#line 2176 "fgl_parser.tab.c"
     break;
 
-  case 31: /* new_flavor: NEW DOT flavor  */
-#line 463 "./fgl_parser.y"
+  case 35: /* new_flavor: NEW DOT flavor  */
+#line 499 "./fgl_parser.y"
                         {
 		auto* const newNode = new fgl::ast::node::new_flavor({::fgl::ast::Type::new_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::NEW({::fgl::ast::Type::NEW, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_flavor) });
 		(yyval.fgl_new_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2131 "fgl_parser.tab.c"
+#line 2187 "fgl_parser.tab.c"
     break;
 
-  case 32: /* delete_flavor: DELETE DOT flavor  */
-#line 473 "./fgl_parser.y"
+  case 36: /* delete_flavor: DELETE DOT flavor  */
+#line 509 "./fgl_parser.y"
                            {
 		auto* const newNode = new fgl::ast::node::delete_flavor({::fgl::ast::Type::delete_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::DELETE({::fgl::ast::Type::DELETE, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_flavor) });
 		(yyval.fgl_delete_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2142 "fgl_parser.tab.c"
+#line 2198 "fgl_parser.tab.c"
     break;
 
-  case 33: /* expand_flavor: EXPAND DOT flavor DOT WITH LEFT_PARANTHESIS value RIGHT_PARANTHESIS  */
-#line 483 "./fgl_parser.y"
+  case 37: /* expand_flavor: EXPAND DOT flavor DOT WITH LEFT_PARANTHESIS value RIGHT_PARANTHESIS  */
+#line 519 "./fgl_parser.y"
                                                                              {
 		auto* const newNode = new fgl::ast::node::expand_flavor({::fgl::ast::Type::expand_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::EXPAND({::fgl::ast::Type::EXPAND, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-7].Terminal) }), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-6].Terminal) }), (yyvsp[-5].fgl_flavor), new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-4].Terminal) }), new fgl::ast::node::WITH({::fgl::ast::Type::WITH, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-3].Terminal) }), new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_value), new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_expand_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2153 "fgl_parser.tab.c"
+#line 2209 "fgl_parser.tab.c"
     break;
 
-  case 34: /* flavor_capture: flavor  */
-#line 493 "./fgl_parser.y"
+  case 38: /* flavor_capture: flavor  */
+#line 529 "./fgl_parser.y"
                 {
 		auto* const newNode = new fgl::ast::node::flavor_capture({::fgl::ast::Type::flavor_capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_flavor) });
 		(yyval.fgl_flavor_capture) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2164 "fgl_parser.tab.c"
+#line 2220 "fgl_parser.tab.c"
     break;
 
-  case 35: /* flavor_capture: conditional_flavor  */
-#line 499 "./fgl_parser.y"
+  case 39: /* flavor_capture: conditional_flavor  */
+#line 535 "./fgl_parser.y"
                               {
 		auto* const newNode = new fgl::ast::node::flavor_capture({::fgl::ast::Type::flavor_capture, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_conditional_flavor) });
 		(yyval.fgl_flavor_capture) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2175 "fgl_parser.tab.c"
+#line 2231 "fgl_parser.tab.c"
     break;
 
-  case 36: /* conditional_flavor: value EQEQ value  */
-#line 509 "./fgl_parser.y"
+  case 40: /* conditional_flavor: value EQEQ value  */
+#line 545 "./fgl_parser.y"
                           {
 		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[-2].fgl_value), new fgl::ast::node::EQEQ({::fgl::ast::Type::EQEQ, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_value) });
 		(yyval.fgl_conditional_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2186 "fgl_parser.tab.c"
+#line 2242 "fgl_parser.tab.c"
     break;
 
-  case 37: /* conditional_flavor: value LTE value  */
-#line 515 "./fgl_parser.y"
+  case 41: /* conditional_flavor: value LTE value  */
+#line 551 "./fgl_parser.y"
                            {
 		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[-2].fgl_value), new fgl::ast::node::LTE({::fgl::ast::Type::LTE, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_value) });
 		(yyval.fgl_conditional_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2197 "fgl_parser.tab.c"
+#line 2253 "fgl_parser.tab.c"
     break;
 
-  case 38: /* conditional_flavor: value GTE value  */
-#line 521 "./fgl_parser.y"
+  case 42: /* conditional_flavor: value GTE value  */
+#line 557 "./fgl_parser.y"
                            {
 		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[-2].fgl_value), new fgl::ast::node::GTE({::fgl::ast::Type::GTE, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_value) });
 		(yyval.fgl_conditional_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2208 "fgl_parser.tab.c"
+#line 2264 "fgl_parser.tab.c"
     break;
 
-  case 39: /* conditional_flavor: value LT value  */
-#line 527 "./fgl_parser.y"
+  case 43: /* conditional_flavor: value LT value  */
+#line 563 "./fgl_parser.y"
                           {
 		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 3, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[-2].fgl_value), new fgl::ast::node::LT({::fgl::ast::Type::LT, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_value) });
 		(yyval.fgl_conditional_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2219 "fgl_parser.tab.c"
+#line 2275 "fgl_parser.tab.c"
     break;
 
-  case 40: /* conditional_flavor: value GT value  */
-#line 533 "./fgl_parser.y"
+  case 44: /* conditional_flavor: value GT value  */
+#line 569 "./fgl_parser.y"
                           {
 		auto* const newNode = new fgl::ast::node::conditional_flavor({::fgl::ast::Type::conditional_flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 4, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[-2].fgl_value), new fgl::ast::node::GT({::fgl::ast::Type::GT, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_value) });
 		(yyval.fgl_conditional_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2230 "fgl_parser.tab.c"
+#line 2286 "fgl_parser.tab.c"
     break;
 
-  case 41: /* value: object_access  */
-#line 543 "./fgl_parser.y"
+  case 45: /* value: object_access  */
+#line 579 "./fgl_parser.y"
                        {
 		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_object_access) });
 		(yyval.fgl_value) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2241 "fgl_parser.tab.c"
+#line 2297 "fgl_parser.tab.c"
     break;
 
-  case 42: /* value: NUMBER  */
-#line 549 "./fgl_parser.y"
+  case 46: /* value: NUMBER  */
+#line 585 "./fgl_parser.y"
                   {
 		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::NUMBER({::fgl::ast::Type::NUMBER, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_value) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2252 "fgl_parser.tab.c"
+#line 2308 "fgl_parser.tab.c"
     break;
 
-  case 43: /* value: STRING  */
-#line 555 "./fgl_parser.y"
+  case 47: /* value: STRING  */
+#line 591 "./fgl_parser.y"
                   {
 		auto* const newNode = new fgl::ast::node::value({::fgl::ast::Type::value, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 2, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::STRING({::fgl::ast::Type::STRING, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_value) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2263 "fgl_parser.tab.c"
+#line 2319 "fgl_parser.tab.c"
     break;
 
-  case 44: /* user_defined_instruction: value  */
-#line 565 "./fgl_parser.y"
+  case 48: /* user_defined_instruction: value  */
+#line 601 "./fgl_parser.y"
                {
 		auto* const newNode = new fgl::ast::node::user_defined_instruction({::fgl::ast::Type::user_defined_instruction, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_value) });
 		(yyval.fgl_user_defined_instruction) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2274 "fgl_parser.tab.c"
+#line 2330 "fgl_parser.tab.c"
     break;
 
-  case 45: /* object: VARNAME  */
-#line 575 "./fgl_parser.y"
+  case 49: /* object: VARNAME  */
+#line 611 "./fgl_parser.y"
                  {
 		auto* const newNode = new fgl::ast::node::object({::fgl::ast::Type::object, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_object) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2285 "fgl_parser.tab.c"
+#line 2341 "fgl_parser.tab.c"
     break;
 
-  case 46: /* object_access: deamerreserved_arrow__member__  */
-#line 585 "./fgl_parser.y"
+  case 50: /* object_access: deamerreserved_arrow__member__  */
+#line 621 "./fgl_parser.y"
                                         {
 		auto* const newNode = new fgl::ast::node::object_access({::fgl::ast::Type::object_access, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_deamerreserved_arrow__member__) });
 		(yyval.fgl_object_access) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2296 "fgl_parser.tab.c"
+#line 2352 "fgl_parser.tab.c"
     break;
 
-  case 47: /* deamerreserved_arrow__member__: member deamerreserved_star__DOT__member__  */
-#line 595 "./fgl_parser.y"
+  case 51: /* deamerreserved_arrow__member__: member deamerreserved_star__DOT__member__  */
+#line 631 "./fgl_parser.y"
                                                    {
 		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__member__({::fgl::ast::Type::deamerreserved_arrow__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { (yyvsp[-1].fgl_member), (yyvsp[0].fgl_deamerreserved_star__DOT__member__) });
 		(yyval.fgl_deamerreserved_arrow__member__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2307 "fgl_parser.tab.c"
+#line 2363 "fgl_parser.tab.c"
     break;
 
-  case 48: /* deamerreserved_star__DOT__member__: DOT member deamerreserved_star__DOT__member__  */
-#line 605 "./fgl_parser.y"
+  case 52: /* deamerreserved_star__DOT__member__: DOT member deamerreserved_star__DOT__member__  */
+#line 641 "./fgl_parser.y"
                                                        {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__DOT__member__({::fgl::ast::Type::deamerreserved_star__DOT__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::DOT({::fgl::ast::Type::DOT, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_member), (yyvsp[0].fgl_deamerreserved_star__DOT__member__) });
 		(yyval.fgl_deamerreserved_star__DOT__member__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2318 "fgl_parser.tab.c"
+#line 2374 "fgl_parser.tab.c"
     break;
 
-  case 49: /* deamerreserved_star__DOT__member__: %empty  */
-#line 611 "./fgl_parser.y"
+  case 53: /* deamerreserved_star__DOT__member__: %empty  */
+#line 647 "./fgl_parser.y"
            {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__DOT__member__({::fgl::ast::Type::deamerreserved_star__DOT__member__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		(yyval.fgl_deamerreserved_star__DOT__member__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2329 "fgl_parser.tab.c"
+#line 2385 "fgl_parser.tab.c"
     break;
 
-  case 50: /* member: VARNAME LEFT_PARANTHESIS deamerreserved_arrow__deamerreserved_optional__argument____ RIGHT_PARANTHESIS  */
-#line 621 "./fgl_parser.y"
+  case 54: /* member: VARNAME LEFT_PARANTHESIS deamerreserved_arrow__deamerreserved_optional__argument____ RIGHT_PARANTHESIS  */
+#line 657 "./fgl_parser.y"
                                                                                                                 {
 		auto* const newNode = new fgl::ast::node::member({::fgl::ast::Type::member, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-3].Terminal) }), new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_deamerreserved_arrow__deamerreserved_optional__argument____), new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_member) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2340 "fgl_parser.tab.c"
+#line 2396 "fgl_parser.tab.c"
     break;
 
-  case 51: /* member: VARNAME  */
-#line 627 "./fgl_parser.y"
+  case 55: /* member: VARNAME  */
+#line 663 "./fgl_parser.y"
                    {
 		auto* const newNode = new fgl::ast::node::member({::fgl::ast::Type::member, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_member) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2351 "fgl_parser.tab.c"
+#line 2407 "fgl_parser.tab.c"
     break;
 
-  case 52: /* deamerreserved_arrow__deamerreserved_optional__argument____: argument deamerreserved_star__COMMA__argument__  */
-#line 637 "./fgl_parser.y"
+  case 56: /* deamerreserved_arrow__deamerreserved_optional__argument____: argument deamerreserved_star__COMMA__argument__  */
+#line 673 "./fgl_parser.y"
                                                          {
 		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { (yyvsp[-1].fgl_argument), (yyvsp[0].fgl_deamerreserved_star__COMMA__argument__) });
 		(yyval.fgl_deamerreserved_arrow__deamerreserved_optional__argument____) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2362 "fgl_parser.tab.c"
+#line 2418 "fgl_parser.tab.c"
     break;
 
-  case 53: /* deamerreserved_arrow__deamerreserved_optional__argument____: %empty  */
-#line 643 "./fgl_parser.y"
+  case 57: /* deamerreserved_arrow__deamerreserved_optional__argument____: %empty  */
+#line 679 "./fgl_parser.y"
            {
 		auto* const newNode = new fgl::ast::node::deamerreserved_arrow__deamerreserved_optional__argument____({::fgl::ast::Type::deamerreserved_arrow__deamerreserved_optional__argument____, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		(yyval.fgl_deamerreserved_arrow__deamerreserved_optional__argument____) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2373 "fgl_parser.tab.c"
+#line 2429 "fgl_parser.tab.c"
     break;
 
-  case 54: /* deamerreserved_star__COMMA__argument__: COMMA argument deamerreserved_star__COMMA__argument__  */
-#line 653 "./fgl_parser.y"
+  case 58: /* deamerreserved_star__COMMA__argument__: COMMA argument deamerreserved_star__COMMA__argument__  */
+#line 689 "./fgl_parser.y"
                                                                {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__argument__({::fgl::ast::Type::deamerreserved_star__COMMA__argument__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, { new fgl::ast::node::COMMA({::fgl::ast::Type::COMMA, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_argument), (yyvsp[0].fgl_deamerreserved_star__COMMA__argument__) });
 		(yyval.fgl_deamerreserved_star__COMMA__argument__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2384 "fgl_parser.tab.c"
+#line 2440 "fgl_parser.tab.c"
     break;
 
-  case 55: /* deamerreserved_star__COMMA__argument__: %empty  */
-#line 659 "./fgl_parser.y"
+  case 59: /* deamerreserved_star__COMMA__argument__: %empty  */
+#line 695 "./fgl_parser.y"
            {
 		auto* const newNode = new fgl::ast::node::deamerreserved_star__COMMA__argument__({::fgl::ast::Type::deamerreserved_star__COMMA__argument__, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::translation }}, {  });
 		(yyval.fgl_deamerreserved_star__COMMA__argument__) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2395 "fgl_parser.tab.c"
+#line 2451 "fgl_parser.tab.c"
     break;
 
-  case 56: /* argument: value  */
-#line 669 "./fgl_parser.y"
+  case 60: /* argument: value  */
+#line 705 "./fgl_parser.y"
                {
 		auto* const newNode = new fgl::ast::node::argument({::fgl::ast::Type::argument, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { (yyvsp[0].fgl_value) });
 		(yyval.fgl_argument) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2406 "fgl_parser.tab.c"
+#line 2462 "fgl_parser.tab.c"
     break;
 
-  case 57: /* flavor: VARNAME flavor_specialization  */
-#line 679 "./fgl_parser.y"
+  case 61: /* flavor: VARNAME flavor_specialization  */
+#line 715 "./fgl_parser.y"
                                        {
 		auto* const newNode = new fgl::ast::node::flavor({::fgl::ast::Type::flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-1].Terminal) }), (yyvsp[0].fgl_flavor_specialization) });
 		(yyval.fgl_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2417 "fgl_parser.tab.c"
+#line 2473 "fgl_parser.tab.c"
     break;
 
-  case 58: /* flavor: VARNAME  */
-#line 685 "./fgl_parser.y"
+  case 62: /* flavor: VARNAME  */
+#line 721 "./fgl_parser.y"
                    {
 		auto* const newNode = new fgl::ast::node::flavor({::fgl::ast::Type::flavor, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 1, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::VARNAME({::fgl::ast::Type::VARNAME, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_flavor) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2428 "fgl_parser.tab.c"
+#line 2484 "fgl_parser.tab.c"
     break;
 
-  case 59: /* flavor_specialization: LEFT_PARANTHESIS value RIGHT_PARANTHESIS  */
-#line 695 "./fgl_parser.y"
+  case 63: /* flavor_specialization: LEFT_PARANTHESIS value RIGHT_PARANTHESIS  */
+#line 731 "./fgl_parser.y"
                                                   {
 		auto* const newNode = new fgl::ast::node::flavor_specialization({::fgl::ast::Type::flavor_specialization, ::deamer::external::cpp::ast::NodeValue::nonterminal, { 0, ::deamer::external::cpp::ast::ProductionRuleType::user }}, { new fgl::ast::node::LEFT_PARANTHESIS({::fgl::ast::Type::LEFT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[-2].Terminal) }), (yyvsp[-1].fgl_value), new fgl::ast::node::RIGHT_PARANTHESIS({::fgl::ast::Type::RIGHT_PARANTHESIS, ::deamer::external::cpp::ast::NodeValue::terminal, (yyvsp[0].Terminal) }) });
 		(yyval.fgl_flavor_specialization) = newNode;
 
 		// Ignored, Deleted, tokens are deleted
 	}
-#line 2439 "fgl_parser.tab.c"
+#line 2495 "fgl_parser.tab.c"
     break;
 
 
-#line 2443 "fgl_parser.tab.c"
+#line 2499 "fgl_parser.tab.c"
 
         default: break;
       }
@@ -2674,7 +2730,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 705 "./fgl_parser.y"
+#line 741 "./fgl_parser.y"
 
 
 void fglerror(const char* s)
