@@ -48,7 +48,7 @@ namespace fgl::ast::listener::user
 		void ListenEntry(const node::FUNCTION_SETTING* node) override
 		{
 			auto function = node->GetValue();
-			function.erase(0, 9);
+			function.erase(0, function.find('{') + 1);
 
 			functions.push_back(function);
 		}
@@ -56,7 +56,7 @@ namespace fgl::ast::listener::user
 		void ListenEntry(const node::INHERITANCE_SETTING* node) override
 		{
 			auto inheritance = node->GetValue();
-			inheritance.erase(0, 12);
+			inheritance.erase(0, inheritance.find('{') + 1);
 
 			inheritances.push_back(inheritance);
 		}
@@ -65,7 +65,7 @@ namespace fgl::ast::listener::user
 		{
 			auto namingConventionText = node->GetValue();
 			namingConventionText.pop_back();
-			namingConventionText.erase(0, 15);
+			namingConventionText.erase(0, namingConventionText.find('{') + 1);
 
 			if (namingConventionText == "LS")
 			{
@@ -85,7 +85,7 @@ namespace fgl::ast::listener::user
 		{
 			auto language_name = node->GetValue();
 			language_name.pop_back();
-			language_name.erase(0, 21);
+			language_name.erase(0, language_name.find('{') + 1);
 
 			languageName = language_name;
 		}
@@ -94,7 +94,7 @@ namespace fgl::ast::listener::user
 		{
 			auto dispatch = node->GetValue();
 			dispatch.pop_back();
-			dispatch.erase(0, 9);
+			dispatch.erase(0, dispatch.find('{') + 1);
 
 			if (dispatch == "false")
 			{
@@ -182,21 +182,21 @@ namespace fgl::ast::listener::user
 			fgl->SetNamingConvention(namingConvention);
 			fgl->SetDeamerLanguageName(languageName);
 			fgl->SetDispatchUsage(enableDispatch);
-			fgl.value().SetManipulationRules(manipulationRules);
+			fgl->SetManipulationRules(manipulationRules);
 
 			for (const auto& include : includes)
 			{
-				fgl.value().AddIncludeSetting(include);
+				fgl->AddIncludeSetting(include);
 			}
 
 			for (const auto& member : members)
 			{
-				fgl.value().AddMemberSetting(member);
+				fgl->AddMemberSetting(member);
 			}
 
 			for (const auto& function : functions)
 			{
-				fgl.value().AddFunctionSetting(function);
+				fgl->AddFunctionSetting(function);
 			}
 
 			for (const auto& inheritance : inheritances)
